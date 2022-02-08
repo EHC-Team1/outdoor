@@ -1,5 +1,5 @@
 <?php
-class ArticleModel
+class CustomerModel
 {
   protected $pdo;
   const USER = 'root';
@@ -19,48 +19,43 @@ class ArticleModel
       $pdo = new PDO($this::DSN, $this::USER, $this::PASS);
       $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     } catch (PDOException $Exception) {
-      die('接続エラー：' . $Exception->getMessage());
+      die('接続エラー' . $Exception->getMessage());
     }
     return $pdo;
   }
 
-  // 記事の登録
+  // ユーザー情報一致確認
+  public function check()
+  {
+  }
+
+  // ユーザー登録
   public function input()
   {
   }
 
-  // 記事の詳細表示
+  // ユーザーログイン
+  public function login()
+  {
+  }
+
+  // ユーザー情報 登録内容確認
   public function show()
   {
   }
 
-  // 記事の一覧表示
+  //
   public function index()
   {
   }
 
-  // 該当ジャンルの商品の一覧
-  public function genre_index()
-  {
-  }
-
-  // 記事の検索
-  public function search_index()
-  {
-  }
-
-  // 記事の編集
+  //ユーザー情報の編集
   public function edit()
   {
   }
 
-  // 記事の更新
+  // ユーザー情報の更新
   public function update()
-  {
-  }
-
-  // 記事の削除
-  public function delete()
   {
   }
 }
