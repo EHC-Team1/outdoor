@@ -3,7 +3,7 @@ class OrderModel
 {
   protected $pdo;
   const USER = 'root';
-  const PASS = '';
+  const PASS = 'password';
   const HOST = 'localhost';
   const NAME = 'outdoor';
   const DSN = 'mysql:host=localhost;dbname=outdoor;charset=utf8';
