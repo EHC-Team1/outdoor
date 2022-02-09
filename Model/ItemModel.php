@@ -27,6 +27,86 @@ class ItemModel
   // 商品の登録
   public function input()
   {
+    $genre_id = $_POST['genre_id'];
+    $article_id = $_POST['article_id'];
+    $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+    $introduction = htmlspecialchars($_POST['introduction'], ENT_QUOTES, 'UTF-8');
+    $item_image = $_FILES['item_image'];
+    $price = $_POST['price'];
+    $is_status = $_POST['is_status'];
+
+    // 必須項目が入力されているかチェック
+    if ($genre_id && $name && $introduction && $price && $is_status) {
+
+      // 画像ファイルがある場合
+      if (isset($item_image['error']) && is_int($item_image['error']) && $item_image["name"] !== "") {
+        // ファイルの内容をすべて読み込む
+        $raw_data = file_get_contents($item_image['tmp_name']);
+        // 拡張子を取り出し、ファイルの形式を判別する
+        $tmp = pathinfo($item_image['name']);
+        $extension = $tmp["extension"];
+        if ($extension === "jpg" || $extension === "jpeg" || $extension === "JPG" || $extension === "JPEG") {
+          $extension = "jpeg";
+        } elseif ($extension === "png" || $extension === "PNG") {
+          $extension = "png";
+        } elseif ($extension === "gif" || $extension === "GIF") {
+          $extension = "gif";
+        } else {
+          echo "非対応のファイルです";
+          echo ("<button onclick=location.href='../view_admin/admin_item_index.php' class=btn btn-outline-secondary btn-lg>戻る</button>");
+        }
+        try {
+          // db_connectメソッドを呼び出す
+          $pdo = $this->db_connect();
+          $date = getdate();
+          // DBに格納するファイル名を設定
+          $item_image = $item_image['tmp_name'] . $date["year"] . $date["mon"] . $date["mday"] . $date["hours"] . $date["minutes"] . $date["seconds"];
+          $item_image = hash("sha256", $item_image);
+          // DBにデータを格納
+          $stmt = $pdo->prepare("INSERT INTO messages(genre_id, article_id, name, introduction, price, item_image, extension, raw_data, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :item_image, :extension, :raw_data, :is_status, now(), now());");
+          $stmt->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
+          $stmt->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+          $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+          $stmt->bindParam(':introduction', $introduction, PDO::PARAM_STR);
+          $stmt->bindParam(':price', $price, PDO::PARAM_STR);
+          $stmt->bindValue(":item_image", $item_image, PDO::PARAM_STR);
+          $stmt->bindValue(":extension", $extension, PDO::PARAM_STR);
+          $stmt->bindValue(":raw_data", $raw_data, PDO::PARAM_STR);
+          $stmt->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+          $stmt->execute();
+        } catch (PDOException $Exception) {
+          die('接続エラー：' . $Exception->getMessage());
+        }
+        // 格納に成功すれば商品一覧画面に遷移
+        header('Location: ../view_admin/admin_item_index.php');
+
+        // 画像ファイルがない場合
+      } else {
+        try {
+          // db_connectメソッドを呼び出す
+          $pdo = $this->db_connect();
+          // DBにデータを格納
+          $stmt = $pdo->prepare("INSERT INTO messages(genre_id, article_id, name, introduction, price, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :is_status, now(), now());");
+          $stmt->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
+          $stmt->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+          $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+          $stmt->bindParam(':introduction', $introduction, PDO::PARAM_STR);
+          $stmt->bindParam(':price', $price, PDO::PARAM_STR);
+          $stmt->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+          $stmt->execute();
+        } catch (PDOException $Exception) {
+          die('接続エラー：' . $Exception->getMessage());
+        }
+        // 格納に成功すれば商品一覧画面に遷移
+        header('Location: ../view_admin/admin_item_index.php');
+      }
+
+      // 必須項目が入力されていなければ入力画面にリダイレクト
+    } else {
+      $message = "商品名とジャンルと商品説明と価格は必須項目です";
+      return $message;
+      header('Location: ../view_admin/item_input.php');
+    }
   }
 
   // 商品の詳細表示
