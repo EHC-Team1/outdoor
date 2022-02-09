@@ -9,29 +9,36 @@ session_start();
 //   die();
 // }
 
-// Genreクラスを呼び出し
-require_once('../Model/GenreModel.php');
-$pdo = new GenreModel();
-// indexメソッドを呼び出し
-$genres = $pdo->index();
-
-// Articleクラスを呼び出し
-require_once('../Model/ArticleModel.php');
-$pdo = new ArticleModel();
-// indexメソッドを呼び出し
-$articles = $pdo->index();
-
-// 商品追加ボタンが押された場合
+// 「商品追加」ボタンが押された場合
 if (isset($_POST['input_item'])) {
-  // Itemクラスを呼び出し
+  // ItemModelファイルを読み込み
   require_once('../Model/ItemModel.php');
+  // Itemクラスを呼び出し
   $pdo = new ItemModel();
-  // inputクラスを呼び出し
-  $pdo = $pdo->input();
+  // inputメソッドを呼び出し
+  $item = $pdo->input();
   // エラーメッセージを$messageに格納
-  $message = $pdo;
+  $message = $item;
+
+  // 押されていない状態
+} else {
+  // GenreModelファイルを読み込み
+  require_once('../Model/GenreModel.php');
+  // Genreクラスを呼び出し
+  $pdo = new GenreModel();
+  // indexメソッドを呼び出し
+  $genres = $pdo->index();
+
+  // ArticleModelファイルを読み込み
+  require_once('../Model/ArticleModel.php');
+  // Articleクラスを呼び出し
+  $pdo = new ArticleModel();
+  // indexメソッドを呼び出し
+  $articles = $pdo->index();
+
+  $message = "";
 }
-$message = "";
+$message = htmlspecialchars($message);
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -40,8 +47,8 @@ $message = "";
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5 mb-5">商品作成フォーム</h1>
     <div class="col-md-10">
-      <?php $message = htmlspecialchars($message); ?>
-      <form action="item_input.php" method="post" enctype="multipart/form-data">
+      <?= $message; ?>
+      <form method="post" enctype="multipart/form-data">
         <div class="form-group">
           <label>商品名</label>
           <input type="text" name="name" class="form-control">

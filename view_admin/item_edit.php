@@ -1,10 +1,11 @@
 <?php
 session_start();
 
-// Messageクラスを呼び出し
+// ItemModelファイルを呼び出し
 require_once('../Model/ItemModel.php');
+// Itemクラスを呼び出し
 $pdo = new ItemModel();
-// showメソッドを呼び出し
+// editメソッドを呼び出し
 $item = $pdo->edit();
 ?>
 
