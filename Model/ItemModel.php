@@ -33,7 +33,12 @@ class ItemModel
     $introduction = htmlspecialchars($_POST['introduction'], ENT_QUOTES, 'UTF-8');
     $item_image = $_FILES['item_image'];
     $price = $_POST['price'];
-    $is_status = $_POST['is_status'];
+    // 購入ステータスの判定
+    if ($_POST['is_status'] == "buy_able") {
+      $is_status = 1;
+    } else {
+      $is_status = 0;
+    }
 
     // 必須項目が入力されているかチェック
     if ($genre_id && $name && $introduction && $price && $is_status) {

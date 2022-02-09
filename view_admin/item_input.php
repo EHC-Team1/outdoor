@@ -66,9 +66,9 @@ $message = "";
           <label>税込価格</label>
           <input type="text" name="price" class="form-control">
           <label>販売ステータス</label>
-          <input type="radio" class="btn-check" name="is_status" value="1" checked>
+          <input type="radio" class="btn-check" name="is_status" value="buy_able" checked>
           <label class="btn btn-outline-success">購入可能</label>
-          <input type="radio" class="btn-check" name="is_status" value="0">
+          <input type="radio" class="btn-check" name="is_status" value="buy_unable">
           <label class="btn btn-outline-danger">販売停止</label>
           <div class="input-group mt-3 mb-3">
             <input type="file" name="image" class="form-control-file">

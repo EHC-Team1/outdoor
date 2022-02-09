@@ -37,6 +37,19 @@ class ArticleModel
   // 記事の一覧表示
   public function index()
   {
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      // DBからarticlesテーブルの全データを取得
+      $articles = $pdo->prepare(
+        "SELECT * FROM articles"
+      );
+      $articles->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    // $articlesを返す
+    return $articles;
   }
 
   // 該当ジャンルの商品の一覧
