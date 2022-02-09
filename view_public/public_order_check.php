@@ -17,7 +17,7 @@ $pdo = new OrderModel();
   </div>
   <div class="row">
     <div class="col-md-9">
-      <table border="1">
+      <table class="table">
         <tr>
           <th>商品名</th>
           <th>単価(税込み)</th>
@@ -36,7 +36,7 @@ $pdo = new OrderModel();
       </table>
     </div>
     <div class="col-md-3">
-      <table border="1">
+      <table class="table">
         <tbody>
           <tr>
             <th>送料</th>
