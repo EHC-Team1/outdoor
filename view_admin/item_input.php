@@ -2,16 +2,14 @@
 // セッションを宣言
 session_start();
 
-// // 管理者としてログインしているかチェック
-// if (isset($_SESSION['admin'])) {
-// } else {
-//   header("Location: admin_login.php");
-//   die();
-// }
+// 管理者としてログインしているかチェック
+if (isset($_SESSION['admin'])) {
+} else {
+  header("Location: admin_login.php");
+  die();
+}
 
 // Genreクラスを呼び出し
-// var_dump(dirname(__FILE__));
-// die();
 require_once('../Model/GenreModel.php');
 $pdo = new GenreModel();
 // indexメソッドを呼び出し
@@ -41,9 +39,9 @@ $genres = $pdo->index();
         <input type="text" name="price" class="form-control">
         <label>販売ステータス</label>
         <input type="radio" class="btn-check" name="is_status" value="TRUE" checked>
-        <label class="btn btn-outline-success">購入可能</label>
-        <input type="radio" class="btn-check" name="is_status" value="FALSE">
-        <label class="btn btn-outline-danger">販売停止</label>
+        <label class="btn btn-outline-success" id="success-outlined">購入可能</label>
+        <input type="radio" class="btn-check" name="is_status" id="danger-outlined" value="FALSE">
+        <label class="btn btn-outline-danger" id="danger-outlined">販売停止</label>
         <input type="submit" class="btn btn-outline-success btn-lg" value="商品を追加する">
       </div>
     </form>
