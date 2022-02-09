@@ -33,7 +33,12 @@ class ItemModel
     $introduction = htmlspecialchars($_POST['introduction'], ENT_QUOTES, 'UTF-8');
     $item_image = $_FILES['item_image'];
     $price = $_POST['price'];
-    $is_status = $_POST['is_status'];
+    // 購入ステータスの判定
+    if ($_POST['is_status'] == "buy_able") {
+      $is_status = 1;
+    } else {
+      $is_status = 0;
+    }
 
     // 必須項目が入力されているかチェック
     if ($genre_id && $name && $introduction && $price && $is_status) {
@@ -63,17 +68,17 @@ class ItemModel
           $item_image = $item_image['tmp_name'] . $date["year"] . $date["mon"] . $date["mday"] . $date["hours"] . $date["minutes"] . $date["seconds"];
           $item_image = hash("sha256", $item_image);
           // DBにデータを格納
-          $stmt = $pdo->prepare("INSERT INTO messages(genre_id, article_id, name, introduction, price, item_image, extension, raw_data, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :item_image, :extension, :raw_data, :is_status, now(), now());");
-          $stmt->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
-          $stmt->bindParam(':article_id', $article_id, PDO::PARAM_INT);
-          $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-          $stmt->bindParam(':introduction', $introduction, PDO::PARAM_STR);
-          $stmt->bindParam(':price', $price, PDO::PARAM_STR);
-          $stmt->bindValue(":item_image", $item_image, PDO::PARAM_STR);
-          $stmt->bindValue(":extension", $extension, PDO::PARAM_STR);
-          $stmt->bindValue(":raw_data", $raw_data, PDO::PARAM_STR);
-          $stmt->bindParam(':is_status', $is_status, PDO::PARAM_INT);
-          $stmt->execute();
+          $item = $pdo->prepare("INSERT INTO messages(genre_id, article_id, name, introduction, price, item_image, extension, raw_data, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :item_image, :extension, :raw_data, :is_status, now(), now());");
+          $item->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
+          $item->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+          $item->bindParam(':name', $name, PDO::PARAM_STR);
+          $item->bindParam(':introduction', $introduction, PDO::PARAM_STR);
+          $item->bindParam(':price', $price, PDO::PARAM_STR);
+          $item->bindValue(":item_image", $item_image, PDO::PARAM_STR);
+          $item->bindValue(":extension", $extension, PDO::PARAM_STR);
+          $item->bindValue(":raw_data", $raw_data, PDO::PARAM_STR);
+          $item->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+          $item->execute();
         } catch (PDOException $Exception) {
           die('接続エラー：' . $Exception->getMessage());
         }
@@ -86,14 +91,14 @@ class ItemModel
           // db_connectメソッドを呼び出す
           $pdo = $this->db_connect();
           // DBにデータを格納
-          $stmt = $pdo->prepare("INSERT INTO messages(genre_id, article_id, name, introduction, price, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :is_status, now(), now());");
-          $stmt->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
-          $stmt->bindParam(':article_id', $article_id, PDO::PARAM_INT);
-          $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-          $stmt->bindParam(':introduction', $introduction, PDO::PARAM_STR);
-          $stmt->bindParam(':price', $price, PDO::PARAM_STR);
-          $stmt->bindParam(':is_status', $is_status, PDO::PARAM_INT);
-          $stmt->execute();
+          $item = $pdo->prepare("INSERT INTO messages(genre_id, article_id, name, introduction, price, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :is_status, now(), now());");
+          $item->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
+          $item->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+          $item->bindParam(':name', $name, PDO::PARAM_STR);
+          $item->bindParam(':introduction', $introduction, PDO::PARAM_STR);
+          $item->bindParam(':price', $price, PDO::PARAM_STR);
+          $item->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+          $item->execute();
         } catch (PDOException $Exception) {
           die('接続エラー：' . $Exception->getMessage());
         }
