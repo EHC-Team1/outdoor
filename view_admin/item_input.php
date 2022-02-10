@@ -48,7 +48,7 @@ $message = htmlspecialchars($message);
     <h1 class="text-center mt-5 mb-5">商品作成フォーム</h1>
     <div class="col-md-10">
       <?= $message; ?>
-      <form method="post" enctype="multipart/form-data">
+      <form action="item_input.php" method="post" enctype="multipart/form-data">
         <div class="form-group">
           <label>商品名</label>
           <input type="text" name="name" class="form-control">

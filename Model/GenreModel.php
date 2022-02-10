@@ -29,7 +29,13 @@ class GenreModel
   {
     $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
     // ジャンル名が入っているかチェック
-    if (isset($name)) {
+    if (empty($name)) {
+      // 入っていなければエラーメッセージを表示
+      $message = "ジャンル名を入力してください。";
+      return $message;
+
+      // 入力されていた場合
+    } else {
       try {
         // DBに接続
         $pdo = $this->db_connect();
@@ -43,10 +49,6 @@ class GenreModel
       }
       $message = "ジャンルが追加されました。";
       return $message;
-
-      // 入っていなければgenre_index.phpにリダイレクト
-    } else {
-      header('Location: genre_index.php');
     }
   }
 
@@ -88,24 +90,18 @@ class GenreModel
   {
     $id = $_POST['id'];
     $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
-    if (isset($name)) {
-      try {
-        // DBに接続
-        $pdo = $this->db_connect();
-        $genre = $pdo->prepare(
-          "UPDATE genres SET name = :name, updated_at = now() WHERE id = $id"
-        );
-        $genre->bindParam(':name', $name, PDO::PARAM_STR);
-        $genre->execute();
-      } catch (PDOException $Exception) {
-        die('接続エラー：' . $Exception->getMessage());
-      }
-      header('Location: genre_index.php');
-
-      // 入っていなければgenre_edit.phpにリダイレクト
-    } else {
-      header('Location: genre_edit.php');
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $genre = $pdo->prepare(
+        "UPDATE genres SET name = :name, updated_at = now() WHERE id = $id"
+      );
+      $genre->bindParam(':name', $name, PDO::PARAM_STR);
+      $genre->execute();
+    } catch (PDOException $Exception) {
+      die('接続エラー：' . $Exception->getMessage());
     }
+    header('Location: genre_index.php');
   }
 
   // ジャンルの削除
