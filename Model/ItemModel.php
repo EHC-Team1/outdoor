@@ -68,7 +68,7 @@ class ItemModel
           $item_image = $item_image['tmp_name'] . $date["year"] . $date["mon"] . $date["mday"] . $date["hours"] . $date["minutes"] . $date["seconds"];
           $item_image = hash("sha256", $item_image);
           // DBにデータを格納
-          $item = $pdo->prepare("INSERT INTO messages(genre_id, article_id, name, introduction, price, item_image, extension, raw_data, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :item_image, :extension, :raw_data, :is_status, now(), now());");
+          $item = $pdo->prepare("INSERT INTO items(genre_id, article_id, name, introduction, price, item_image, extension, raw_data, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :item_image, :extension, :raw_data, :is_status, now(), now());");
           $item->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
           $item->bindParam(':article_id', $article_id, PDO::PARAM_INT);
           $item->bindParam(':name', $name, PDO::PARAM_STR);
@@ -91,7 +91,7 @@ class ItemModel
           // db_connectメソッドを呼び出す
           $pdo = $this->db_connect();
           // DBにデータを格納
-          $item = $pdo->prepare("INSERT INTO messages(genre_id, article_id, name, introduction, price, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :is_status, now(), now());");
+          $item = $pdo->prepare("INSERT INTO items(genre_id, article_id, name, introduction, price, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :is_status, now(), now());");
           $item->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
           $item->bindParam(':article_id', $article_id, PDO::PARAM_INT);
           $item->bindParam(':name', $name, PDO::PARAM_STR);

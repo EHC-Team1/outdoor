@@ -33,13 +33,14 @@ if (isset($_POST['update_genre'])) {
         <h1 class="text-center">ジャンル編集フォーム</h1>
       </div>
       <div class=" col-md-4">
-        <input type="text" name="name" class="form-control" value="<?php echo ($genre['name']); ?>">
+        <input type="text" name="name" class="form-control" value="<?php echo ($genre['name']); ?>" id="genre_edit_input">
       </div>
       <div class="col-md-2">
-        <button type="submit" name="update_genre" class="btn btn-outline-success btn-lg">更新</button>
+        <button type="submit" name="update_genre" class="btn btn-outline-success btn-lg" id="genre_edit_btn">更新</button>
       </div>
     </div>
   </form>
 </div>
-
+<!-- バリデーション用jsファイル -->
+<script src="../js/genre_edit.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
