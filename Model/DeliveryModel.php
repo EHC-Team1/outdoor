@@ -27,6 +27,39 @@ class DeliveryModel
   // 配送先の登録
   public function input()
   {
+    $customer_id = $_POST['customer_id'];
+    $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+    $postal_code = htmlspecialchars($_POST['postal_code'], ENT_QUOTES, 'UTF-8');
+    $address = htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8');
+    var_dump($_POST);
+    // 必要項目が入っているかチェック
+    if (empty($name || $postal_code || $address)) {
+      // 入っていなければdelivery_input.phpへリダイレクト
+      // header('Location: delivery_input.php');
+      $message = "必須項目を入力してください。";
+      return $message;
+    } else {
+      try {
+        // DBに接続
+        $pdo = $this->db_connect();
+        $delivery = $pdo->prepare(
+          "INSERT INTO deliveries (customer_id, name, postal_code, address) VALUES(:customer_id, :name, :postal_code, :address)"
+        );
+        $delivery->bindParam(':customer_id', $customer_id, PDO::PARAM_STR);
+        $delivery->bindParam(':name', $name, PDO::PARAM_STR);
+        $delivery->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
+        $delivery->bindParam(':address', $address, PDO::PARAM_STR);
+        $delivery->execute();
+      } catch (PDOException $Exception) {
+        die('接続エラー：' . $Exception->getMessage());
+      }
+      // $message = "新規配送先が登録されました。";
+      // return $message;
+
+      // 格納に成功すればマイページに遷移
+      header('Location: mypage.php');
+    }
+
   }
 
   // 配送先の一覧表示
