@@ -3,18 +3,21 @@
 <h1>会員ログイン</h1>
 <h4>商品のご購入の際は、ログインが必要です。</h4>
 
-<form>
+<form method="post" action="">
 
   <!-- 名前入力 -->
-  <label for="name">お名前</label>
-  <input id="name" type="text"><br><br>
+  <label for="name">Name</label>
+  <input id="name" type="text" placeholder="姓">
+  <input id="name" type="text" placeholder="名"><br><br>
 
   <!-- パスワード入力 -->
-  <label for="password">パスワード</label>
+  <label for="password">Password</label>
   <input id="password" type="password"><br><br>
 
+  <!-- サインアップ画面へ -->
+  <a href="public_signup.php">新規登録</a>
+
   <!-- ログインボタン -->
-  <input type="submit" name="btn_submit" value="新規登録">
   <input type="submit" name="btn_submit" value="ログイン">
 
 </form>
