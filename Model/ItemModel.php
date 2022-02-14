@@ -108,7 +108,7 @@ class ItemModel
 
       // 必須項目が入力されていなければ入力画面にリダイレクト
     } else {
-      $message = "商品名とジャンルと商品説明と価格は必須項目です";
+      $message = "商品名・ジャンル・商品説明・価格は必須項目です";
       return $message;
       header('Location: ../view_admin/item_input.php');
     }
