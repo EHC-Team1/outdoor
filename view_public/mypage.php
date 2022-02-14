@@ -2,8 +2,19 @@
 // セッションを宣言
 session_start();
 
+// CustomerModelファイルを読み込み
+require_once('../Model/CustomerModel.php');
+// Customerクラスを呼び出し
+$pdo = new CustomerModel();
+// showメソッドを呼び出し
+$customers = $pdo->show();
 
-
+// DeliveryModelファイルを読み込み
+require_once('../Model/DeliveryModel.php');
+// Deliveryクラスを呼び出し
+$pdo = new DeliveryModel();
+// indexメソッドを呼び出し
+$deliveries = $pdo->index();
 
 ?>
 
@@ -24,23 +35,23 @@ session_start();
             <tbody>
               <tr>
                 <th scope="row" class="col-md-4 text-right">氏名</th>
-                <td class="col-md-8"><? ?>山田太郎(仮)</td>
+                <td class="col-md-8"><? $customers['name_last'] ?> <? $customer['name_first'] ?></td>
               </tr>
               <tr>
                 <th scope="row" class="col-md-4 text-right">メールアドレス</th>
-                <td class="col-md-8"><? ?></td>
+                <td class="col-md-8"><? $customers['email'] ?></td>
               </tr>
               <tr>
                 <th scope="row" class="col-md-4 text-right">郵便番号</th>
-                <td class="col-md-8"><? ?></td>
+                <td class="col-md-8"><? $customers['postal_code'] ?></td>
               </tr>
               <tr>
                 <th scope="row" class="col-md-4 text-right">住所</th>
-                <td class="col-md-8"><? ?></td>
+                <td class="col-md-8"><? $customers['address'] ?></td>
               </tr>
               <tr>
                 <th scope="row" class="col-md-4 text-right">電話番号</th>
-                <td class="col-md-8"><? ?></td>
+                <td class="col-md-8"><? $customers['telephone_num'] ?></td>
               </tr>
             </tbody>
           </table>
@@ -53,12 +64,34 @@ session_start();
     </form>
     <div class="col-md-10">
       <!-- 配送先を繰り返しで表示 -->
-      <div class="card">
-        <div class="card-body">
+      <?php while ($delivery = $deliveries->fetch()) : ?>
+        <div class="card mb-3">
+          <div class="card-body">
+            <table class="table table-borderless">
+              <tbody>
+                <tr>
+                  <td><?= $delivery['name'] ?> 様</td>
+                  <td><?= $delivery['postal_code'] ?></td>
+                  <td><?= $delivery['address'] ?></td>
+                  <td>
+                    <form action="delivery_edit.php" method="post" class="d-flex align-items-center justify-content-center">
+                      <input type="hidden" name="id" value="<?php echo $delivery['id'] ?>">
+                      <button type="submit" name="edit" class="btn btn-outline-success">編集</button>
+                    </form>
+                  </td>
+                  <td>
+                    <form method="post" class="d-flex align-items-center justify-content-center">
+                      <input type="hidden" name="id" value="<?php echo $delivery['id'] ?>">
+                      <button type="submit" name="delete" class="btn btn-outline-danger">削除</button>
+                    </form>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      <?php endwhile; ?>
     </div>
-
   </div>
 </div>
 
