@@ -2,20 +2,8 @@
 // セッションを宣言
 session_start();
 
-// if (isset($_POST['input_delivery'])) {
-//   // 入力情報をデータベースに登録
-//   var_dump($_POST);
-//   $delivery = $db->prepare("INSERT INTO deliveries SET name=?, postal_code=?, address=?, created=NOW();");
-//   $deliveries->execute(array(
-//       $_POST['name'],
-//       $_POST['postal_code'],
-//       $_POST['address'],
-//   ));
-//   header('Location: mypage.php');
-// }
-
 // 「新規登録」ボタンが押された場合
-if (isset($_POST['input_delivery'])) {
+if (isset($_POST['delivery_input'])) {
   // DeliveryModelファイルを読み込み
   require_once('../Model/DeliveryModel.php');
   // Deliveryクラスを呼び出す
@@ -25,6 +13,7 @@ if (isset($_POST['input_delivery'])) {
   // エラーメッセージを$messageに格納
   $message = $delivery;
 }
+$message = "";
 $message = htmlspecialchars($message);
 
 ?>
@@ -34,10 +23,12 @@ $message = htmlspecialchars($message);
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5 mb-5">配送先新規登録</h1>
+    <!-- 戻るボタンは仮置き -->
+    <button onclick="history.back();" class="btn btn-outline-secondary">戻る</button>
     <div class="col-md-10">
-    <?= $message; ?>
+      <?= $message; ?>
       <form method="POST">
-      <input type="hidden" name="customer_id" value="1">
+        <input type="hidden" name="customer_id" value="1">
         <table class="table table-borderless">
           <tbody>
             <tr>
@@ -61,11 +52,12 @@ $message = htmlspecialchars($message);
           </tbody>
         </table>
         <div class="d-flex align-items-center justify-content-center">
-          <button type="submit" name="input_delivery" class="btn btn-outline-primary btn-lg">新規登録</button>
+          <button type="submit" name="delivery_input" class="btn btn-outline-primary btn-lg" id="delivery_input_btn">新規登録</button>
         </div>
       </form>
     </div>
   </div>
 </div>
-
+<!-- バリデーション用jsファイル -->
+<script src="../js/delivery_input.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
