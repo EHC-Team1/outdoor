@@ -29,8 +29,6 @@ if (isset($_POST['delete'])) {
   $pdo = new DeliveryModel();
   // indexメソッドを呼び出し
   $deliveries = $pdo->index();
-
-
 }
 
 ?>
@@ -87,8 +85,6 @@ if (isset($_POST['delete'])) {
           <table class="table table-borderless">
             <tbody>
               <?php $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
-              var_dump($deliveries);
-              exit;
               foreach ($deliveries as $delivery) { ?>
                 <tr>
                   <td><?= $delivery['name'] ?> 様</td>
@@ -112,14 +108,9 @@ if (isset($_POST['delete'])) {
           </table>
         </div>
       </div>
-
     </div>
   </div>
 </div>
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 <!-- バリデーション用jsファイル -->
 <script src="../js/mypage.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
