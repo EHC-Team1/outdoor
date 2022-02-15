@@ -10,40 +10,40 @@ a {
 
 .slide1 {
   width: 100%;
-  height: 350px;
+  height: 450px;
   background-image: url(../image/slide1.jpg);
   background-size: cover;
-  background-position: center;
+  background-position: bottom;
 }
 
 .slide2 {
   width: 100%;
-  height: 350px;
+  height: 450px;
   background-image: url(../image/slide2.jpg);
   background-size: cover;
-  background-position: center;
+  background-position: bottom;
 }
 
 .slide3 {
   width: 100%;
-  height: 350px;
+  height: 450px;
   background-image: url(../image/slide3.jpg);
   background-size: cover;
-  background-position: center;
+  background-position: bottom;
 }
 
 .slide4 {
   width: 100%;
-  height: 350px;
+  height: 450px;
   background-image: url(../image/slide4.jpg);
   background-size: cover;
-  background-position: center;
+  background-position: bottom;
 }
 
 .slide5 {
   width: 100%;
-  height: 350px;
+  height: 450px;
   background-image: url(../image/slide5.jpg);
   background-size: cover;
-  background-position: center;
+  background-position: bottom;
 }
