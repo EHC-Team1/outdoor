@@ -4,7 +4,7 @@ session_start();
 
 // DeliveryModelファイルを呼び出し
 require_once('../Model/DeliveryModel.php');
-// Genreクラスを呼び出し
+// Deliveryクラスを呼び出し
 $pdo = new DeliveryModel();
 // editメソッドを呼び出し
 $delivery = $pdo->edit();
@@ -18,9 +18,7 @@ if (isset($_POST['update_delivery'])) {
   $delivery = $pdo->update();
 }
 
-
 ?>
-
 
 <?php require_once '../view_common/header.php'; ?>
 
