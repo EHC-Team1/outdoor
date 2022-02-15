@@ -120,7 +120,6 @@ class DeliveryModel
     header('Location: mypage.php');
   }
 
-
   // 配送先の削除
   public function delete()
   {
