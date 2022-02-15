@@ -1,14 +1,9 @@
-$(document).ready(function () {
-  $("#theTarget").skippr({
-    transition: "slide",
-    speed: 1000,
-    easing: "easeOutQuart",
-    navType: "block",
-    childrenElementType: "div",
-    arrows: true,
-    autoPlay: true,
-    autoPlayDuration: 3000,
-    keyboardOnAlways: true,
-    hidePrevious: false,
+$(function(){
+  $('.main-visual').slick({
+    accessibility: true,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    dots: true,
+    fade: true,
   });
 });
