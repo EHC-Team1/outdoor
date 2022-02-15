@@ -34,19 +34,19 @@ $message = htmlspecialchars($message);
             <tr>
               <th scope="row" class="col-md-4 text-right">宛名</th>
               <td class="col-md-8">
-                <input type="text_field" name="name" placeholder="藤浪翔平">
+                <input type="text" name="name" id="delivery_input" placeholder="藤浪翔平">
               </td>
             </tr>
             <tr>
               <th scope="row" class="col-md-4 text-right">郵便番号</th>
               <td class="col-md-8">
-                <input type="text_field" name="postal_code" placeholder="000-1111">
+                <input type="text" name="postal_code" id="delivery_input" placeholder="000-1111">
               </td>
             </tr>
             <tr>
               <th scope="row" class="col-md-4 text-right">住所</th>
               <td class="col-md-8">
-                <input type="text_field" name="address" class="col-md-8 p-0" placeholder="東京都豊島区池袋0-0-0">
+                <input type="text" name="address" id="delivery_input" class="col-md-8 p-0" placeholder="東京都豊島区池袋0-0-0">
               </td>
             </tr>
           </tbody>

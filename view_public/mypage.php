@@ -16,6 +16,21 @@ $pdo = new DeliveryModel();
 // indexメソッドを呼び出し
 $deliveries = $pdo->index();
 
+// 削除ボタンが押下された時
+if (isset($_POST['delete'])) {
+  // Deliveryクラスを呼び出し
+  $pdo = new DeliveryModel();
+  // deleteメソッドを呼び出し
+  $delivery = $pdo->delete();
+  // サクセスメッセージを$messageに格納
+  $message = $delivery;
+
+  // Deliveryクラスを呼び出し
+  $pdo = new DeliveryModel();
+  // indexメソッドを呼び出し
+  $deliveries = $pdo->index();
+}
+
 ?>
 
 
@@ -64,11 +79,16 @@ $deliveries = $pdo->index();
     </form>
     <div class="col-md-10">
       <!-- 配送先を繰り返しで表示 -->
-      <?php while ($delivery = $deliveries->fetch()) : ?>
-        <div class="card mb-3">
-          <div class="card-body">
-            <table class="table table-borderless">
-              <tbody>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <table class="table table-borderless">
+            <tbody>
+            
+              <?php $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
+              var_dump($deliveries);
+              exit;
+              foreach ($deliveries as $delivery) { ?>
                 <tr>
                   <td><?= $delivery['name'] ?> 様</td>
                   <td><?= $delivery['postal_code'] ?></td>
@@ -82,18 +102,19 @@ $deliveries = $pdo->index();
                   <td>
                     <form method="post" class="d-flex align-items-center justify-content-center">
                       <input type="hidden" name="id" value="<?php echo $delivery['id'] ?>">
-                      <button type="submit" name="delete" class="btn btn-outline-danger">削除</button>
+                      <button type="submit" name="delete" id="delivery_delete_btn" class="btn btn-outline-danger">削除</button>
                     </form>
                   </td>
                 </tr>
-              </tbody>
-            </table>
-          </div>
+              <?php } ?>
+            </tbody>
+          </table>
         </div>
-      <?php endwhile; ?>
+      </div>
+
     </div>
   </div>
 </div>
-
-
+<!-- バリデーション用jsファイル -->
+<script src="../js/mypage.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
