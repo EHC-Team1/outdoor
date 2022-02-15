@@ -84,7 +84,6 @@ if (isset($_POST['delete'])) {
         <div class="card-body">
           <table class="table table-borderless">
             <tbody>
-            
               <?php $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
               var_dump($deliveries);
               exit;
