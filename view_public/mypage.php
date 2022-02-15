@@ -16,11 +16,7 @@ $pdo = new DeliveryModel();
 // indexメソッドを呼び出し
 $deliveries = $pdo->index();
 
-<<<<<<< Updated upstream
 // 削除ボタンが押下された時
-=======
-// 削除ボタンが押されたとき
->>>>>>> Stashed changes
 if (isset($_POST['delete'])) {
   // Deliveryクラスを呼び出し
   $pdo = new DeliveryModel();
@@ -28,14 +24,13 @@ if (isset($_POST['delete'])) {
   $delivery = $pdo->delete();
   // サクセスメッセージを$messageに格納
   $message = $delivery;
-<<<<<<< Updated upstream
 
   // Deliveryクラスを呼び出し
   $pdo = new DeliveryModel();
   // indexメソッドを呼び出し
   $deliveries = $pdo->index();
-=======
->>>>>>> Stashed changes
+
+
 }
 
 ?>
