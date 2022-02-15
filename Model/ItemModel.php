@@ -41,7 +41,7 @@ class ItemModel
     }
 
     // 必須項目が入力されているかチェック
-    if ($genre_id && $name && $introduction && $price && $is_status) {
+    if ($genre_id && $article_id && $name && $introduction && $price) {
 
       // 画像ファイルがある場合
       if (isset($item_image['error']) && is_int($item_image['error']) && $item_image["name"] !== "") {
@@ -108,7 +108,7 @@ class ItemModel
 
       // 必須項目が入力されていなければ入力画面にリダイレクト
     } else {
-      $message = "商品名・ジャンル・商品説明・価格は必須項目です";
+      $message = "画像以外は必須項目です";
       return $message;
       header('Location: ../view_admin/item_input.php');
     }
@@ -122,6 +122,16 @@ class ItemModel
   // 商品の一覧表示
   public function index()
   {
+    try {
+      $pdo = $this->db_connect();
+      $items = $pdo->prepare(
+        "SELECT * FROM items ORDER BY updated_at DESC"
+      );
+      $items->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $items;
   }
 
   // 該当ジャンル商品の一覧表示
