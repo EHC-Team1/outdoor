@@ -264,10 +264,25 @@ class CustomerModel
   {
   }
 
-  //
+
+  // ユーザー情報の一覧表示
   public function index()
   {
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+
+      // SQL文 customersテーブルの情報を全て抽出
+      $customer = $pdo->prepare(
+        "SELECT * FROM customers"
+      );
+      $customer->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $customer;
   }
+
 
   //ユーザー情報の編集
   public function edit()
