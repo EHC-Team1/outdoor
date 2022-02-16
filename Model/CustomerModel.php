@@ -273,14 +273,14 @@ class CustomerModel
       $pdo = $this->db_connect();
 
       // SQL文 customersテーブルの情報を全て抽出
-      $customer = $pdo->prepare(
+      $customers = $pdo->prepare(
         "SELECT * FROM customers"
       );
       $customer->execute();
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
     }
-    return $customer;
+    return $customers;
   }
 
 
