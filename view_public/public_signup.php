@@ -2,14 +2,14 @@
 // セッションの宣言
 session_start();
 
-// セッションの中身を初期化
-$_SESSION['customer']['name_last'] = $_SESSION['customer']['name_first'] = $_SESSION['customer']['email']
-  = $_SESSION['customer']['postal_code'] = $_SESSION['customer']['address'] = $_SESSION['customer']['telephone_num']
-  = $_SESSION['customer']['password'] = '';
 
-// 「確認」ボタンが押された場合
-if (isset($_POST['check'])) {
+  // public_signup.phpで「再編集」ボタンが押された場合
+if (isset($_POST['edit'])) {
+  // エラーメッセージ無し
+  $message = "";
 
+  // 「確認」ボタンが押された場合
+} elseif (isset($_POST['check'])) {
   require_once('../Model/CustomerModel.php');
   $pdo = new CustomerModel();
 
@@ -21,21 +21,14 @@ if (isset($_POST['check'])) {
 } elseif (empty($message)) {
   $message = "";
 
-  // public_signup.phpで「再編集」ボタンが押された場合
-} elseif (isset($_POST['edit'])) {
-  require_once('../Model/CustomerModel.php');
-  $pdo = new CustomerModel();
-
-  // CustomerModelのcheckメソッドを呼び出す
-  $pdo = $pdo->check();
-  // $message = $pdo;
-
   // ボタンが押されていない場合(初期画面)
 } else {
   // セッションの中身を初期化
   $_SESSION['customer']['name_last'] = $_SESSION['customer']['name_first'] = $_SESSION['customer']['email']
     = $_SESSION['customer']['postal_code'] = $_SESSION['customer']['address'] = $_SESSION['customer']['telephone_num']
     = $_SESSION['customer']['password'] = '';
+  // エラーメッセージ無し
+  $message = "";
 }
 
 // メッセージをサニタイズ
@@ -52,17 +45,6 @@ $message = htmlspecialchars($message);
 <h4>下記項目を入力して、確認ボタンを押して下さい。</h4>
 
 <?= $message; ?>
-
-
-<!-- 出来たら、エラーメッセージは一括で出したいなぁ -->
-<!-- <?php
-      if (!empty($message)) : ?>
-  <?php foreach ($message as $value) : ?>
-    <li>・<?php echo $value; ?></li>
-  <?php endforeach; ?>
-<?php endif; ?> -->
-
-
 
 <form method="post">
 
@@ -92,7 +74,7 @@ $message = htmlspecialchars($message);
   <label for="password">Password</label>
   <input id="password" type="password" name="password" placeholder="半角英数字8文字以上24文字以下" value="<?= $_SESSION['customer']['password'] ?>"><br><br>
 
-  <!-- パスワード(確認)入力 いる？？-->
+  <!-- パスワード(確認)入力 時間あれば-->
   <!-- <label for="password2">Password(確認用)</label>
   <input id="password2" type="password" name="password2" placeholder="半角英数字8文字以上24文字以下" value="<?= $_SESSION['customer']['password2'] ?>"><br><br> -->
 

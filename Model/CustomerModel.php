@@ -54,74 +54,74 @@ class CustomerModel
       // $password2 = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password2']);
 
 
-        // 名前(姓)のバリデーション 30文字以下
-        if (20 <= mb_strlen($name_last, 'UTF-8')) {
-          $message = '名前(姓)は、30文字以下で入力して下さい。';
-          return $message;
-        }
-
-        // 名前(名)のバリデーション 30文字以下
-        if (20 <= mb_strlen($name_first, 'UTF-8')) {
-          $message = '名前(名)は、30文字以下で入力して下さい。';
-          return $message;
-        }
-
-        // メールアドレスのバリデーション 形式制限 200文字以下
-        if (!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9])+([a-zA-Z0-9._-]+)+$/", $email)) {
-          $message = 'メールアドレスの形式で入力して下さい。';
-          return $message;
-
-          // メールアドレスの文字数制限 300文字以下
-        } else {
-          if (300 <= mb_strlen($email, 'UTF-8')) {
-            $message = 'メールアドレスは、200文字以下で入力して下さい。';
-            return $message;
-          }
-        }
-
-        // 郵便番号のバリデーション 数字7桁ハイフン無し
-        if (!preg_match("/^[0-9]{7}+$/", $postal_code)) {
-          $message = '郵便番号は、半角数字7桁ハイフン無しで入力して下さい。';
-          return $message;
-        }
-
-        // 住所のバリデーション 300文字以下
-        if (300 <= mb_strlen($address, 'UTF-8')) {
-          $message = 'ご住所は、300文字以下で入力して下さい。';
-          return $message;
-        }
-
-        // 電話番号のバリデーション 数字30桁以内ハイフン無し
-        if (!preg_match("/^[0-9]{3,30}+$/", $telephone_num)) {
-          $message = '電話番号は、半角数字ハイフン無しで入力して下さい。';
-          return $message;
-        }
-
-        // パスワードのバリデーション 半角英数字8文字以上24文字以下
-        if (!preg_match("/\A[a-zA-Z\d]{8,24}+$/", $password)) {
-          $message = 'パスワードは、半角英数字8文字以上 24文字以下で入力して下さい。';
-          return $message;
-
-          // パスワード(確認)と一致しているか判定 時間あれば
-          // } else {
-          //   if ($password != $password2) {
-          //     $message = 'パスワード(確認)が、一致しません。';
-          //     return $message;
-          //   }
-        }
-
-        // 各値が入力されていない場合のエラーメッセージ
-      } else {
-        $message = "全て必須項目です。";
+      // 名前(姓)のバリデーション 30文字以下
+      if (20 <= mb_strlen($name_last, 'UTF-8')) {
+        $message = '名前(姓)は、30文字以下で入力して下さい。';
         return $message;
       }
 
-      // 全項目OK(エラーメッセ無し)の場合、入力確認画面へリダイレクト
-      if (empty($message)) {
-        header("Location: ./public_signup_check.php");
-        exit;
+      // 名前(名)のバリデーション 30文字以下
+      if (20 <= mb_strlen($name_first, 'UTF-8')) {
+        $message = '名前(名)は、30文字以下で入力して下さい。';
+        return $message;
       }
+
+      // メールアドレスのバリデーション 形式制限 200文字以下
+      if (!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9])+([a-zA-Z0-9._-]+)+$/", $email)) {
+        $message = 'メールアドレスの形式で入力して下さい。';
+        return $message;
+
+        // メールアドレスの文字数制限 300文字以下
+      } else {
+        if (300 <= mb_strlen($email, 'UTF-8')) {
+          $message = 'メールアドレスは、200文字以下で入力して下さい。';
+          return $message;
+        }
+      }
+
+      // 郵便番号のバリデーション 数字7桁ハイフン無し
+      if (!preg_match("/^[0-9]{7}+$/", $postal_code)) {
+        $message = '郵便番号は、半角数字7桁ハイフン無しで入力して下さい。';
+        return $message;
+      }
+
+      // 住所のバリデーション 300文字以下
+      if (300 <= mb_strlen($address, 'UTF-8')) {
+        $message = 'ご住所は、300文字以下で入力して下さい。';
+        return $message;
+      }
+
+      // 電話番号のバリデーション 数字30桁以内ハイフン無し
+      if (!preg_match("/^[0-9]{3,30}+$/", $telephone_num)) {
+        $message = '電話番号は、半角数字ハイフン無しで入力して下さい。';
+        return $message;
+      }
+
+      // パスワードのバリデーション 半角英数字8文字以上24文字以下
+      if (!preg_match("/\A[a-zA-Z\d]{8,24}+$/", $password)) {
+        $message = 'パスワードは、半角英数字8文字以上 24文字以下で入力して下さい。';
+        return $message;
+
+        // パスワード(確認)と一致しているか判定 時間あれば
+        // } else {
+        //   if ($password != $password2) {
+        //     $message = 'パスワード(確認)が、一致しません。';
+        //     return $message;
+        //   }
+      }
+
+      // 各値が入力されていない場合のエラーメッセージ
+    } else {
+      $message = "全て必須項目です。";
+      return $message;
     }
+
+    // 全項目OK(エラーメッセ無し)の場合、入力確認画面へリダイレクト
+    if (empty($message)) {
+      header("Location: ./public_signup_check.php");
+      exit;
+    }
+  }
 
 
   // ユーザー登録
@@ -204,7 +204,7 @@ class CustomerModel
       return $message;
     }
 
-    // 全項目OK(エラーメッセ無し)の場合、入力確認画面へリダイレクト
+    // 全項目OK(エラーメッセ無し)の場合
     if (empty($message)) {
 
       try {
@@ -223,7 +223,7 @@ class CustomerModel
         $customer->execute();
 
         // 抽出データを配列に格納
-        $user = $customer->fetch();
+        $member = $customer->fetch();
 
         // 問題なければ処理実行
         $customer = $pdo->commit();
@@ -235,23 +235,22 @@ class CustomerModel
       }
 
       // ハッシュ化したパスワードが一致するか検証
-      if (password_verify($password, $user['password'])) {
+      if (password_verify($password, $member['password'])) {
 
-        // とりあえずメッセ出しただけ
-        $message = "ログイン成功です。";
-        var_dump($message);
-        die;
+        // 条件一致の場合、カスタマー情報をセッションに再代入
+        $_SESSION['customer'] = [
+          'name_last' => $member['name_last'], 'name_first' => $member['name_first'], 'email' => $member['email'],
+          'postal_code' => $member['postal_code'], 'address' => $member['address'],
+          'telephone_num' => $member['telephone_num'], 'password' => $member['password']
+        ];
 
-        // 条件一致の場合、TOP画面へリダイレクト
-        // header('Location: ./top.php');
-        // exit;
-
-        // trueの場合、カスタマー情報をセッションに再代入
-        // $_SESSION['customer'] = ['email' => $user['email'], 'password' => $user['password']];
+        // TOP画面へリダイレクト
+        header('Location: ./top.php');
+        exit;
 
         // 不一致の場合、エラーメッセージを返す
       } else {
-        $message = "メールアドレス もしくは、パスワードが間違っています。";
+        $message = "メールアドレス または、パスワードが間違っています。";
         return $message;
       }
     }

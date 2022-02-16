@@ -9,16 +9,7 @@ if (isset($_POST['input'])) {
 
   // CustomerModelのinputメソッドを呼び出して登録処理 → 登録完了画面へ
   $customer = $pdo->input();
-
-  // $message = $customer;
-  // エラーメッセージなければ、表示なし
-  // } else {
-  //   $message = "";
 }
-
-// メッセージをサニタイズ
-// $message = htmlspecialchars($message);
-
 ?>
 
 <!-- ------------------------------ 表示画面 --------------------------------- -->
