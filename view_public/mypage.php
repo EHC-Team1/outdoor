@@ -79,7 +79,6 @@ if (isset($_POST['delete'])) {
     </form>
     <div class="col-md-10">
       <!-- 配送先を繰り返しで表示 -->
-
       <div class="card mb-3">
         <div class="card-body">
           <table class="table table-borderless">
@@ -99,7 +98,7 @@ if (isset($_POST['delete'])) {
                   <td>
                     <form method="post" class="d-flex align-items-center justify-content-center">
                       <input type="hidden" name="id" value="<?php echo $delivery['id'] ?>">
-                      <button type="submit" name="delete" id="delivery_delete_btn" class="btn btn-outline-danger">削除</button>
+                      <button type="submit" name="delete" class="btn btn-outline-danger">削除</button>
                     </form>
                   </td>
                 </tr>
