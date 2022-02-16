@@ -8,6 +8,6 @@
   <button type="submit" name="top" class="btn btn-outline-success btn-lg">TOP画面へ</button>
 </form>
 
-<a href="public_signup.php">ログイン画面へ</a>
+<a href="public_login.php">ログイン画面へ</a>
 
 <?php require_once('../view_common/footer.php'); ?>
