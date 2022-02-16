@@ -142,6 +142,18 @@ class ItemModel
   // 検索該当商品の一覧表示
   public function search_index()
   {
+    $keyword = $_POST['keyword'];
+    try {
+      $pdo = $this->db_connect();
+      $search_items = $pdo->prepare(
+        "SELECT * FROM items WHERE introduction LIKE CONCAT('%',:keyword,'%') AND is_status = 1 ORDER BY updated_at DESC"
+      );
+      $search_items->bindValue(':keyword', $keyword);
+      $search_items->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $search_items;
   }
 
   // 商品の編集
