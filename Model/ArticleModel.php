@@ -37,12 +37,13 @@ class ArticleModel
   // 記事の一覧表示
   public function index()
   {
+
     try {
       // DBに接続
       $pdo = $this->db_connect();
-      // DBからarticlesテーブルの全データを取得
+      // DBからarticlesテーブルの全データを投稿日時の降順で取得
       $articles = $pdo->prepare(
-        "SELECT * FROM articles"
+        "SELECT * FROM articles ORDER BY created_at DESC;"
       );
       $articles->execute();
     } catch (PDOException $Exception) {

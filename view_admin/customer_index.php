@@ -1,7 +1,3 @@
-
-入力途中 20220216 11:05
-
-
 <?php
 // セッションを宣言
 session_start();
@@ -13,61 +9,79 @@ session_start();
 //   die();
 // }
 
+// ------------------ 表示件数制限 MOdelへ移動予定 (値はテスト用) ---------------
+if (isset($_POTS['limit'])) {
+  // 「10件」選択されたら場合
+  if ($_POTS['limit'] === '5') {
+    $limit = 5;
+    // 「30件」選択されたら場合
+  } elseif ($_POTS['limit'] === '7') {
+    $limit = 7;
+  }
+}
+// ------------------------------ 2022.02.16 ---------------------------------
+
 // CustomerModelファイルを読み込み
 require_once('../Model/CustomerModel.php');
 
-  // Genreクラスを呼び出し
-  $pdo = new GenreModel();
-  // indexメソッドを呼び出し
-  $genres = $pdo->index();
-  $message = "";
+// Customerクラスを呼び出し
+$pdo = new CustomerModel();
+// indexメソッドを呼び出し
+$customers = $pdo->index();
+// $message = "";
 
-$message = htmlspecialchars($message);
+// $message = htmlspecialchars($message);
+//
 ?>
 
+<!-- ------------------------------ 表示画面 --------------------------------- -->
+
 <?php require_once '../view_common/header.php'; ?>
+
 <div class="container">
   <form method="post">
     <div class="row d-flex align-items-center justify-content-center mt-5">
-      <div class="col-md-3">
-        <h4 class="text-center">ジャンルを追加</h4>
-      </div>
-      <div class=" col-md-4">
-        <input type="text" name="name" class="form-control" placeholder="ジャンル名">
-      </div>
-      <div class="col-md-3">
-        <button type="submit" name="input_genre" class="btn btn-outline-primary">ジャンルを追加</button>
-      </div>
     </div>
   </form>
-  <h1 class="text-center mt-5 mb-5">ジャンル一覧</h1>
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-10 d-flex flex-row-reverse">
+      <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg mt-3">戻る</button>
+    </div>
+  </div>
+  <h1 class="text-center mt-5 mb-5">ユーザー一覧</h1>
   <div class="row d-flex align-items-center justify-content-center">
     <div class="col-md-10">
-      <?= $message; ?>
+
+      <!-- 表示件数の制限 -->
+      <form method="post">
+        <select name="limit">
+          <option value="">全件</option>
+          <option value="5">10件</option>
+          <option value="7">30件</option>
+        </select>
+      </form>
+
       <table class="table">
         <tbody>
+          <tr bgcolor='#BCCDCF'>
+            <th>お名前</th>
+            <th>メールアドレス</th>
+            <th>郵便番号</th>
+            <th>ご住所</th>
+            <th>ご連絡先</th>
+          </tr>
           <?php
-          foreach ($genres as $genre) { ?>
+          // 既存分会員情報の出力処理を繰り返す
+          foreach ($customers as $customer) { ?>
             <tr>
-              <td>
-                <?php
-                echo "<h4>";
-                echo ($genre['name']);
-                echo "</h4>";
-                ?>
-              </td>
-              <td>
-                <form action="genre_edit.php" method="post" class="d-flex align-items-center justify-content-center">
-                  <input type="hidden" name="id" value="<?php echo $genre['id'] ?>">
-                  <button type="submit" name="edit" class="btn btn-outline-success">編集</button>
-                </form>
-              </td>
-              <td>
-                <form method="post" class="d-flex align-items-center justify-content-center">
-                  <input type="hidden" name="id" value="<?php echo $genre['id'] ?>">
-                  <button type="submit" name="delete" class="btn btn-outline-danger">削除</button>
-                </form>
-              </td>
+              <!-- <tr :nth-child(ood) bgcolor='#DCF0F2'> -->
+              <?php echo "<h4>"; ?>
+              <td><?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?> 様</td>
+              <td><?= $customer['email'] ?></td>
+              <td><?= '〒' . '&nbsp' . substr_replace($customer['postal_code'], '-', 3, 0) ?></td>
+              <td><?= $customer['address'] ?></td>
+              <td><?= $customer['telephone_num'] ?></td>
+              <?php echo "<h4>"; ?>
             </tr>
           <?php } ?>
         </tbody>
@@ -75,6 +89,5 @@ $message = htmlspecialchars($message);
     </div>
   </div>
 </div>
-
 
 <?php require_once '../view_common/footer.php'; ?>
