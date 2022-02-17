@@ -4,17 +4,68 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/bootstrap.css">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- jQuery読み込み -->
   <script src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.0.js'></script>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- スライド用slick -->
   <link rel="stylesheet" href="../css/slick-theme.css" type="text/css">
   <link rel="stylesheet" href="../css/slick.css" type="text/css">
-  <script type="text/javascript" src="http://code.jquery.com/jquery-3.1.0.min.js"></script>
   <script src="../js/slick.js" type="text/javascript"></script>
   <title>Outdoor</title>
 </head>
 
 <body>
   <header>
+    <!-- ログイン状態か判別 -->
+    <?php if (isset($_SESSION['customer'])) { ?>
+      <!-- ログイン状態 -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand mb-0 h1 ms-5" href="../view_public/top.php">OUTDOOR</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            </ul>
+            <form method="POST">
+              <button class="btn btn-outline-secondary ms-5 me-5" type="submit" name="logout">ログアウト</button>
+              <button class="btn btn-outline-info me-5" onclick="location.href='cart_item_index.php'">カートを見る</button>
+            </form>
+          </div>
+        </div>
+
+      </nav>
+    <?php } else { ?>
+      <!-- ゲスト状態 -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand mb-0 h1 ms-5" href="../view_public/top.php">OUTDOOR</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            </ul>
+            <button class="btn btn-outline-primary ms-5 me-5" onclick="location.href='public_login.php'">ログイン</button>
+            <button class="btn btn-outline-info me-5" onclick="location.href='public_signup.php'">カートを見る</button>
+          </div>
+        </div>
+      </nav>
+    <?php } ?>
   </header>
+
+  <?php
+  // 「ログアウト」ボタンが押された時
+  if (isset($_POST['logout'])) {
+    // CustomerModelファイルを呼び出し
+    require_once('../Model/CustomerModel.php');
+    // Customerクラスを呼び出し
+    $pdo = new CustomerModel();
+    // logoutメソッドを呼び出し
+    $pdo = $pdo->logout();
+  }
+  ?>
