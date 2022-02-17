@@ -128,7 +128,9 @@ if (isset($_POST['search'])) {
       <?php foreach ($genres as $genre) { ?>
         <tr>
           <td class="text-center">
-            <h5><?= $genre['name'] ?></h5>
+            <a href="../view_public/genre_item_index.php?genre_id=<?= $genre['id'] ?>" style="text-decoration:none">
+              <h5 style="color:black"><?= $genre['name'] ?></h5>
+            </a>
           </td>
         </tr>
       <?php } ?>
