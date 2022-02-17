@@ -1,4 +1,7 @@
 <?php
+// セッションの宣言
+session_start();
+
 // ArticleModelファイルを読み込み
 require_once('../Model/ArticleModel.php');
 // Articleクラスを呼び出し

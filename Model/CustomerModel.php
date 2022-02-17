@@ -30,17 +30,14 @@ class CustomerModel
   public function check()
   {
     // POSTデータをセッションに格納
-    $_SESSION['customer'] = [
+    $_SESSION['signup'] = [
       'name_last' => $_POST['name_last'], 'name_first' => $_POST['name_first'], 'email' => $_POST['email'],
       'postal_code' => $_POST['postal_code'], 'address' => $_POST['address'],
       'telephone_num' => $_POST['telephone_num'], 'password' => $_POST['password']
     ];
 
     // 各値が入力されている場合
-    if (
-      $_POST['name_last'] && $_POST['name_first'] && $_POST['email'] && $_POST['email'] &&
-      $_POST['postal_code'] && $_POST['address'] && $_POST['telephone_num'] && $_POST['password']
-    ) {
+    if ($_POST['name_last'] && $_POST['name_first'] && $_POST['email'] && $_POST['email'] && $_POST['postal_code'] && $_POST['address'] && $_POST['telephone_num'] && $_POST['password']) {
 
       // 空白除去(文頭・文末)して、変数に代入
       $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_last']);
@@ -66,17 +63,24 @@ class CustomerModel
         return $message;
       }
 
-      // メールアドレスのバリデーション 形式制限 200文字以下
-      if (!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9])+([a-zA-Z0-9._-]+)+$/", $email)) {
-        $message = 'メールアドレスの形式で入力して下さい。';
-        return $message;
-
-        // メールアドレスの文字数制限 300文字以下
-      } else {
-        if (300 <= mb_strlen($email, 'UTF-8')) {
-          $message = 'メールアドレスは、200文字以下で入力して下さい。';
+      //メールアドレスのバリデーション
+      if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        // メールアドレスがすでに使われていないか調べる
+        // DBに接続
+        $db = new CustomerModel();
+        $pdo = $db->db_connect();
+        $stmt = $pdo->prepare('SELECT id FROM customers WHERE email=:email');
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        // すでに使われている場合
+        if (isset($result['id'])) {
+          $message = "このメールアドレスはすでに利用されています。";
           return $message;
         }
+      } else {
+        $message = "メールアドレスが無効です。";
+        return $message;
       }
 
       // 郵便番号のバリデーション 数字7桁ハイフン無し
@@ -109,32 +113,27 @@ class CustomerModel
         //     return $message;
         //   }
       }
+      // バリデーションがすべてOKなら確認画面へ
+      header("Location: ./public_signup_check.php");
 
       // 各値が入力されていない場合のエラーメッセージ
     } else {
       $message = "全て必須項目です。";
       return $message;
     }
-
-    // 全項目OK(エラーメッセ無し)の場合、入力確認画面へリダイレクト
-    if (empty($message)) {
-      header("Location: ./public_signup_check.php");
-      exit;
-    }
   }
-
 
   // ユーザー登録
   public function input()
   {
     // セッションの値を空白除去して、変数に代入 (パスワードのみハッシュ化)
-    $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['customer']['name_last'], ENT_QUOTES, 'UTF-8')));
-    $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['customer']['name_first'], ENT_QUOTES, 'UTF-8')));
-    $email =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['customer']['email']);
-    $postal_code =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['customer']['postal_code']);
-    $address =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['customer']['address'], ENT_QUOTES, 'UTF-8')));
-    $telephone_num =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['customer']['telephone_num']);
-    $password =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (password_hash($_SESSION['customer']['password'], PASSWORD_DEFAULT)));
+    $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['signup']['name_last'], ENT_QUOTES, 'UTF-8')));
+    $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['signup']['name_first'], ENT_QUOTES, 'UTF-8')));
+    $email =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['signup']['email']);
+    $postal_code =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['signup']['postal_code']);
+    $address =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['signup']['address'], ENT_QUOTES, 'UTF-8')));
+    $telephone_num =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['signup']['telephone_num']);
+    $password =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (password_hash($_SESSION['signup']['password'], PASSWORD_DEFAULT)));
 
     try {
       // DB接続
@@ -142,9 +141,6 @@ class CustomerModel
       // SQL文
       $customer = $pdo->prepare('INSERT INTO customers ( name_last, name_first, email, postal_code, address, telephone_num, password )
       VALUES( :name_last, :name_first, :email, :postal_code, :address, :telephone_num, :password )');
-
-      // トランザクション開始
-      $pdo->beginTransaction();
 
       // BDのカラムへ、各値をセット
       $customer->bindParam(':name_last', $name_last, PDO::PARAM_STR);
@@ -156,29 +152,18 @@ class CustomerModel
       $customer->bindParam(':password', $password, PDO::PARAM_STR);
       // 実行
       $customer->execute();
-
-      // 問題なければ処理実行
-      $customer = $pdo->commit();
+      $pdo = null;
+      unset($_SESSION['signup']);
+      // 登録完了画面へリダイレクト
+      header("Location: ./public_signup_complete.php");
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
-
-      // エラー発生時は処理を取り消し
-      $pdo->rollBack();
     }
-
-    // 登録出来たら、登録完了画面へリダイレクト
-    header('Location: ./public_signup_complete.php');
-    exit;
   }
-
-
 
   // ユーザーログイン
   public function login()
   {
-    // POSTデータをセッションに格納
-    $_SESSION['customer'] = ['email' => $_POST['email'], 'password' => $_POST['password']];
-
     // 各値が入力されている場合
     if ($_POST['email'] && $_POST['password']) {
 
@@ -186,73 +171,35 @@ class CustomerModel
       $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
       $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
 
-      // メールアドレスのバリデーション 形式制限 200文字以下
-      if (!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9])+([a-zA-Z0-9._-]+)+$/", $email)) {
-        $message = 'メールアドレスの形式で入力して下さい。';
-        return $message;
-      }
+      // DB接続
+      $pdo = $this->db_connect();
+      // SQL文 メールアドレスが一致するデータを抽出
+      $customer = $pdo->prepare('SELECT * FROM customers WHERE email = :email');
+      // 実行
+      $customer->execute(array(':email' => $email));
+      // 抽出データを配列に格納
+      $result = $customer->fetch(PDO::FETCH_ASSOC);
 
-      // パスワードのバリデーション 半角英数字8文字以上24文字以下
-      if (!preg_match("/\A[a-zA-Z\d]{8,24}+$/", $password)) {
-        $message = 'パスワードは、半角英数字8文字以上 24文字以下で入力して下さい。';
-        return $message;
-      }
-
-      // 各値が入力されていない場合のエラーメッセージ
-    } else {
-      $message = "全て必須項目です。";
-      return $message;
-    }
-
-    // 全項目OK(エラーメッセ無し)の場合
-    if (empty($message)) {
-
-      try {
-        // DB接続
-        $pdo = $this->db_connect();
-
-        // SQL文 メールアドレスが一致するデータを抽出
-        $customer = $pdo->prepare('SELECT * FROM customers WHERE email = :email');
-
-        // トランザクション開始
-        $pdo->beginTransaction();
-
-        // BDのカラムへ、値をセット
-        $customer->bindParam(':email', $email, PDO::PARAM_STR);
-        // 実行
-        $customer->execute();
-
-        // 抽出データを配列に格納
-        $member = $customer->fetch();
-
-        // 問題なければ処理実行
-        $customer = $pdo->commit();
-      } catch (PDOException $Exception) {
-        die('接続エラー：' . $Exception->getMessage());
-
-        // エラー発生時は処理を取り消し
-        $pdo->rollBack();
-      }
-
-      // ハッシュ化したパスワードが一致するか検証
-      if (password_verify($password, $member['password'])) {
-
-        // 条件一致の場合、カスタマー情報をセッションに再代入
+      // ハッシュ化したパスワードの認証
+      if (password_verify($password, $result['password'])) {
+        // ログイン認証に成功した場合
+        // loginセッションを削除
+        unset($_SESSION['login']['email'], $_SESSION['password']);
+        // セッションにユーザー情報を格納
         $_SESSION['customer'] = [
-          'name_last' => $member['name_last'], 'name_first' => $member['name_first'], 'email' => $member['email'],
-          'postal_code' => $member['postal_code'], 'address' => $member['address'],
-          'telephone_num' => $member['telephone_num'], 'password' => $member['password']
+          'id' => $result['id'], 'name_last' => $result['name_last'], 'name_first' => $result['name_first'], 'email' => $result['email'], 'postal_code' => $result['postal_code'], 'address' => $result['address'], 'telephone_num' => $result['telephone_num'], 'password' => $result['password']
         ];
-
         // TOP画面へリダイレクト
         header('Location: ./top.php');
         exit;
-
-        // 不一致の場合、エラーメッセージを返す
       } else {
-        $message = "メールアドレス または、パスワードが間違っています。";
+        // ログイン認証に失敗した場合
+        $message = "メールアドレスまたはパスワードが違います。";
         return $message;
       }
+    } else {
+      $message = "メールアドレス・パスワードを入力してください。";
+      return $message;
     }
   }
 
@@ -275,7 +222,7 @@ class CustomerModel
       $customers = $pdo->prepare(
         "SELECT * FROM customers"
       );
-      $customer->execute();
+      $customers->execute();
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
     }
@@ -291,5 +238,18 @@ class CustomerModel
   // ユーザー情報の更新
   public function update()
   {
+  }
+  public function logout()
+  {
+    // セッション変数をクリア
+    $_SESSION = array();
+
+    // クッキーに登録されているセッションIDの情報を削除
+    if (ini_get("session.use_cookies")) {
+      setcookie(session_name(), '', time() - 42000, '/');
+    }
+
+    // セッションを破棄
+    session_destroy();
   }
 }
