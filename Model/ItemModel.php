@@ -115,8 +115,20 @@ class ItemModel
   }
 
   // 商品の詳細表示
-  public function show()
+  public function show($item_id)
   {
+    $item_id = $item_id;
+    try {
+      // db_connectメソッドを呼び出す
+      $pdo = $this->db_connect();
+      $item = $pdo->prepare(
+        "SELECT items.name AS item_name, items.introduction AS introduction, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE items.genre_id = genres.id AND items.id = $item_id"
+      );
+      $item->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $item;
   }
 
   // 商品の一覧表示

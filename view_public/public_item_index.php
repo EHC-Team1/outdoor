@@ -1,5 +1,6 @@
 <?php
-
+// セッションの宣言
+session_start();
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -22,7 +23,9 @@
               <div class="card-body">
                 <h5 class="card-title"><?= $search_item['name'] ?></h5>
                 <h5 class="card-title">￥<?= $search_item['price'] ?></h5>
-                <a href="#" class="btn btn-secondary">詳細を見る</a>
+                <div class="d-flex flex-row-reverse">
+                  <a href="../view_public/item_show.php?item_id=<?= $search_item['id'] ?>" class="btn btn-secondary">詳細を見る</a>
+                </div>
               </div>
             </div>
           </div>
