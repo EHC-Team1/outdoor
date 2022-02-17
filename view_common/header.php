@@ -28,16 +28,14 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav me-auto mb-lg-0">
             </ul>
-            <form method="POST">
-              <button class="btn btn-outline-secondary ms-5 me-5" type="submit" name="logout">ログアウト</button>
-              <button class="btn btn-outline-info me-5" onclick="location.href='cart_item_index.php'">カートを見る</button>
-            </form>
+            <h5 class="navbar-brand mb-0 ms-5"><?= $_SESSION['customer']['name_last'] ?>さん</h5>
+            <button class="btn btn-outline-success ms-5 me-5" onclick="location.href='mypage.php'">マイページ</button>
+            <button class="btn btn-outline-secondary me-5" onclick="location.href='public_logout.php'" type="submit" name="logout" value="1">ログアウト</button>
+            <button class="btn btn-outline-info me-5" onclick="location.href='cart_item_index.php'">カートを見る</button>
           </div>
         </div>
-
       </nav>
     <?php } else { ?>
       <!-- ゲスト状態 -->

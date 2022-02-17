@@ -1,6 +1,4 @@
 <?php
-// セッションを宣言
-session_start();
 
 // 「検索」ボタンが押された場合
 if (isset($_POST['search'])) {
