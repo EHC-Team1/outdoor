@@ -34,11 +34,18 @@ if (isset($_POST['delete'])) {
     <div class="col-md-8">
       <!-- カート内商品の表示 -->
       <?php $cart_items = $cart_items->fetchAll(PDO::FETCH_ASSOC);
-      foreach ($cart_items as $cart_item) { ?>
+      foreach ($cart_items as $cart_item) {
+        $target = $cart_item["item_image"]; ?>
         <div class="card mb-4">
           <div class="row">
             <div class="col">
-              <img src="../image/item_サンダル.jpg" width="80%" height="80%" class="px-3 mt-3 mb-3" alt="サンダル">
+              <div class="card-body">
+                <?php
+                if ($cart_item["extension"] == "jpeg" || $cart_item["extension"] == "png" || $cart_item["extension"] == "gif") {
+                  echo ("<img src='../view_common/item_image.php?target=$target'width=200 height=200>");
+                }
+                ?>
+              </div>
             </div>
             <div class="col">
               <div class="card m-3">
@@ -54,6 +61,12 @@ if (isset($_POST['delete'])) {
                     <input type="text" value='<?= $cart_item['quantity'] ?>' class="inputtext textbox">
                     <button class="button up">+</button>
                   </div>
+                  <select class="form-select form-select-lg" name="quantity">
+                    <option selected value="<?= $cart_item['quantity'] ?>">数量</option>
+                    <?php for ($quantity = 1; $quantity <= 50; $quantity++) { ?>
+                      <option value="<?= $quantity ?>"><?= $quantity ?></option>
+                    <?php } ?>
+                  </select>
                 </div>
               </div>
             </div>
@@ -64,7 +77,8 @@ if (isset($_POST['delete'])) {
         <tbody>
           <tr>
             <td class="text-center">商品合計(税込み)</td>
-            <td>¥<?#= $cart_item['price'] ?></td><br>
+            <td>¥<? #= $cart_item['price'] 
+                  ?></td><br>
           </tr>
           <tr>
             <td class="text-center">送料</td>
@@ -80,7 +94,8 @@ if (isset($_POST['delete'])) {
                 <td class="text-center">
                   <h5>注文合計(税込)</h5>
                 </td>
-                <td>¥<?#= $cart_item['price'] ?></td><br>
+                <td>¥<? #= $cart_item['price'] 
+                      ?></td><br>
               </tr>
             </tbody>
           </table>
