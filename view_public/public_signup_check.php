@@ -8,7 +8,7 @@ if (isset($_POST['input'])) {
   $pdo = new CustomerModel();
 
   // CustomerModelのinputメソッドを呼び出して登録処理 → 登録完了画面へ
-  $customer = $pdo->input();
+  $customers = $pdo->input();
 }
 ?>
 <!-- ------------------------------ 表示画面 --------------------------------- -->
