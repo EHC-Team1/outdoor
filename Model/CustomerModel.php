@@ -29,27 +29,46 @@ class CustomerModel
   // 必須項目の入力チェック
   public function check()
   {
-    // POSTデータをセッションに格納
+    //----------------------------------- 65～74行をif外に持ってきただけ --------------------------------------------
+    // 空白除去(文頭・文末)して、変数に代入
+    $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_last']);
+    $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_first']);
+    $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
+    $postal_code = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['postal_code']);
+    $address = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['address']);
+    $telephone_num = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['telephone_num']);
+    $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
+    // パスワード(確認)時間あれば
+    // $password2 = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password2']);
+
+    // 変数をセッションに格納
     $_SESSION['signup'] = [
-      'name_last' => $_POST['name_last'], 'name_first' => $_POST['name_first'], 'email' => $_POST['email'],
-      'postal_code' => $_POST['postal_code'], 'address' => $_POST['address'],
-      'telephone_num' => $_POST['telephone_num'], 'password' => $_POST['password']
+      'name_last' => $name_last, 'name_first' => $name_first, 'email' => $email,
+      'postal_code' => $postal_code, 'address' => $address,
+      'telephone_num' => $telephone_num, 'password' => $password
     ];
+    //-------------------------------------- 2022.02.17 --------------------------------------------
+
+    // POSTデータをセッションに格納
+    // $_SESSION['signup'] = [
+    //   'name_last' => $_POST['name_last'], 'name_first' => $_POST['name_first'], 'email' => $_POST['email'],
+    //   'postal_code' => $_POST['postal_code'], 'address' => $_POST['address'],
+    //   'telephone_num' => $_POST['telephone_num'], 'password' => $_POST['password']
+    // ];
 
     // 各値が入力されている場合
     if ($_POST['name_last'] && $_POST['name_first'] && $_POST['email'] && $_POST['email'] && $_POST['postal_code'] && $_POST['address'] && $_POST['telephone_num'] && $_POST['password']) {
 
       // 空白除去(文頭・文末)して、変数に代入
-      $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_last']);
-      $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_first']);
-      $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
-      $postal_code = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['postal_code']);
-      $address = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['address']);
-      $telephone_num = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['telephone_num']);
-      $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
+      // $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_last']);
+      // $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_first']);
+      // $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
+      // $postal_code = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['postal_code']);
+      // $address = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['address']);
+      // $telephone_num = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['telephone_num']);
+      // $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
       // パスワード(確認)時間あれば
       // $password2 = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password2']);
-
 
       // 名前(姓)のバリデーション 30文字以下
       if (20 <= mb_strlen($name_last, 'UTF-8')) {
@@ -78,8 +97,10 @@ class CustomerModel
           $message = "このメールアドレスはすでに利用されています。";
           return $message;
         }
+        // RFC違反メールアドレスの場合
       } else {
-        $message = "メールアドレスが無効です。";
+        $message = "ご入力頂いたメールアドレスは、登録できない形式のものです。
+        恐れ入りますが、他のメールアドレスをご利用頂くようお願いします。";
         return $message;
       }
 
@@ -126,14 +147,26 @@ class CustomerModel
   // ユーザー登録
   public function input()
   {
+
+    //----------------------------------- checkメソッドで空白除去済み --------------------------------------------
+    // セッションの値を変数に代入 (パスワードのみハッシュ化)
+    $name_last = htmlspecialchars($_SESSION['signup']['name_last'], ENT_QUOTES, 'UTF-8');
+    $name_first = htmlspecialchars($_SESSION['signup']['name_first'], ENT_QUOTES, 'UTF-8');
+    $email = $_SESSION['signup']['email'];
+    $postal_code = $_SESSION['signup']['postal_code'];
+    $address = htmlspecialchars($_SESSION['signup']['address'], ENT_QUOTES, 'UTF-8');
+    $telephone_num = $_SESSION['signup']['telephone_num'];
+    $password = password_hash($_SESSION['signup']['password'], PASSWORD_DEFAULT);
+    //-------------------------------------- 2022.02.17 --------------------------------------------
+
     // セッションの値を空白除去して、変数に代入 (パスワードのみハッシュ化)
-    $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['signup']['name_last'], ENT_QUOTES, 'UTF-8')));
-    $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['signup']['name_first'], ENT_QUOTES, 'UTF-8')));
-    $email =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['signup']['email']);
-    $postal_code =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['signup']['postal_code']);
-    $address =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['signup']['address'], ENT_QUOTES, 'UTF-8')));
-    $telephone_num =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['signup']['telephone_num']);
-    $password =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (password_hash($_SESSION['signup']['password'], PASSWORD_DEFAULT)));
+    // $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['signup']['name_last'], ENT_QUOTES, 'UTF-8')));
+    // $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['signup']['name_first'], ENT_QUOTES, 'UTF-8')));
+    // $email =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['signup']['email']);
+    // $postal_code =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['signup']['postal_code']);
+    // $address =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_SESSION['signup']['address'], ENT_QUOTES, 'UTF-8')));
+    // $telephone_num =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_SESSION['signup']['telephone_num']);
+    // $password =  preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (password_hash($_SESSION['signup']['password'], PASSWORD_DEFAULT)));
 
     try {
       // DB接続
@@ -204,7 +237,6 @@ class CustomerModel
   }
 
 
-
   // ユーザー情報 登録内容確認
   public function show()
   {
@@ -239,6 +271,8 @@ class CustomerModel
   public function update()
   {
   }
+
+
   public function logout()
   {
     // セッション変数をクリア

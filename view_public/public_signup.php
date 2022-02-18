@@ -35,6 +35,7 @@ $message = htmlspecialchars($message);
 <div class="container">
   <h1 style="text-align:center" class="mt-5 mb-5">ユーザー登録</h1>
   <div class="row d-flex align-items-center justify-content-center">
+  <div class="col-md-8">
     <form method="post">
       <div class="form-group">
         <?= $message; ?>
@@ -46,44 +47,16 @@ $message = htmlspecialchars($message);
         <input type="text" name="address" class="form-control" placeholder="住所" value="<?= $address ?>">
         <input type="text" name="telephone_num" class="form-control" placeholder="電話番号" value="<?= $telephone_num ?>">
         <input type="password" name="password" class="form-control" placeholder="パスワード" value="<?= $password ?>">
-        <p>※パスワードは半角英数字をそれぞれ1文字以上含んだ、8文字以上20字以内で設定してください。</p></br>
+        <p>※パスワードは半角英数字をそれぞれ1文字以上含んだ、8文字以上24字以内で設定してください。</p></br>
       </div>
-      <div class="d-flex align-items-center justify-content-center">
-        <button type="submit" name="check" class="btn btn-outline-primary btn-lg">確認する</button>
+      <div class="d-flex align-items-center justify-content-evenly mt-5 md-5">
+          <button type="submit" name="back" formaction="./public_login.php" class="btn btn-outline-secondary btn-lg">ログイン画面へ戻る</button>
+          <button type="submit" formaction="public_signup.php" name="check" class="btn btn-outline-primary btn-lg">確認する</button>
+        </div>
       </div>
     </form>
   </div>
+  </div>
 </div>
-
-
-
-<!-- <h1>新規会員登録</h1>
-<h4>下記項目を入力して、確認ボタンを押して下さい。</h4> -->
-<!-- <form method="post"> -->
-<!-- 名前入力 -->
-<!-- <label for="name">Name</label>
-  <input id="name" type="text" name="name_last" placeholder="姓" value="">
-  <input id="name" type="text" name="name_first" placeholder="名" value=""><br><br> -->
-<!-- メールアドレス入力 -->
-<!-- <label for="email">E-mail</label>
-  <input id="email" type="text" name="email" value=""><br><br> -->
-<!-- 郵便番号入力 -->
-<!-- <label for="postal_code">Postal Code</label>
-  <input id="postal_code" type="text" name="postal_code" placeholder="ハイフン無し" value=""><br><br> -->
-<!-- 住所入力 -->
-<!-- <label for="address">Address</label>
-  <input id="address" type="text" name="address" value=""><br><br> -->
-<!-- 電話番号入力 -->
-<!-- <label for="telephone_num">Tell</label>
-  <input id="telephone_num" type="text" name="telephone_num" placeholder="ハイフン無し" value=""><br><br> -->
-<!-- パスワード入力 -->
-<!-- <label for="password">Password</label>
-  <input id="password" type="password" name="password" placeholder="半角英数字8文字以上24文字以下" value=""><br><br> -->
-<!-- パスワード(確認)入力 時間あれば-->
-<!-- <label for="password2">Password(確認用)</label>
-  <input id="password2" type="password" name="password2" placeholder="半角英数字8文字以上24文字以下" value="<?= $password2 ?>"><br><br> -->
-<!-- 入力チェックへ-->
-<!-- <button type="submit" name="check" class="btn btn-outline-primary btn-lg">確認</button>
-</form> -->
 
 <?php require_once '../view_common/footer.php'; ?>
