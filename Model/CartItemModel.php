@@ -64,7 +64,7 @@ class CartItemModel
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $cart_items = $pdo->prepare(
         "SELECT cart_items.*,
-        items.name, items.price FROM cart_items LEFT JOIN items ON cart_items.item_id = items.id ORDER BY updated_at"
+        items.name, items.price, items.item_image, items.extension FROM cart_items LEFT JOIN items ON cart_items.item_id = items.id ORDER BY updated_at"
       );
       $cart_items->execute();
     } catch (PDOException $Exception) {
