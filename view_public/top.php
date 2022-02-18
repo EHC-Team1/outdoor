@@ -8,7 +8,7 @@ require_once('../Model/ArticleModel.php');
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
 $articles = $pdo->index();
-// モデルからreturnしてきた情報をitemsに格納
+// モデルからreturnしてきた情報をarticlesに格納
 $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
