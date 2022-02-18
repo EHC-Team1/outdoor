@@ -49,7 +49,11 @@ if (isset($_POST['delete'])) {
                   </form>
                   <?= $cart_item['name'] ?><br>
                   ¥<?= $cart_item['price'] ?>(税込)
-                  <?= $cart_item['quantity'] ?>
+                  <div class="field">
+                    <button class="button down">-</button>
+                    <input type="text" value='<?= $cart_item['quantity'] ?>' class="inputtext textbox">
+                    <button class="button up">+</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -86,5 +90,5 @@ if (isset($_POST['delete'])) {
   </div>
 </div>
 
-
+<script src="../js/cart_item_index.js"></script>
 <?php require_once('../view_common/footer.php') ?>
