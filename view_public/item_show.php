@@ -50,7 +50,7 @@ if (isset($_POST['buy'])) {
     <div class="col-md-7">
       <div class="row">
         <?php $target = $item["item_image"]; ?>
-        <?php if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") { ?>
+        <?php if ($item["item_extension"] == "jpeg" || $item["item_extension"] == "png" || $item["item_extension"] == "gif") { ?>
           <img src="../view_common/item_image.php?target=<?= $target ?>" alt="item_image" class="img-fluid">
         <?php } ?>
       </div>
@@ -80,8 +80,29 @@ if (isset($_POST['buy'])) {
       <div class="row mb-3">
         <h6 class="ms-3 text-center"><?= $item['introduction'] ?></h6>
       </div>
-      <div class="row">
-      </div>
+
+      <!-- 関連記事が公開状態の時に表示 -->
+      <?php if ($item['article_is_status'] = 1) { ?>
+        <div class="row row-cols-1 row-cols-md-1 g-3">
+          <div class="card g-0" style="max-width: auto;">
+            <div class="row m-2">
+              <div class="col-md-5">
+                <?php if ($item["article_extension"] == "jpeg" || $item["article_extension"] == "png" || $item["article_extension"] == "gif") { ?>
+                  <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
+                <?php } ?>
+              </div>
+              <div class="col-md-7">
+                <div class="card-body">
+                  <h5 class="card-title"><?= $item['title'] ?></h5>
+                  <p class="card-text"><?= $item['body'] ?></p>
+                  <p class="card-text"><small class="text-muted"><?= $item['article_updated_at'] ?></small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php } ?>
+
     </div>
   </div>
 </div>

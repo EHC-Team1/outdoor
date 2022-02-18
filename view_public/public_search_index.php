@@ -1,6 +1,12 @@
 <?php
 // セッションの宣言
 session_start();
+
+// 検索が実行されていなけばトップへリダイレクト
+if ($_POST['flexRadioDefault']) {
+} else {
+  header('Location: ../view_public/top.php');
+}
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -12,8 +18,9 @@ session_start();
     </div>
 
     <!-- itemが検索された場合 -->
-    <?php if ($search_items) { ?>
+    <?php if ($_POST['flexRadioDefault'] = 1) { ?>
       <div class="col-md-8 ms-3">
+        <h3>TOP/<?= $_SESSION['search'] ?></h3>
         <div class="row">
           <?php foreach ($search_items as $search_item) {
             $target = $search_item["item_image"]; ?>
@@ -37,7 +44,7 @@ session_start();
     <?php } ?>
 
     <!-- articleが検索された場合 -->
-    <?php if ($search_articles) { ?>
+    <?php if ($_POST['flexRadioDefault'] = 2) { ?>
       <div class="col-md-8 ms-3">
         <?php foreach ($search_articles as $search_article) {
           $target = $search_article["article_image"]; ?>
