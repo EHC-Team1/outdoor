@@ -114,23 +114,7 @@ class ItemModel
     }
   }
 
-  // 商品の詳細表示
-  public function show($item_id)
-  {
-    $item_id = $item_id;
-    try {
-      // db_connectメソッドを呼び出す
-      $pdo = $this->db_connect();
-      $item = $pdo->prepare(
-        "SELECT items.name AS item_name, items.introduction AS introduction, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE items.genre_id = genres.id AND items.id = $item_id"
-      );
-      $item->execute();
-    } catch (PDOException $Exception) {
-      exit("接続エラー：" . $Exception->getMessage());
-    }
-    return $item;
-  }
-
+  // admin側のため全表示
   // 商品の一覧表示
   public function index()
   {
@@ -146,28 +130,6 @@ class ItemModel
     return $items;
   }
 
-  // 該当ジャンル商品の一覧表示
-  public function genre_index()
-  {
-  }
-
-  // 検索該当商品の一覧表示
-  public function search_index()
-  {
-    $keyword = $_POST['keyword'];
-    try {
-      $pdo = $this->db_connect();
-      $search_items = $pdo->prepare(
-        "SELECT * FROM items WHERE introduction LIKE CONCAT('%',:keyword,'%') AND is_status = 1 ORDER BY updated_at DESC"
-      );
-      $search_items->bindValue(':keyword', $keyword);
-      $search_items->execute();
-    } catch (PDOException $Exception) {
-      exit("接続エラー：" . $Exception->getMessage());
-    }
-    return $search_items;
-  }
-
   // 商品の編集
   public function edit()
   {
@@ -181,5 +143,56 @@ class ItemModel
   // 商品の削除
   public function delete()
   {
+  }
+
+  // 商品の詳細表示
+  public function show($item_id)
+  {
+    $item_id = $item_id;
+    try {
+      // db_connectメソッドを呼び出す
+      $pdo = $this->db_connect();
+      $item = $pdo->prepare(
+        "SELECT items.id AS item_id, items.name AS item_name, items.introduction AS introduction, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE items.genre_id = genres.id AND items.id = $item_id AND items.is_status = 1"
+      );
+      $item->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $item;
+  }
+
+  // 該当ジャンル商品の一覧表示
+  public function genre_index($genre_id)
+  {
+    $genre_id = $genre_id;
+    try {
+      // db_connectメソッドを呼び出す
+      $pdo = $this->db_connect();
+      $items = $pdo->prepare(
+        "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE genres.id = items.genre_id AND items.genre_id = $genre_id  AND items.is_status = 1"
+      );
+      $items->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $items;
+  }
+
+  // 検索該当商品の一覧表示
+  public function search_index()
+  {
+    $keyword = $_POST['keyword'];
+    try {
+      $pdo = $this->db_connect();
+      $search_items = $pdo->prepare(
+        "SELECT items.id AS item_id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE items.introduction LIKE CONCAT('%',:keyword,'%') AND items.is_status = 1 AND items.genre_id = genres.id ORDER BY items.updated_at DESC"
+      );
+      $search_items->bindValue(':keyword', $keyword);
+      $search_items->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $search_items;
   }
 }

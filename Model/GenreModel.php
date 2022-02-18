@@ -122,4 +122,21 @@ class GenreModel
     $message = "ジャンルが削除されました。";
     return $message;
   }
+
+  // ジャンル名の参照
+  public function show($genre_id)
+  {
+    $id = $genre_id;
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $selected_genre = $pdo->prepare(
+        "SELECT * FROM genres WHERE id = $id"
+      );
+      $selected_genre->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $selected_genre;
+  }
 }
