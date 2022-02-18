@@ -2,6 +2,13 @@
 // セッションの宣言
 session_start();
 
+// // ログインしているかチェック
+// if (isset($_SESSION['customer'])) {
+// } else {
+//   header("Location: ../view_public/top.php");
+//   die();
+// }
+
 if (isset($_GET["item_id"]) && $_GET["item_id"] !== "") {
   $item_id = $_GET["item_id"];
 } else {
@@ -16,6 +23,22 @@ $pdo = new ItemModel();
 $item = $pdo->show($item_id);
 // returnしてきた$itemを$itemに格納
 $item = $item->fetch(PDO::FETCH_ASSOC);
+
+// 「購入」ボタンが押された場合
+if (isset($_POST['buy'])) {
+  // CartItemModelファイルを読み込み
+  require_once('../Model/CartItemModel.php');
+  // CartItemクラスを呼び出し
+  $pdo = new CartItemModel();
+  // inputメソッドを呼び出し
+  $cart_items = $pdo->input();
+  // エラーメッセージを$messageに格納
+  $message = $cart_items;
+
+  // 押されていない状態
+} else {
+  $message = '';
+}
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -34,9 +57,10 @@ $item = $item->fetch(PDO::FETCH_ASSOC);
       <div class="row mt-3">
         <h3 class="ms-3"><?= $item['item_name'] ?> / <?= $item['genre_name'] ?></h3>
       </div>
-      <form action="cart_item_index.php" method="POST">
+      <form method="POST">
         <input type="hidden" name="item_id" value="<?= $item['item_id'] ?>">
         <div class="row d-flex">
+          <?= $message ?>
           <div class="col-md-4 me-auto mb-3 mt-4">
             <h2 class="ms-3">￥<?= $item['price'] ?></h2>
           </div>

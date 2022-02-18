@@ -24,9 +24,35 @@ class CartItemModel
     return $pdo;
   }
 
-  // 
+  // カートに商品を追加
   public function input()
   {
+    // 数量が選択されているかチェック
+    if ($_POST['quantity']) {
+      $item_id = $_POST['item_id'];
+      $customer_id = $_SESSION['customer']['id'];
+      $quantity = $_POST['quantity'];
+      try {
+        // DBに接続
+        $pdo = $this->db_connect();
+        $cart_items = $pdo->prepare(
+          "INSERT INTO cart_items (item_id, customer_id, quantity, created_at, updated_at) VALUES (:item_id, :customer_id, :quantity, now(), now())"
+        );
+        $cart_items->bindParam(':item_id', $item_id, PDO::PARAM_INT);
+        $cart_items->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+        $cart_items->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+        $cart_items->execute();
+      } catch (PDOException $Exception) {
+        die('接続エラー：' . $Exception->getMessage());
+      }
+      // 追加されればカート商品一覧画面に遷移
+      header('Location: cart_item_index.php');
+
+      // 数量が入っていなければリダイレクト
+    } else {
+      $message = "数量を選択してください。";
+      return $message;
+    }
   }
 
   // カート内商品の表示
@@ -67,7 +93,7 @@ class CartItemModel
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
-    
+
     header('Location: cart_item_index.php');
   }
 }
