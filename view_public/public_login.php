@@ -41,18 +41,20 @@ $message = htmlspecialchars($message);
     <div class="col-md-8">
       <?= $message; ?>
       <form method="post" action="">
-        <table class="table table-borderless">
-          <tbody>
-            <tr>
-              <th style="text-align:center" class="border-collapse:auto"><label for="email" scope="row">メールアドレス</label></th>
-              <td><input id="email" type="text" name="email" class="form-control" value="<?= $email ?>"><br></td>
-            </tr>
-            <tr>
-              <th style="text-align:center"><label for="password" scope="row">パスワード</label></th>
-              <td><input id="password" type="password" name="password" class="form-control" placeholder="半角英数字8文字以上24文字以下" value="<?= $password ?>"></td>
-            </tr>
-          </tbody>
-        </table>
+        <div style="text-align:center">
+          <div class="row">
+            <div class="col-md-3"><label for="email">メールアドレス</label></div>
+            <div class="col-md-9">
+              <input id="email" type="text" name="email" class="form-control" value="<?= $email ?>" autofocus><br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3"><label for="password">パスワード</label></div>
+            <div class="col-md-9">
+              <input id="password" type="password" name="password" class="form-control" placeholder="半角英数字8文字以上24文字以下" value="<?= $password ?>">
+            </div>
+          </div>
+        </div>
         <div class="d-flex align-items-center justify-content-evenly mt-5 md-5">
           <button type="submit" formaction="public_signup.php" name="signup" class="btn btn-outline-success btn-lg">新規登録</button>
           <button type="submit" name="login" class="btn btn-outline-primary btn-lg">ログイン</button>
