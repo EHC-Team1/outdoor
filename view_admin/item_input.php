@@ -60,6 +60,13 @@ $message = htmlspecialchars($message);
         <div class="form-group">
           <label>商品名</label>
           <input type="text" name="name" class="form-control" value="<?= ($_SESSION['item']['name']) ?>">
+          <div class="mb-3 row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">商品名</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="staticEmail" value="<?= ($_SESSION['item']['name']) ?>">
+            </div>
+          </div>
+
           <select name="genre_id" class="form-select">
             <option selected value="">ジャンルを選択</option>
             <?php foreach ($genres as $genre) { ?>
@@ -68,6 +75,7 @@ $message = htmlspecialchars($message);
               </option>
             <?php } ?>
           </select>
+
           <select name="article_id" class="form-select">
             <option selected value="">関連記事</option>
             <?php foreach ($articles as $article) { ?>
@@ -76,18 +84,19 @@ $message = htmlspecialchars($message);
               </option>
             <?php } ?>
           </select>
+
           <label>商品説明</label>
           <textarea name="introduction" class="form-control" rows="7"><?= ($_SESSION['item']['introduction']) ?></textarea>
           <label>税込価格</label>
           <input type="text" name="price" class="form-control" value="<?= ($_SESSION['item']['price']) ?>">
           <label>販売ステータス</label>
-          <input type="radio" class="btn-check" name="is_status" value="buy_able" checked>
+          <input type="radio" class="btn-check" name="is_status" value="buy_able">
           <label class="btn btn-outline-success">購入可能</label>
           <input type="radio" class="btn-check" name="is_status" value="buy_unable">
           <label class="btn btn-outline-danger">販売停止</label>
-          <div class="input-group mt-3 mb-3">
-            <input type="file" name="item_image" class="form-control-file" value="<?= ($_SESSION['item']['item_image']) ?>">
-            <p>※容量の大きい画像はエラーになることがあります。</p>
+          <div class="mt-3 mb-3">
+            <label for="formFile" class="form-label">※容量の大きい画像はエラーになることがあります。</label>
+            <input class="form-control" type="file" id="formFile" name="item_image" value="<?= ($_SESSION['item']['item_image']) ?>">
           </div>
           <div class="d-flex align-items-center justify-content-center">
             <button type="submit" name="input_item" class="btn btn-outline-success btn-lg">商品を追加する</button>

@@ -41,12 +41,12 @@ $items = $items->fetchAll(PDO::FETCH_ASSOC);
       <table class="table">
         <tbody>
           <?php
-          foreach ($items as $row) {
-            $target = $row["item_image"]; ?>
+          foreach ($items as $item) {
+            $target = $item["item_image"]; ?>
             <tr>
               <td rowspan="2">
                 <?php
-                if ($row["extension"] == "jpeg" || $row["extension"] == "png" || $row["extension"] == "gif") {
+                if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") {
                   echo ("<img src='../view_common/item_image.php?target=$target'width=200 height=200>");
                 }
                 ?>
@@ -54,16 +54,26 @@ $items = $items->fetchAll(PDO::FETCH_ASSOC);
               <td>
                 <?php
                 echo "<h3><strong>";
-                echo ($row['name']);
+                echo ($item['name']);
                 echo "</strong></h3>"
                 ?>
+              </td>
+              <td rowspan="2" class="align-middle">
+                <form action="item_edit.php" method="post" class="d-flex align-items-center justify-content-center mb-4">
+                  <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                  <button type="submit" name="edit" class="btn btn-outline-success">編集</button>
+                </form>
+                <form method="post" class="d-flex align-items-center justify-content-center">
+                  <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                  <button type="submit" name="delete" class="btn btn-outline-danger">削除</button>
+                </form>
               </td>
             </tr>
             <tr>
               <td>
                 <?php
                 echo "<h4>￥";
-                echo ($row['price']);
+                echo ($item['price']);
                 echo "円</h4>"
                 ?>
               </td>
