@@ -31,48 +31,50 @@ class CartItemModel
     if ($_POST['quantity']) {
       $item_id = $_POST['item_id'];
       $customer_id = $_SESSION['customer']['id'];
-      
+
       //商品が登録されているかチェック
-        $pdo = $this->db_connect();
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $item = $pdo->prepare(
-          "SELECT item_id, quantity FROM cart_items WHERE item_id = $item_id"
-        );
-        $item->execute();
-        $item = $item->fetch(PDO::FETCH_ASSOC);
-        //商品がカートにあれば数量追加処理
-        if($item['item_id']){
-          $quantity = $_POST['quantity'] + $item['quantity'];    
-          try {
-            // DBに接続
-            $pdo = $this->db_connect();
-            $cart_items = $pdo->prepare(
-              "UPDATE cart_items SET quantity = :quantity WHERE item_id = $item_id"
-            );
-            $cart_items->bindParam(':quantity', $quantity, PDO::PARAM_INT);
-            $cart_items->execute();
-          } catch (PDOException $Exception) {
-            die('接続エラー：' . $Exception->getMessage());
-          }
+      $pdo = $this->db_connect();
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $item = $pdo->prepare(
+        "SELECT item_id, quantity FROM cart_items WHERE item_id = $item_id"
+      );
+      $item->execute();
+      $item = $item->fetch(PDO::FETCH_ASSOC);
+      //商品がカートにあれば数量追加処理
+      if ($item['item_id']) {
+        $quantity = $_POST['quantity'] + $item['quantity'];
+        try {
+          // DBに接続
+          $pdo = $this->db_connect();
+          $cart_items = $pdo->prepare(
+            "UPDATE cart_items SET quantity = :quantity WHERE item_id = $item_id"
+          );
+          $cart_items->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+          $cart_items->execute();
+        } catch (PDOException $Exception) {
+          die('接続エラー：' . $Exception->getMessage());
+        }
+
+        //商品がカートに存在していない場合
+      } else {
+        $quantity = $_POST['quantity'];
+        try {
+          // DBに接続
+          $pdo = $this->db_connect();
+          $cart_items = $pdo->prepare(
+            "INSERT INTO cart_items (item_id, customer_id, quantity, created_at, updated_at) VALUES (:item_id, :customer_id, :quantity, now(), now())"
+          );
+          $cart_items->bindParam(':item_id', $item_id, PDO::PARAM_INT);
+          $cart_items->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+          $cart_items->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+          $cart_items->execute();
+        } catch (PDOException $Exception) {
+          die('接続エラー：' . $Exception->getMessage());
+        }
+      }
       // 追加されればカート商品一覧画面に遷移
       header('Location: cart_item_index.php');
 
-      //商品がカートに存在していない場合
-    }else{
-      try {
-        // DBに接続
-        $pdo = $this->db_connect();
-        $cart_items = $pdo->prepare(
-          "INSERT INTO cart_items (item_id, customer_id, quantity, created_at, updated_at) VALUES (:item_id, :customer_id, :quantity, now(), now())"
-        );
-        $cart_items->bindParam(':item_id', $item_id, PDO::PARAM_INT);
-        $cart_items->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
-        $cart_items->bindParam(':quantity', $quantity, PDO::PARAM_INT);
-        $cart_items->execute();
-      } catch (PDOException $Exception) {
-        die('接続エラー：' . $Exception->getMessage());
-      }
-    }
       // 数量が入っていなければリダイレクト
     } else {
       $message = "数量を選択してください。";
