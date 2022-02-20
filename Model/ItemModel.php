@@ -153,7 +153,7 @@ class ItemModel
       // db_connectメソッドを呼び出す
       $pdo = $this->db_connect();
       $item = $pdo->prepare(
-        "SELECT items.id AS item_id, items.name AS item_name, items.introduction AS introduction, items.price AS price, items.item_image AS item_image, items.extension AS item_extension, genres.name AS genre_name, articles.title AS title, articles.body AS body, articles.article_image AS article_image, articles.extension AS article_extension, articles.is_status AS article_is_status, articles.updated_at AS article_updated_at FROM items, genres, articles WHERE items.genre_id = genres.id AND items.article_id = articles.id AND items.id = $item_id AND items.is_status = 1"
+        "SELECT items.id AS item_id, items.name AS item_name, items.introduction AS introduction, items.price AS price, items.item_image AS item_image, items.extension AS item_extension, genres.name AS genre_name, items.article_id AS article_id, articles.is_status AS article_is_status FROM items, genres, articles WHERE items.genre_id = genres.id AND items.article_id = articles.id AND items.id = $item_id AND items.is_status = 1"
       );
       $item->execute();
     } catch (PDOException $Exception) {
@@ -170,7 +170,7 @@ class ItemModel
       // db_connectメソッドを呼び出す
       $pdo = $this->db_connect();
       $items = $pdo->prepare(
-        "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE genres.id = items.genre_id AND items.genre_id = $genre_id  AND items.is_status = 1"
+        "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE genres.id = items.genre_id AND items.genre_id = $genre_id  AND items.is_status = 1 ORDER BY items.updated_at DESC"
       );
       $items->execute();
     } catch (PDOException $Exception) {
