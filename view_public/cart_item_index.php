@@ -56,11 +56,6 @@ if (isset($_POST['delete'])) {
                   </form>
                   <?= $cart_item['name'] ?><br>
                   ¥<?= $cart_item['price'] ?>(税込)
-                  <div class="field">
-                    <button class="button down">-</button>
-                    <input type="text" value='<?= $cart_item['quantity'] ?>' class="inputtext textbox">
-                    <button class="button up">+</button>
-                  </div>
                   <select class="form-select form-select-lg" name="quantity">
                     <option selected value="<?= $cart_item['quantity'] ?>">数量</option>
                     <?php for ($quantity = 1; $quantity <= 50; $quantity++) { ?>
