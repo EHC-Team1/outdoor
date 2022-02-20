@@ -15,13 +15,14 @@ if (isset($_POST['delete'])) {
   $pdo = new CartItemModel();
   // deleteメソッドを呼び出し
   $cart_item = $pdo->delete();
-  // サクセスメッセージを$messageに格納
-  $message = $cart_item;
+}
 
+// 更新ボタンが押下された時
+if (isset($_POST['update'])) {
   // CartItemクラスを呼び出し
   $pdo = new CartItemModel();
-  // indexメソッドを呼び出し
-  $cart_items = $pdo->index();
+  // updateメソッドを呼び出し
+  $stmt = $pdo->update();
 }
 
 ?>
@@ -53,15 +54,16 @@ if (isset($_POST['delete'])) {
                   <form method="post">
                     <input type="hidden" name="id" value="<?php echo $cart_item['id'] ?>">
                     <button type="submit" name="delete" class="btn-close text-right" aria-label="Close"></button>
+                    <?= $cart_item['name'] ?><br>
+                    ¥<?= $cart_item['price'] ?>(税込)
+                    <select class="form-select form-select-lg" name="quantity">
+                      <option selected><?= $cart_item['quantity'] ?></option>
+                      <?php for ($quantity = 1; $quantity <= 50; $quantity++) { ?>
+                        <option name="quantity" value="<?= $quantity ?>"><?= $quantity ?></option>
+                      <?php } ?>
+                    </select>
+                    <button type="submit" name="update" class="btn btn-outline-success">更新</button>
                   </form>
-                  <?= $cart_item['name'] ?><br>
-                  ¥<?= $cart_item['price'] ?>(税込)
-                  <select class="form-select form-select-lg" name="quantity">
-                    <option selected value="<?= $cart_item['quantity'] ?>">数量</option>
-                    <?php for ($quantity = 1; $quantity <= 50; $quantity++) { ?>
-                      <option value="<?= $quantity ?>"><?= $quantity ?></option>
-                    <?php } ?>
-                  </select>
                 </div>
               </div>
             </div>
@@ -100,5 +102,4 @@ if (isset($_POST['delete'])) {
   </div>
 </div>
 
-<script src="../js/cart_item_index.js"></script>
 <?php require_once('../view_common/footer.php') ?>

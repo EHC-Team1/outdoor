@@ -31,17 +31,18 @@ class CartItemModel
     if ($_POST['quantity']) {
       $item_id = $_POST['item_id'];
       $customer_id = $_SESSION['customer']['id'];
-      $quantity = $_POST['quantity'];
+      
       //商品が登録されているかチェック
         $pdo = $this->db_connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $item = $pdo->prepare(
-          "SELECT item_id FROM cart_items WHERE item_id = $item_id"
+          "SELECT item_id, quantity FROM cart_items WHERE item_id = $item_id"
         );
         $item->execute();
         $item = $item->fetch(PDO::FETCH_ASSOC);
         //商品がカートにあれば数量追加処理
         if($item['item_id']){
+          $quantity = $_POST['quantity'] + $item['quantity'];    
           try {
             // DBに接続
             $pdo = $this->db_connect();
@@ -100,6 +101,23 @@ class CartItemModel
   // カート内商品の更新
   public function update()
   {
+    $id = $_POST['id'];
+    $quantity = $_POST['quantity'];
+    // var_dump($quantity, $id);
+    // exit();
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $stmt = $pdo->prepare(
+        "UPDATE cart_items SET quantity = :quantity, WHERE id = $id"
+      );
+      $stmt->bindParam(':quantity', $quantity, PDO::PARAM_STR);
+      // $update_item->bindParam(':id', $id, PDO::PARAM_INT);
+      $stmt->execute();
+    } catch (PDOException $Exception) {
+      die('接続エラー：' . $Exception->getMessage());
+    }
+    header('Location: cart_item_index.php');
   }
 
   // カート内商品の削除
@@ -110,7 +128,7 @@ class CartItemModel
       // DBに接続
       $pdo = $this->db_connect();
       $cart_items = $pdo->prepare(
-        "DELETE FROM cart_items WHERE id=:id"
+        "DELETE FROM cart_items WHERE id = :id"
       );
       $cart_items->bindParam(':id', $id, PDO::PARAM_INT);
       $cart_items->execute();

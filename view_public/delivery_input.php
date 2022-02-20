@@ -14,7 +14,7 @@ if (isset($_POST['input_delivery'])) {
   // inputメソッドを呼び出す
   $delivery = $pdo->input();
 }
-
+//var_dump($_SESSION['customer']['id']); die;
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -26,7 +26,7 @@ if (isset($_POST['input_delivery'])) {
     <button onclick="history.back();" class="btn btn-outline-secondary">戻る</button>
     <div class="col-md-10">
       <form method="POST">
-        <input type="hidden" name="customer_id" value="1">
+        <input type="hidden" name="customer_id" value="<?= $_SESSION['customer']['id'] ?>">
         <table class="table table-borderless">
           <tbody>
             <tr>
