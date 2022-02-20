@@ -53,7 +53,6 @@ class CartItemModel
           } catch (PDOException $Exception) {
             die('接続エラー：' . $Exception->getMessage());
           }
-      
       // 追加されればカート商品一覧画面に遷移
       header('Location: cart_item_index.php');
 
