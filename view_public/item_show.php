@@ -24,6 +24,27 @@ $item = $pdo->show($item_id);
 // returnしてきた$itemを$itemに格納
 $item = $item->fetch(PDO::FETCH_ASSOC);
 
+// 関連記事が公開状態であれば呼び出し
+if ($item['article_is_status'] == 0) {
+  $article_id = $item['article_id'];
+  // ArticleModelファイルを読み込み
+  require_once('../Model/ArticleModel.php');
+  // Articleクラスを呼び出し
+  $pdo = new ArticleModel();
+  // item_articleメソッドを呼び出し
+  $article = $pdo->item_article($article_id);
+  // returnしてきた$articleを$articleに格納
+  $article = $article->fetch(PDO::FETCH_ASSOC);
+
+  // 非公開状態であれば記事なし
+} else {
+  $article['title'] = "";
+  $article['body'] = "";
+  $article['article_image'] = "";
+  $article['extension'] = "";
+  $article['updated_at'] = "";
+}
+
 // 「購入」ボタンが押された場合
 if (isset($_POST['buy'])) {
   // CartItemModelファイルを読み込み
@@ -80,29 +101,31 @@ if (isset($_POST['buy'])) {
       <div class="row mb-3">
         <h6 class="ms-3 text-center"><?= $item['introduction'] ?></h6>
       </div>
-
-      <!-- 関連記事が公開状態の時に表示 -->
-      <?php if ($item['article_is_status'] = 1) { ?>
-        <div class="row row-cols-1 row-cols-md-1 g-3">
-          <div class="card g-0" style="max-width: auto;">
-            <div class="row m-2">
-              <div class="col-md-5">
-                <?php if ($item["article_extension"] == "jpeg" || $item["article_extension"] == "png" || $item["article_extension"] == "gif") { ?>
-                  <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
-                <?php } ?>
-              </div>
-              <div class="col-md-7">
-                <div class="card-body">
-                  <h5 class="card-title"><?= $item['title'] ?></h5>
-                  <p class="card-text"><?= $item['body'] ?></p>
-                  <p class="card-text"><small class="text-muted"><?= $item['article_updated_at'] ?></small></p>
-                </div>
-              </div>
+      <div class="row row-cols-1 row-cols-md-1 g-3">
+        <!-- 関連記事が公開状態の時に表示 -->
+        <?php if ($item['article_is_status'] == 1) {
+          echo ("<div class='card g-0' style='max-width: auto;'>");
+        } ?>
+        <div class="row m-2">
+          <div class="col-md-5">
+            <?php $target = $article["article_image"]; ?>
+            <?php if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") { ?>
+              <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
+            <?php } ?>
+          </div>
+          <div class="col-md-7">
+            <div class="card-body">
+              <h5 class="card-title"><?= $article['title'] ?></h5>
+              <p class="card-text"><?= $article['body'] ?></p>
+              <p class="card-text"><small class="text-muted"><?= $article['updated_at'] ?></small></p>
             </div>
           </div>
         </div>
-      <?php } ?>
-
+        <!-- 関連記事が公開状態の時に表示 -->
+        <?php if ($item['article_is_status'] == 1) {
+          echo ("</div>");
+        } ?>
+      </div>
     </div>
   </div>
 </div>
