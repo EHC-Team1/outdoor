@@ -25,7 +25,7 @@ $item = $pdo->show($item_id);
 $item = $item->fetch(PDO::FETCH_ASSOC);
 
 // 関連記事が公開状態であれば呼び出し
-if ($item['article_is_status'] == 0) {
+if ($item['article_is_status'] == 1) {
   $article_id = $item['article_id'];
   // ArticleModelファイルを読み込み
   require_once('../Model/ArticleModel.php');
