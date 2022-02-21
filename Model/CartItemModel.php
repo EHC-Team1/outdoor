@@ -91,7 +91,7 @@ class CartItemModel
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $cart_items = $pdo->prepare(
         "SELECT cart_items.*,
-        items.name, items.price, items.item_image, items.extension FROM cart_items LEFT JOIN items ON cart_items.item_id = items.id ORDER BY updated_at"
+        items.name, items.price, items.item_image, items.extension FROM cart_items LEFT JOIN items ON cart_items.item_id = items.id ORDER BY created_at"
       );
       $cart_items->execute();
     } catch (PDOException $Exception) {
@@ -105,17 +105,20 @@ class CartItemModel
   {
     $id = $_POST['id'];
     $quantity = $_POST['quantity'];
-    // var_dump($quantity, $id);
+    // var_dump($id, $quantity);
     // exit();
     try {
       // DBに接続
       $pdo = $this->db_connect();
-      $stmt = $pdo->prepare(
-        "UPDATE cart_items SET quantity = :quantity, WHERE id = $id"
+      $cart_item = $pdo->prepare(
+        "UPDATE cart_items SET quantity = ? WHERE id = ?"
       );
-      $stmt->bindParam(':quantity', $quantity, PDO::PARAM_STR);
+      $cart_item->execute(array(
+        $_POST['quantity'],
+        $_POST['id'],
+      ));
+      // bindParam(':quantity', $quantity, PDO::PARAM_STR);
       // $update_item->bindParam(':id', $id, PDO::PARAM_INT);
-      $stmt->execute();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
@@ -137,7 +140,6 @@ class CartItemModel
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
-
     header('Location: cart_item_index.php');
   }
 }

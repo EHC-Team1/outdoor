@@ -22,7 +22,7 @@ if (isset($_POST['update'])) {
   // CartItemクラスを呼び出し
   $pdo = new CartItemModel();
   // updateメソッドを呼び出し
-  $stmt = $pdo->update();
+  $cart_item = $pdo->update();
 }
 
 ?>
@@ -74,8 +74,7 @@ if (isset($_POST['update'])) {
         <tbody>
           <tr>
             <td class="text-center">商品合計(税込み)</td>
-            <td>¥<? #= $cart_item['price'] 
-                  ?></td><br>
+            <td>¥<?#= $cart_item['price'] * $quantity ?></td><br>
           </tr>
           <tr>
             <td class="text-center">送料</td>
@@ -91,8 +90,7 @@ if (isset($_POST['update'])) {
                 <td class="text-center">
                   <h5>注文合計(税込)</h5>
                 </td>
-                <td>¥<? #= $cart_item['price'] 
-                      ?></td><br>
+                <td>¥<? #= $cart_item['price'] ?></td><br>
               </tr>
             </tbody>
           </table>
