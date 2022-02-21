@@ -39,7 +39,7 @@ $message = htmlspecialchars($message);
     <form method="post">
       <div class="form-group">
         <?= $message; ?>
-        <input type="text" name="name_last" class="form-control" placeholder="姓" value="<?= $name_last ?>">
+        <input type="text" name="name_last" class="form-control" placeholder="姓" value="<?= $name_last ?>" autofocus>
         <input type="text" name="name_first" class="form-control" placeholder="名" value="<?= $name_first ?>">
         <p>※氏名は20字以内で設定してください。</p>
         <input type="email" name="email" class="form-control" placeholder="メールアドレス" value="<?= $email ?>">
