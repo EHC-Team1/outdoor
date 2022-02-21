@@ -1,4 +1,7 @@
 <?php
+// セッションを宣言
+session_start();
+
 // // 管理者としてログインしているかチェック
 // if (isset($_SESSION['admin'])) {
 // } else {
@@ -31,7 +34,7 @@ if (isset($_POST['update_genre'])) {
     <input type="hidden" name="id" value="<?php echo ($genre['id']); ?>">
     <div class="row d-flex align-items-center justify-content-center mt-5">
       <div class="col-md-5">
-        <h1 class="text-center">ジャンル編集フォーム</h1>
+        <h4 class="text-center">ジャンル編集フォーム</h4>
       </div>
       <div class=" col-md-4">
         <input type="text" name="name" class="form-control" value="<?php echo ($genre['name']); ?>" id="genre_edit_input">

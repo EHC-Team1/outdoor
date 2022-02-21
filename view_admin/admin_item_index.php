@@ -36,41 +36,42 @@ $items = $items->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
   <h1 style="text-align:center" class="mt-5 mb-5">商品一覧</h1>
-  <div class="row">
-    <div class="col-md-11">
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm-10">
       <table class="table">
         <tbody>
           <?php
           foreach ($items as $item) {
             $target = $item["item_image"]; ?>
             <tr>
-              <td rowspan="2">
-                <?php
-                if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") {
-                  echo ("<img src='../view_common/item_image.php?target=$target'width=200 height=200>");
-                }
-                ?>
-              </td>
-              <td>
-                <?php
-                echo "<h3><strong>";
-                echo ($item['name']);
-                echo "</strong></h3>"
-                ?>
-              </td>
-              <td rowspan="2" class="align-middle">
-                <form action="item_edit.php" method="post" class="d-flex align-items-center justify-content-center mb-4">
-                  <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                  <button type="submit" name="edit" class="btn btn-outline-success">編集</button>
+              <td rowspan="2" class="align-middle col-sm-1">
+                <form class="d-flex align-items-center justify-content-center mb-4">
+                  <?php if ($item['is_status'] = 1) { ?>
+                    <button type='button' class='btn btn-success' disabled>販売中</button>
+                  <?php } else { ?>
+                    <button type='button' class='btn btn-danger btn-lg' disabled>販売停止中</button>
+                  <?php } ?>
                 </form>
                 <form method="post" class="d-flex align-items-center justify-content-center">
                   <input type="hidden" name="id" value="<?= $item['id'] ?>">
                   <button type="submit" name="delete" class="btn btn-outline-danger">削除</button>
                 </form>
               </td>
+              <td class="col-sm-3 text-center" rowspan="2">
+                <?php
+                if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") {
+                  echo ("<img src='../view_common/item_image.php?target=$target'width=200 height=200>");
+                }
+                ?>
+              </td>
+              <td class="co-sm-6 align-middle">
+                <a href=" ../view_admin/item_edit.php?item_id=<?= $item['id'] ?>" style="text-decoration:none">
+                  <h4 style="color:black"><?= $item['item_name'] ?> / <?= $item['genre_name'] ?></h4>
+                </a>
+              </td>
             </tr>
             <tr>
-              <td>
+              <td class="col-sm-6 align-middle">
                 <?php
                 echo "<h4>￥";
                 echo ($item['price']);

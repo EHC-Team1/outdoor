@@ -46,6 +46,7 @@ if ($_POST['flexRadioDefault']) {
     <!-- articleが検索された場合 -->
     <?php if ($_POST['flexRadioDefault'] = 2) { ?>
       <div class="col-md-8 ms-3">
+        <h3>TOP/<?= $_SESSION['search'] ?></h3>
         <?php foreach ($search_articles as $search_article) {
           $target = $search_article["article_image"]; ?>
           <div class="row row-cols-1 row-cols-md-1 g-3">
