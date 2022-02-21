@@ -127,7 +127,7 @@ class ArticleModel
       $pdo = $this->db_connect();
       //SQL文 全データを投稿日時の降順で取得
       $articles = $pdo->prepare(
-        "SELECT * FROM articles ORDER BY created_at DESC;"
+        "SELECT * FROM articles WHERE is_status = 1 ORDER BY created_at DESC;"
       );
       $articles->execute();
     } catch (PDOException $Exception) {
@@ -137,6 +137,26 @@ class ArticleModel
     return $articles;
   }
 
+  // 関連記事の呼び出し
+  public function item_article($article_id)
+  {
+    $article_id = $article_id;
+    try {
+      $pdo = $this->db_connect();
+      $article = $pdo->prepare(
+        "SELECT * FROM articles WHERE id = $article_id AND is_status = 1"
+      );
+      $article->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $article;
+  }
+
+  // 該当ジャンルの商品の一覧
+  public function genre_index()
+  {
+  }
 
   // 記事の検索
   public function search_index()

@@ -12,6 +12,7 @@ require_once('../Model/GenreModel.php');
 $pdo = new GenreModel();
 // editメソッドを呼び出し
 $genre = $pdo->edit();
+// returnしてきた$genreを$genreに格納
 $genre = $genre->fetch(PDO::FETCH_ASSOC);
 
 // 「更新」ボタンが押された場合

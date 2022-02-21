@@ -8,7 +8,7 @@ require_once('../Model/ArticleModel.php');
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
 $articles = $pdo->index();
-// モデルからreturnしてきた情報をitemsに格納
+// モデルからreturnしてきた情報をarticlesに格納
 $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -29,9 +29,10 @@ $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <div class="col-md-8 ms-3">
-      <?php foreach ($articles as $article) {
-        $target = $article["article_image"]; ?>
-        <div class="row row-cols-1 row-cols-md-1 g-3">
+      <div class="row row-cols-1 row-cols-md-1 g-3">
+        <?php foreach ($articles as $article) {
+          $target = $article["article_image"]; ?>
+          <!-- 公開状態の記事のみ表示 -->
           <div class="card g-0" style="max-width: auto;">
             <div class="row m-2">
               <div class="col-md-5">
@@ -48,8 +49,8 @@ $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
               </div>
             </div>
           </div>
-        </div>
-      <?php } ?>
+        <?php } ?>
+      </div>
     </div>
 
     <?php require_once '../view_common/footer.php'; ?>

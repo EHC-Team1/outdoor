@@ -21,11 +21,6 @@ if (isset($_POST['input_genre'])) {
   // サクセスメッセージを$messageに格納
   $message = $genre;
 
-  // Genreクラスを呼び出し
-  $pdo = new GenreModel();
-  // indexメソッドを呼び出し
-  $genres = $pdo->index();
-
   // 「削除」ボタンが押された場合
 } elseif (isset($_POST['delete'])) {
   // Genreクラスを呼び出し
@@ -35,19 +30,15 @@ if (isset($_POST['input_genre'])) {
   // サクセスメッセージを$messageに格納
   $message = $genre;
 
-  // Genreクラスを呼び出し
-  $pdo = new GenreModel();
-  // indexメソッドを呼び出し
-  $genres = $pdo->index();
-
   // 押されていない状態
 } else {
-  // Genreクラスを呼び出し
-  $pdo = new GenreModel();
-  // indexメソッドを呼び出し
-  $genres = $pdo->index();
   $message = "";
 }
+
+// Genreクラスを呼び出し
+$pdo = new GenreModel();
+// indexメソッドを呼び出し
+$genres = $pdo->index();
 
 $message = htmlspecialchars($message);
 ?>

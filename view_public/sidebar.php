@@ -25,24 +25,6 @@ if (isset($_POST['search'])) {
       $search_articles = $pdo->search_index();
     }
 
-    // ArticleModelファイルを読み込み
-    require_once('../Model/ArticleModel.php');
-    // Articleクラスを呼び出し
-    $pdo = new ArticleModel();
-    // indexメソッドを呼び出し
-    $articles = $pdo->index();
-    // モデルからreturnしてきた情報をarticlesに格納
-    $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
-
-    // GenreModelファイルを読み込み
-    require_once('../Model/GenreModel.php');
-    // Genreクラスを呼び出し
-    $pdo = new GenreModel();
-    // indexメソッドを呼び出し
-    $genres = $pdo->index();
-    // モデルからreturnしてきた情報をgenresに格納
-    $genres = $genres->fetchAll(PDO::FETCH_ASSOC);
-
     // 検索ワードが入力されていない場合
   } else {
     header('Location: ../view_public/top.php');
@@ -50,29 +32,30 @@ if (isset($_POST['search'])) {
 
   // 押されていない状態
 } else {
-  // ArticleModelファイルを読み込み
-  require_once('../Model/ArticleModel.php');
-  // Articleクラスを呼び出し
-  $pdo = new ArticleModel();
-  // indexメソッドを呼び出し
-  $articles = $pdo->index();
-  // モデルからreturnしてきた情報をarticlesに格納
-  $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
-
-  // GenreModelファイルを読み込み
-  require_once('../Model/GenreModel.php');
-  // Genreクラスを呼び出し
-  $pdo = new GenreModel();
-  // indexメソッドを呼び出し
-  $genres = $pdo->index();
-  // モデルからreturnしてきた情報をgenresに格納
-  $genres = $genres->fetchAll(PDO::FETCH_ASSOC);
   // セッションを初期化
   $_SESSION['search'] = "";
 }
+
+// ArticleModelファイルを読み込み
+require_once('../Model/ArticleModel.php');
+// Articleクラスを呼び出し
+$pdo = new ArticleModel();
+// indexメソッドを呼び出し
+$articles = $pdo->index();
+// モデルからreturnしてきた情報をarticlesに格納
+$articles = $articles->fetchAll(PDO::FETCH_ASSOC);
+
+// GenreModelファイルを読み込み
+require_once('../Model/GenreModel.php');
+// Genreクラスを呼び出し
+$pdo = new GenreModel();
+// indexメソッドを呼び出し
+$genres = $pdo->index();
+// モデルからreturnしてきた情報をgenresに格納
+$genres = $genres->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<form action="public_item_index.php" method="POST">
+<form action="public_search_index.php" method="POST">
   <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value=1 checked>
     <label class="form-check-label" for="flexRadioDefault1">
@@ -128,7 +111,9 @@ if (isset($_POST['search'])) {
       <?php foreach ($genres as $genre) { ?>
         <tr>
           <td class="text-center">
-            <h5><?= $genre['name'] ?></h5>
+            <a href="../view_public/genre_item_index.php?genre_id=<?= $genre['id'] ?>" style="text-decoration:none">
+              <h5 style="color:black"><?= $genre['name'] ?></h5>
+            </a>
           </td>
         </tr>
       <?php } ?>

@@ -65,11 +65,12 @@ class DeliveryModel
   public function index()
   {
     try {
+      $customer_id = $_SESSION['customer']['id'];
       // DBに接続
       $pdo = $this->db_connect();
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $deliveries = $pdo->prepare(
-        "SELECT * FROM deliveries"
+        "SELECT * FROM deliveries WHERE customer_id = $customer_id"
       );
       $deliveries->execute();
     } catch (PDOException $Exception) {
@@ -98,15 +99,11 @@ class DeliveryModel
   // 配送先の更新
   public function update()
   {
-    $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
-    $postal_code = htmlspecialchars($_POST['postal_code'], ENT_QUOTES, 'UTF-8');
-    $address = htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8');
-    $id = $_POST['id'];
     try {
       // DBに接続
       $pdo = $this->db_connect();
       $delivery = $pdo->prepare(
-        "UPDATE deliveries SET name = ?, postal_code = ?, address = ? WHERE id =  ?"
+        "UPDATE deliveries SET name = ?, postal_code = ?, address = ? WHERE id = ?"
       );
       $delivery->execute(array(
         $_POST['name'],
