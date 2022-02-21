@@ -27,12 +27,97 @@ class ArticleModel
   // 記事の登録
   public function input()
   {
+    // POSTデータを変数に代入
+    $title = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8')));
+    $body = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_POST['body'], ENT_QUOTES, 'UTF-8')));
+    $article_image = $_FILES['article_image'];
+    // 公開ステータスの判定 「公開」の場合
+    if ($_POST['is_status']  == "disclosure") {
+      $is_status = 1;
+    } else {
+      $is_status = 0;
+    }
+
+    // 必須項目の入力チェック
+    if ($title && $body) {
+
+      // 画像ファイルがある場合
+      if (isset($article_image['error']) && is_int($article_image['error']) && $article_image['name'] !== "") {
+        // ファイルの内容を全て読み込む
+        $raw_data = file_get_contents($article_image['tmp_name']);
+        // 拡張子を取り出し、ファイルの形式を判断する
+        $tmp = pathinfo($article_image["name"]);
+        $extension = $tmp["extension"];
+        if ($extension === "jpg" || $extension === "jpeg" || $extension === "JPG" || $extension === "JPEG") {
+          $extension = "jpeg";
+        } elseif ($extension === "png" || $extension === "PNG") {
+          $extension = "png";
+        } elseif ($extension === "gif" || $extension === "GIF") {
+          $extension = "gif";
+        } else {
+          echo '非対応のファイルです';
+          echo ("<button onclick=location.href='../view_admin/article_index.php' class=btn btn-outline-secondary btn-lg>戻る</button>");
+        }
+        try {
+          // DB接続
+          $pdo = $this->db_connect();
+          $date = getdate();
+          // DBに格納するファイル名を設定
+          $article_image = $article_image['tmp_name'] . $date["year"] . $date["mon"] . $date["mday"] . $date["hours"] . $date["minutes"] . $date["seconds"];
+          $article_image = hash("sha256", $article_image);
+          // SQL文　
+          $articles = $pdo->prepare("INSERT INTO articles ( title, body, article_image, extension, raw_data, is_status, created_at, updated_at)
+          VALUES ( :title, :body, :article_image, :extension, :row_data, :is_status, now(), now());");
+
+          // 値をセット
+          $articles->bindParam(':title', $title, PDO::PARAM_STR);
+          $articles->bindParam(':body', $body, PDO::PARAM_STR);
+          $articles->bindValue(':article_image', $article_image, PDO::PARAM_STR);
+          $articles->bindValue(':extension', $extension, PDO::PARAM_STR);
+          $articles->bindValue(':row_data', $raw_data, PDO::PARAM_STR);
+          $articles->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+          $articles->execute();
+        } catch (PDOException $Exception) {
+          die('接続エラー：' . $Exception->getMessage());
+        }
+        // 格納に成功すれば記事一覧画面に遷移
+        header('Location: ../view_admin/article_index.php');
+
+        // 画像がない場合
+      } else {
+        try {
+          // DB接続
+          $pdo = $this->db_connect();
+          // SQL文
+          $articles = $pdo->prepare("INSERT INTO articles ( title, body, is_status, created_at, updated_at)
+          VALUES ( :title, :body, :is_status, now(), now());");
+
+          // 値をセット
+          $articles->bindParam(':title', $title, PDO::PARAM_STR);
+          $articles->bindParam(':body', $body, PDO::PARAM_STR);
+          $articles->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+          $articles->execute();
+        } catch (PDOException $Exception) {
+          die('接続エラー：' . $Exception->getMessage());
+        }
+        // 格納に成功すれば記事一覧画面に遷移
+        header('Location: ../view_admin/article_index.php');
+      }
+
+      // 必須項目が入力されていない場合、入力画面にリダイレクト
+    } else {
+      $message = "画像以外は必須項目です";
+      return $message;
+      header('Location: ../view_admin/article_index.php');
+    }
   }
+
 
   // 記事の詳細表示
   public function show()
   {
   }
+
 
   // 記事の一覧表示
   public function index()
@@ -40,7 +125,7 @@ class ArticleModel
     try {
       // DBに接続
       $pdo = $this->db_connect();
-      // DBからarticlesテーブルの全データを投稿日時の降順で取得
+      //SQL文 全データを投稿日時の降順で取得
       $articles = $pdo->prepare(
         "SELECT * FROM articles WHERE is_status = 1 ORDER BY created_at DESC;"
       );
@@ -88,8 +173,26 @@ class ArticleModel
   {
   }
 
+
   // 記事の削除
   public function delete()
   {
+    $id = $_POST['id'];
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      // SQL文 一致したidの全データを削除
+      $articles = $pdo->prepare(
+        "DELETE FROM articles WHERE id=:id"
+      );
+      $articles->bindParam(':id', $id, PDO::PARAM_INT);
+      $articles->execute();
+
+    } catch (PDOException $Exception) {
+      die('接続エラー：' . $Exception->getMessage());
+    }
+
+    $message = "記事が削除されました。";
+    return $message;
   }
 }
