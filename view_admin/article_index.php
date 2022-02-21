@@ -9,11 +9,12 @@ session_start();
 //   die();
 // }
 
-  // ArticleModelファイルを読み込み
-  require_once('../Model/ArticleModel.php');
+// ArticleModelファイルを読み込み
+require_once('../Model/ArticleModel.php');
 
 // 「記事追加」ボタンが押された場合
 if (isset($_POST['input_article'])) {
+
   // POSTデータをSESSIONに格納
   $_SESSION['article'] = [
     'title' => htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'),
@@ -36,10 +37,10 @@ if (isset($_POST['input_article'])) {
   // サクセスメッセージを$messageに格納
   $message = $articles;
 
-//  Articleクラスを呼び出し
-$pdo = new ArticleModel();
-// indexメソッドを呼び出し 記事一覧を再取得
-$articles = $pdo->index();
+  //  Articleクラスを呼び出し
+  $pdo = new ArticleModel();
+  // indexメソッドを呼び出し 記事一覧を再取得
+  $articles = $pdo->index();
 
   // 押されていない状態
 } else {
@@ -49,17 +50,22 @@ $articles = $pdo->index();
   $message = "";
 }
 
+// 更新完了のメッセージがあれば、変数に格納
+if (isset($_GET['update'])) {
+  $message = $_GET['update'];
+}
+
+//  Articleクラスを呼び出し
+$pdo = new ArticleModel();
+// indexメソッドを呼び出し
+$articles = $pdo->admin_index();
+
 // ItemModelファイルを読み込み
 require_once('../Model/ItemModel.php');
 // Itemクラスを呼び出し
 $pdo = new ItemModel();
 // indexメソッド呼び出し
 $items = $pdo->index();
-
-//  Articleクラスを呼び出し
-$pdo = new ArticleModel();
-// indexメソッドを呼び出し
-$articles = $pdo->index();
 
 $message = htmlspecialchars($message);
 ?>
@@ -102,14 +108,13 @@ $message = htmlspecialchars($message);
           </div>
         </div>
       </form>
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-12 d-flex flex-row-reverse">
+          <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg mt-3">戻る</button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-<div class="row d-flex justify-content-center">
-  <div class="col-md-10 d-flex flex-row-reverse">
-    <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg mt-3">戻る</button>
-  </div>
-</div>
 </div>
 <div class="container">
   <form method="post">
@@ -159,7 +164,7 @@ $message = htmlspecialchars($message);
               <td>
                 <form method="post" class="d-flex align-items-center justify-content-center">
                   <input type="hidden" name="id" value="<?php echo $article['id'] ?>">
-                  <button type="submit" name="delete" class="btn btn-outline-danger">削除</button>
+                  <button type="submit" name="delete" class="btn btn-outline-danger" id="article_delete_btn">削除</button>
                 </form>
               </td>
             </tr>
@@ -169,5 +174,6 @@ $message = htmlspecialchars($message);
     </div>
   </div>
 </div>
-
+<!-- 削除ボタンバリデーション用jsファイル -->
+<script src="../js/article_index.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
