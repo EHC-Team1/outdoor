@@ -125,7 +125,7 @@ class ArticleModel
     try {
       // DBに接続
       $pdo = $this->db_connect();
-      //SQL文 全データを投稿日時の降順で取得
+      //SQL文 投稿日時の降順で取得
       $articles = $pdo->prepare(
         "SELECT * FROM articles WHERE is_status = 1 ORDER BY created_at DESC;"
       );
@@ -144,7 +144,7 @@ class ArticleModel
     try {
       // DBに接続
       $pdo = $this->db_connect();
-      //SQL文 全データを投稿日時の降順で取得
+      //SQL文 投稿日時の降順で取得
       $articles = $pdo->prepare(
         "SELECT * FROM articles WHERE is_status = 1 ORDER BY created_at DESC;"
       );
@@ -163,7 +163,7 @@ class ArticleModel
     try {
       // DBに接続
       $pdo = $this->db_connect();
-      //SQL文 全データを投稿日時の降順で取得
+      //SQL文 投稿日時の降順で取得
       $articles = $pdo->prepare(
         "SELECT * FROM articles ORDER BY created_at DESC;"
       );
@@ -213,7 +213,7 @@ class ArticleModel
       $articles = $pdo->prepare(
         "SELECT * FROM articles WHERE id=$id"
       );
-      // $articles->bindParam(':id', $id, PDO::PARAM_INT);
+
       $articles->execute();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
