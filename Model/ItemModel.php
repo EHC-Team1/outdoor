@@ -121,7 +121,7 @@ class ItemModel
     try {
       $pdo = $this->db_connect();
       $items = $pdo->prepare(
-        "SELECT * FROM items ORDER BY updated_at DESC"
+        "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, items.is_status AS is_status, genres.name AS genre_name FROM items, genres WHERE items.genre_id = genres.id ORDER BY items.updated_at DESC"
       );
       $items->execute();
     } catch (PDOException $Exception) {
@@ -131,8 +131,20 @@ class ItemModel
   }
 
   // 商品の編集
-  public function edit()
+  public function edit($item_id)
   {
+    $item_id = $item_id;
+    try {
+      // db_connectメソッドを呼び出す
+      $pdo = $this->db_connect();
+      $item = $pdo->prepare(
+        "SELECT items.id AS item_id, items.name AS item_name, items.introduction AS introduction, items.price AS price, items.item_image AS item_image, items.extension AS extension, items.is_status AS is_status, genres.id AS genre_id, genres.name AS genre_name, items.article_id AS article_id, articles.title AS article_title FROM items, genres, articles WHERE items.genre_id = genres.id AND items.article_id = articles.id AND items.id = $item_id"
+      );
+      $item->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $item;
   }
 
   // 商品の更新
