@@ -24,6 +24,27 @@ class AdminModel
     return $pdo;
   }
 
+  public function signup()
+  {
+    $name = $_POST['admin_name'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    try {
+      // DB接続
+      $pdo = $this->db_connect();
+      $admin = $pdo->prepare(
+        "INSERT INTO admins (name, password) VALUES (:name, :password)"
+      );
+      $admin->bindParam(':name', $name, PDO::PARAM_STR);
+      $admin->bindParam(':password', $password, PDO::PARAM_STR);
+      $admin->execute();
+      $pdo = null;
+      // 管理者ログインへリダイレクト
+      header('Location: ./admin_login.php');
+    } catch (PDOException $Exception) {
+      die('接続エラー：' . $Exception->getMessage());
+    }
+  }
+
   // ログイン処理
   public function login()
   {

@@ -2,12 +2,12 @@
 // セッションを宣言
 session_start();
 
-// // 管理者としてログインしているかチェック
-// if (isset($_SESSION['admin'])) {
-// } else {
-//   header("Location: admin_login.php");
-//   die();
-// }
+// 管理者としてログインしているかチェック
+if (isset($_SESSION['admin'])) {
+} else {
+  header("Location: admin_login.php");
+  die();
+}
 
 // 「更新」ボタンが押された場合
 if (isset($_POST['update_genre'])) {

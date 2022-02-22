@@ -2,12 +2,12 @@
 // セッションを宣言
 session_start();
 
-// // 管理者としてログインしているかチェック
-// if (isset($_SESSION['admin'])) {
-// } else {
-//   header("Location: admin_login.php");
-//   die();
-// }
+// 管理者としてログインしているかチェック
+if (isset($_SESSION['admin'])) {
+} else {
+  header("Location: admin_login.php");
+  die();
+}
 
 // 「商品追加」ボタンが押された場合
 if (isset($_POST['input_item'])) {

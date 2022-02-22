@@ -6,14 +6,6 @@ $name = $password = "";
 
 require_once('../Model/AdminModel.php');
 
-// // ログアウト処理
-// if (isset($_POST['logout'])) {
-//   // Adminクラスを呼び出し
-//   $pdo = new AdminModel();
-//   // logoutメソッドを呼び出し
-//   $pdo = $pdo->logout();
-// }
-
 // 「ログイン」ボタンが押された場合
 if (isset($_POST['login'])) {
   // AdminModelクラスを呼び出し

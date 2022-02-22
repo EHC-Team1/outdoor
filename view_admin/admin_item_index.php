@@ -2,12 +2,12 @@
 // セッションを宣言
 session_start();
 
-// // 管理者としてログインしているかチェック
-// if (isset($_SESSION['admin'])) {
-// } else {
-//   header("Location: admin_login.php");
-//   die();
-// }
+// 管理者としてログインしているかチェック
+if (isset($_SESSION['admin'])) {
+} else {
+  header("Location: admin_login.php");
+  die();
+}
 
 // ItemModelファイルを読み込み
 require_once('../Model/ItemModel.php');
