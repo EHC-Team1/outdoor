@@ -17,6 +17,24 @@ if (isset($_GET["item_id"]) && $_GET["item_id"] !== "") {
 
 // ItemModelファイルを呼び出し
 require_once('../Model/ItemModel.php');
+
+// 「更新」ボタンが押された場合
+if (isset($_POST['update_item'])) {
+  // Itemクラスを呼び出し
+  $pdo = new ItemModel();
+  // updateメソッドを呼び出し
+  $item = $pdo->update($item);
+
+  // 「削除」ボタンが押された場合
+} elseif (isset($_POST['delete_item'])) {
+  // Itemクラスを呼び出し
+  $pdo = new ItemModel();
+  // deleteメソッドを呼び出し
+  $item = $pdo->delete();
+  // 管理者トップに遷移
+  header('Location: ../view_admin/admin_item_index.php');
+}
+
 // Itemクラスを呼び出し
 $pdo = new ItemModel();
 // editメソッドを呼び出し
@@ -36,7 +54,8 @@ require_once('../Model/ArticleModel.php');
 // Articleクラスを呼び出し
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
-// $articles = $pdo->admin_index();
+$articles = $pdo->admin_index();
+
 
 ?>
 
@@ -45,19 +64,19 @@ $pdo = new ArticleModel();
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5">商品編集フォーム</h1>
-    <div class="col-md-10">
+    <div class="col-sm-10">
       <div class="row mt-3 mb-3">
-        <?php if ($item['is_status'] = 1) { ?>
+        <?php if ($item['is_status'] == 1) { ?>
           <button type='button' class='btn btn-success' disabled>販売中</button>
         <?php } else { ?>
-          <button type='button' class='btn btn-danger btn-lg' disabled>販売停止中</button>
+          <button type='button' class='btn btn-danger' disabled>販売停止中</button>
         <?php } ?>
       </div>
-      <form action="item_input.php" method="post" enctype="multipart/form-data">
+      <form method="post" enctype="multipart/form-data">
         <div class="row mb-3">
           <label class="col-sm-2 col-form-label text-center">商品名</label>
           <div class="col-sm-10">
-            <input type="text" name="name" class="form-control" value="<?= $item['item_name'] ?>">
+            <input type="text" name="name" class="form-control" value="<?= $item['item_name'] ?>" id="item_name">
           </div>
         </div>
         <div class="row g-3 mb-3">
@@ -73,7 +92,7 @@ $pdo = new ArticleModel();
           </div>
           <div class="col">
             <select name="article_id" class="form-select">
-              <option selected value="<?= $item['article_id'] ?>"><?= $item['article_name'] ?></option>
+              <option selected value="<?= $item['article_id'] ?>"><?= $item['article_title'] ?></option>
               <?php foreach ($articles as $article) { ?>
                 <option value="<?php echo ($article['id']) ?>">
                   <?php echo ($article['title']) ?>
@@ -87,15 +106,21 @@ $pdo = new ArticleModel();
         </div>
         <div class="row mb-3">
           <div class="col">
-            <textarea name="introduction" class="form-control" rows="7"><?= $item['introduction'] ?></textarea>
+            <textarea name="introduction" class="form-control" rows="7" id="item_introduction"><?= $item['introduction'] ?></textarea>
           </div>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-2">
           <div class="col text-center">
             <?php $target = $item["item_image"]; ?>
             <?php if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") { ?>
               <img src="../view_common/item_image.php?target=<?= $target ?>" alt="item_image" class="img-fluid">
             <?php } ?>
+          </div>
+        </div>
+        <div class="row mb-3 d-flex justify-content-center">
+          <div class="col-sm-6 text-center">
+            <input type="checkbox" class="btn-check" id="btncheck" name="delete_image" value="delete_image" autocomplete="off">
+            <label class="btn btn-outline-secondary" for="btncheck">画像を削除</label>
           </div>
         </div>
         <div class="row">
@@ -104,7 +129,7 @@ $pdo = new ArticleModel();
           </div>
           <label class="col-sm-2 col-form-label text-end">税込価格</label>
           <div class="col-sm-3">
-            <input type="text" name="price" class="form-control" value="<?= $item['price'] ?>">
+            <input type="text" name="price" class="form-control" value="<?= $item['price'] ?>" id="item_price">
           </div>
           <label class="col-sm-1 col-form-label">円</label>
         </div>
@@ -112,29 +137,32 @@ $pdo = new ArticleModel();
           <label class="col-sm-6 col-form-label text-center">※容量の大きい画像はエラーになることがあります。</label>
         </div>
         <div class="row mb-3 d-flex justify-content-evenly">
-          <div class="col-sm-2 text-center">
+          <div class="col-sm-3 text-center">
             <input type="radio" class="btn-check" name="is_status" id="success-outlined" value="buy_able" autocomplete="off" checked>
             <label class="btn btn-outline-success" for="success-outlined">購入可能状態</label>
           </div>
-          <div class="col-sm-2 text-center">
+          <div class="col-sm-3 text-center">
             <input type="radio" class="btn-check" name="is_status" id="danger-outlined" value="buy_unable" autocomplete="off">
             <label class="btn btn-outline-danger" for="danger-outlined">販売停止状態</label>
           </div>
         </div>
         <div class="d-flex align-items-center justify-content-center">
-          <button type="submit" name="input_item" class="btn btn-outline-success btn-lg">商品を更新する</button>
+          <button type="submit" name="update_item" class="btn btn-outline-success btn-lg" id="item_update_btn">商品を更新する</button>
         </div>
       </form>
     </div>
   </div>
-  <div class="row d-flex justify-content-center mt-3">
+  <div class="row d-flex justify-content-center mt-3 mb-5">
     <div class="col-md-10 d-flex justify-content-evenly">
       <form method="POST">
-        <button type="submit" name="delete_item" class="btn btn-outline-danger btn-lg">削除する</button>
+        <input type="hidden" name="id" value="<?= $item['item_id'] ?>">
+        <button type="submit" name="delete_item" class="btn btn-outline-danger btn-lg" id="delete_btn">削除する</button>
       </form>
       <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg">戻る</button>
     </div>
   </div>
 </div>
 
+<!-- バリデーション・アラート用jsファイル -->
+<script src="../js/item_edit.js"></script>
 <?php require_once '../view_common/footer.php'; ?>

@@ -6,3 +6,11 @@ $('#genre_edit_btn').click(function () {
 		return false;
 	}
 });
+
+// ジャンル「削除」ボタン押下時のアラート
+$('.btn-outline-danger').click(function () {
+  if (window.confirm("ジャンルを削除しますか？")) {
+  } else {
+    return false;
+  }
+});

@@ -47,13 +47,13 @@ $message = htmlspecialchars($message);
 <div class="container">
   <form method="post">
     <div class="row d-flex align-items-center justify-content-center mt-5">
-      <div class="col-md-3">
+      <div class="col-sm-3">
         <h4 class="text-center">ジャンルを追加</h4>
       </div>
-      <div class=" col-md-4">
+      <div class=" col-sm-4">
         <input type="text" name="name" class="form-control" placeholder="ジャンル名">
       </div>
-      <div class="col-md-3">
+      <div class="col-sm-3">
         <button type="submit" name="input_genre" class="btn btn-outline-primary">ジャンルを追加</button>
       </div>
     </div>
@@ -90,6 +90,11 @@ $message = htmlspecialchars($message);
           <?php } ?>
         </tbody>
       </table>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-10 d-flex flex-row-reverse">
+      <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg mt-3">戻る</button>
     </div>
   </div>
 </div>

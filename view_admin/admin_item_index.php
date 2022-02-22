@@ -11,12 +11,29 @@ session_start();
 
 // ItemModelファイルを読み込み
 require_once('../Model/ItemModel.php');
+
+// 「削除」ボタンが押された場合
+if (isset($_POST['delete'])) {
+  // Itemクラスを呼び出し
+  $pdo = new ItemModel();
+  // deleteメソッドを呼び出し
+  $item = $pdo->delete();
+  // サクセスメッセージを$messageに格納
+  $message = $item;
+
+  // 押されていない状態
+} else {
+  $message = "";
+}
+
 // Itemクラスを呼び出し
 $pdo = new ItemModel();
 // indexメソッドを呼び出し
 $items = $pdo->index();
 // モデルからreturnしてきた情報をitemsに格納
 $items = $items->fetchAll(PDO::FETCH_ASSOC);
+
+$message = htmlspecialchars($message);
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -38,6 +55,7 @@ $items = $items->fetchAll(PDO::FETCH_ASSOC);
   <h1 style="text-align:center" class="mt-5 mb-5">商品一覧</h1>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-10">
+      <?= $message; ?>
       <table class="table">
         <tbody>
           <?php
@@ -46,10 +64,10 @@ $items = $items->fetchAll(PDO::FETCH_ASSOC);
             <tr>
               <td rowspan="2" class="align-middle col-sm-1">
                 <form class="d-flex align-items-center justify-content-center mb-4">
-                  <?php if ($item['is_status'] = 1) { ?>
+                  <?php if ($item['is_status'] == 1) { ?>
                     <button type='button' class='btn btn-success' disabled>販売中</button>
                   <?php } else { ?>
-                    <button type='button' class='btn btn-danger btn-lg' disabled>販売停止中</button>
+                    <button type='button' class='btn btn-danger' disabled>販売停止</button>
                   <?php } ?>
                 </form>
                 <form method="post" class="d-flex align-items-center justify-content-center">
@@ -86,5 +104,6 @@ $items = $items->fetchAll(PDO::FETCH_ASSOC);
   </div>
 </div>
 
-
+<!-- バリデーション・アラート用jsファイル -->
+<script src="../js/admin_item_index.js"></script>
 <?php require_once '../view_common/footer.php'; ?>

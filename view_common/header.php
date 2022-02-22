@@ -19,7 +19,24 @@
 <body>
   <header>
     <!-- ログイン状態か判別 -->
-    <?php if (isset($_SESSION['customer'])) { ?>
+    <?php if (isset($_SESSION['admin'])) { ?>
+      <!-- 管理者ログイン状態 -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand mb-0 h1 ms-5" href="../view_admin/admin_item_index.php">OUTDOOR</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            </ul>
+            <button class="btn btn-outline-secondary me-5" formaction="../view_admin/admin_login.php" formmethod="POST" type="submit" name="logout" value="1">ログアウト</button>
+            <button class="btn btn-outline-secondary ms-5 me-5" onclick="location.href='../view_public/public_login.php'">ユーザーログインへ</button>
+            <button class="btn btn-outline-secondary me-5" onclick="location.href='../view_public/top.php'">ユーザートップへ</button>
+          </div>
+        </div>
+      </nav>
+    <?php } elseif (isset($_SESSION['customer'])) { ?>
       <!-- ログイン状態 -->
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">

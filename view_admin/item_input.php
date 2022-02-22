@@ -44,7 +44,7 @@ require_once('../Model/ArticleModel.php');
 // Articleクラスを呼び出し
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
-// $articles = $pdo->admin_index();
+$articles = $pdo->admin_index();
 
 $message = htmlspecialchars($message);
 ?>
@@ -54,7 +54,7 @@ $message = htmlspecialchars($message);
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5 mb-5">商品登録フォーム</h1>
-    <div class="col-md-10">
+    <div class="col-sm-10">
       <?= $message; ?>
       <form action="item_input.php" method="post" enctype="multipart/form-data">
         <div class="row mb-3">
@@ -107,17 +107,17 @@ $message = htmlspecialchars($message);
           <label class="col-sm-6 col-form-label text-center">※容量の大きい画像はエラーになることがあります。</label>
         </div>
         <div class="row mb-3 d-flex justify-content-evenly">
-          <div class="col-sm-2 text-center">
+          <div class="col-sm-3 text-center">
             <input type="radio" class="btn-check" name="is_status" id="success-outlined" value="buy_able" autocomplete="off" checked>
             <label class="btn btn-outline-success" for="success-outlined">購入可能状態</label>
           </div>
-          <div class="col-sm-2 text-center">
+          <div class="col-sm-3 text-center">
             <input type="radio" class="btn-check" name="is_status" id="danger-outlined" value="buy_unable" autocomplete="off">
             <label class="btn btn-outline-danger" for="danger-outlined">販売停止状態</label>
           </div>
         </div>
         <div class="d-flex align-items-center justify-content-center">
-          <button type="submit" name="input_item" class="btn btn-outline-success btn-lg">商品を追加する</button>
+          <button type="submit" name="input_item" class="btn btn-outline-primary btn-lg">商品を追加する</button>
         </div>
       </form>
     </div>
