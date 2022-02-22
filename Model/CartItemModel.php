@@ -91,9 +91,12 @@ class CartItemModel
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $cart_items = $pdo->prepare(
         "SELECT cart_items.*,
-        items.name, items.price, items.item_image, items.extension FROM cart_items LEFT JOIN items ON cart_items.item_id = items.id ORDER BY created_at"
+        items.name, items.price, items.item_image, items.extension FROM cart_items LEFT JOIN items ON cart_items.item_id = items.id WHERE cart_items.customer_id = ? ORDER BY created_at"
       );
-      $cart_items->execute();
+      $cart_items->execute(array(
+        $_SESSION['customer']['id']
+      )
+      );
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
     }
@@ -105,8 +108,6 @@ class CartItemModel
   {
     $id = $_POST['id'];
     $quantity = $_POST['quantity'];
-    // var_dump($id, $quantity);
-    // exit();
     try {
       // DBに接続
       $pdo = $this->db_connect();
@@ -117,8 +118,6 @@ class CartItemModel
         $_POST['quantity'],
         $_POST['id'],
       ));
-      // bindParam(':quantity', $quantity, PDO::PARAM_STR);
-      // $update_item->bindParam(':id', $id, PDO::PARAM_INT);
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
@@ -132,10 +131,22 @@ class CartItemModel
     try {
       // DBに接続
       $pdo = $this->db_connect();
-      $cart_items = $pdo->prepare(
-        "DELETE FROM cart_items WHERE id = :id"
-      );
+      $cart_items = $pdo->prepare("DELETE FROM cart_items WHERE id = :id");
       $cart_items->bindParam(':id', $id, PDO::PARAM_INT);
+      $cart_items->execute();
+    } catch (PDOException $Exception) {
+      die('接続エラー：' . $Exception->getMessage());
+    }
+    header('Location: cart_item_index.php');
+  }
+
+  // カート内商品を全削除
+  public function all_delete()
+  {
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $cart_items = $pdo->prepare("DELETE FROM cart_items");
       $cart_items->execute();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
