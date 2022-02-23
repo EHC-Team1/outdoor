@@ -55,7 +55,8 @@ $message = htmlspecialchars($message);
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           </ul>
-          <button class="btn btn-outline-secondary ms-5 me-5" onclick="location.href='../view_public/public_login.php'">ユーザーログインへ</button>
+          <button class="btn btn-outline-secondary ms-5 me-5" onclick="location.href='admin_signup.php'">管理者サインアップ</button>
+          <button class="btn btn-outline-secondary me-5" onclick="location.href='../view_public/public_login.php'">ユーザーログインへ</button>
           <button class="btn btn-outline-secondary me-5" onclick="location.href='../view_public/top.php'">ユーザートップへ</button>
         </div>
       </div>

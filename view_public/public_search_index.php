@@ -18,7 +18,7 @@ if ($_POST['flexRadioDefault']) {
     </div>
 
     <!-- itemが検索された場合 -->
-    <?php if ($_POST['flexRadioDefault'] = 1) { ?>
+    <?php if ($_POST['flexRadioDefault'] == 1) { ?>
       <div class="col-md-8 ms-3">
         <h3>TOP/<?= $_SESSION['search'] ?></h3>
         <div class="row">
@@ -44,7 +44,7 @@ if ($_POST['flexRadioDefault']) {
     <?php } ?>
 
     <!-- articleが検索された場合 -->
-    <?php if ($_POST['flexRadioDefault'] = 2) { ?>
+    <?php if ($_POST['flexRadioDefault'] == 2) { ?>
       <div class="col-md-8 ms-3">
         <h3>TOP/<?= $_SESSION['search'] ?></h3>
         <?php foreach ($search_articles as $search_article) {
