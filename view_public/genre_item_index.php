@@ -36,12 +36,12 @@ $selected_genre = $selected_genre->fetch(PDO::FETCH_ASSOC);
     <div class="col-auto">
       <?php require_once '../view_public/sidebar.php'; ?>
     </div>
-    <div class="col-md-8 ms-3">
+    <div class="col-sm-8 ms-3">
       <h3>TOP/<?= $selected_genre['name'] ?></h3>
       <div class="row">
         <?php foreach ($items as $item) {
           $target = $item["item_image"]; ?>
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <div class="card text-white bg-dark mb-3">
               <?php if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") { ?>
                 <img src="../view_common/item_image.php?target=<?= $target ?>" alt="item_image" class="card-img-top img-fluid">

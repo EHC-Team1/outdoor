@@ -18,6 +18,13 @@ if (isset($_GET["item_id"]) && $_GET["item_id"] !== "") {
 // ItemModelファイルを呼び出し
 require_once('../Model/ItemModel.php');
 
+// Itemクラスを呼び出し
+$pdo = new ItemModel();
+// editメソッドを呼び出し
+$item = $pdo->edit($item_id);
+// returnしてきた$itemを$itemに格納
+$item = $item->fetch(PDO::FETCH_ASSOC);
+
 // 「更新」ボタンが押された場合
 if (isset($_POST['update_item'])) {
   // Itemクラスを呼び出し
@@ -34,13 +41,6 @@ if (isset($_POST['update_item'])) {
   // 管理者トップに遷移
   header('Location: ../view_admin/admin_item_index.php');
 }
-
-// Itemクラスを呼び出し
-$pdo = new ItemModel();
-// editメソッドを呼び出し
-$item = $pdo->edit($item_id);
-// returnしてきた$itemを$itemに格納
-$item = $item->fetch(PDO::FETCH_ASSOC);
 
 // Genre / Article選択肢用
 // GenreModelファイルを読み込み

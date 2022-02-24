@@ -19,12 +19,12 @@ if ($_POST['flexRadioDefault']) {
 
     <!-- itemが検索された場合 -->
     <?php if ($_POST['flexRadioDefault'] == 1) { ?>
-      <div class="col-md-8 ms-3">
+      <div class="col-sm-8 ms-3">
         <h3>TOP/<?= $_SESSION['search'] ?></h3>
         <div class="row">
           <?php foreach ($search_items as $search_item) {
             $target = $search_item["item_image"]; ?>
-            <div class="col-md-6">
+            <div class="col-lg-6">
               <div class="card text-white bg-dark mb-3">
                 <?php if ($search_item["extension"] == "jpeg" || $search_item["extension"] == "png" || $search_item["extension"] == "gif") { ?>
                   <img src="../view_common/item_image.php?target=<?= $target ?>" alt="search_item_image" class="card-img-top img-fluid">
