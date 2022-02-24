@@ -226,9 +226,22 @@ class CustomerModel
   }
 
 
-  // ユーザー情報 登録内容確認
+  // ユーザー情報 登録内容表示
   public function show()
   {
+    try {
+      $id = $_SESSION['customer']['id'];
+      // DBに接続
+      $pdo = $this->db_connect();
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $customers = $pdo->prepare(
+        "SELECT * FROM customers WHERE id = $id"
+      );
+      $customers->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $customers;
   }
 
 
@@ -254,13 +267,49 @@ class CustomerModel
   //ユーザー情報の編集
   public function edit()
   {
+    $id = $_SESSION['customer']['id'];
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $customer = $pdo->prepare(
+        "SELECT * FROM customers WHERE id = $id"
+      );
+      $customer->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $customer;
   }
 
   // ユーザー情報の更新
-  public function update()
+  public function update($customer)
   {
+    $customer = $customer;
+    $customer_id = $customer['id'];
+    $name_last = htmlspecialchars($_POST['name_last'], ENT_QUOTES, 'UTF-8');
+    $name_first = htmlspecialchars($_POST['name_first'], ENT_QUOTES, 'UTF-8');
+    $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+    $postal_code = htmlspecialchars($_POST['postal_code'], ENT_QUOTES, 'UTF-8');
+    $address = htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8');
+    $telephone_num = htmlspecialchars($_POST['telephone_num'], ENT_QUOTES, 'UTF-8');
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $customer = $pdo->prepare(
+        "UPDATE customers SET name_last = :name_last, name_first = :name_first, email = :email, postal_code = :postal_code, address = :address, telephone_num = :telephone_num WHERE id = $customer_id"
+      );
+      $customer->bindParam('name_last', $name_last, PDO::PARAM_STR);
+      $customer->bindParam('name_first', $name_first, PDO::PARAM_STR);
+      $customer->bindParam('email', $email, PDO::PARAM_STR);
+      $customer->bindParam('postal_code', $postal_code, PDO::PARAM_STR);
+      $customer->bindParam('address', $address, PDO::PARAM_STR);
+      $customer->bindParam('telephone_num', $telephone_num, PDO::PARAM_STR);
+      $customer->execute();
+    } catch (PDOException $Exception) {
+      die('接続エラー：' . $Exception->getMessage());
+      header('Location: mypage.php');
+    }
   }
-
 
   public function logout()
   {

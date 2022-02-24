@@ -13,8 +13,8 @@ if (isset($_POST['input_delivery'])) {
   $pdo = new DeliveryModel();
   // inputメソッドを呼び出す
   $delivery = $pdo->input();
+  header('Location: mypage.php');
 }
-//var_dump($_SESSION['customer']['id']); die;
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -22,8 +22,6 @@ if (isset($_POST['input_delivery'])) {
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5 mb-5">配送先新規登録</h1>
-    <!-- 戻るボタンは仮置き -->
-    <button onclick="history.back();" class="btn btn-outline-secondary">戻る</button>
     <div class="col-md-10">
       <form method="POST">
         <input type="hidden" name="customer_id" value="<?= $_SESSION['customer']['id'] ?>">
@@ -32,19 +30,19 @@ if (isset($_POST['input_delivery'])) {
             <tr>
               <th scope="row" class="col-md-4 text-right">宛名</th>
               <td class="col-md-8">
-                <input type="text" name="name" id="delivery_input" placeholder="藤浪翔平">
+                <input type="text" name="name" id="delivery_name" placeholder="藤浪翔平">
               </td>
             </tr>
             <tr>
               <th scope="row" class="col-md-4 text-right">郵便番号</th>
               <td class="col-md-8">
-                <input type="text" name="postal_code" id="delivery_input" placeholder="000-1111">
+                <input type="text" name="postal_code" id="delivery_postal_code" placeholder="000-1111">
               </td>
             </tr>
             <tr>
               <th scope="row" class="col-md-4 text-right">住所</th>
               <td class="col-md-8">
-                <input type="text" name="address" id="delivery_input" class="col-md-8 p-0" placeholder="東京都豊島区池袋0-0-0">
+                <input type="text" name="address" id="delivery_address" class="col-md-8 p-0" placeholder="東京都豊島区池袋0-0-0">
               </td>
             </tr>
           </tbody>
