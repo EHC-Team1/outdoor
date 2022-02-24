@@ -45,9 +45,9 @@ class ArticleModel
       if (isset($article_image['error']) && is_int($article_image['error']) && $article_image['name'] !== "") {
         // ファイルの内容を全て読み込む
         $raw_data = file_get_contents($article_image['tmp_name']);
+
         // 拡張子を取り出し、ファイルの形式を判断する
-        $tmp = pathinfo($article_image["name"]);
-        $extension = $tmp["extension"];
+        $extension = pathinfo($article_image["name"], PATHINFO_EXTENSION);
         if ($extension === "jpg" || $extension === "jpeg" || $extension === "JPG" || $extension === "JPEG") {
           $extension = "jpeg";
         } elseif ($extension === "png" || $extension === "PNG") {
@@ -62,6 +62,7 @@ class ArticleModel
           // DB接続
           $pdo = $this->db_connect();
           $date = getdate();
+
           // DBに格納するファイル名を設定
           $article_image = $article_image['tmp_name'] . $date["year"] . $date["mon"] . $date["mday"] . $date["hours"] . $date["minutes"] . $date["seconds"];
           $article_image = hash("sha256", $article_image);
@@ -80,8 +81,6 @@ class ArticleModel
         } catch (PDOException $Exception) {
           die('接続エラー：' . $Exception->getMessage());
         }
-        // 格納に成功すれば記事一覧画面に遷移
-        // header('Location: ../view_admin/article_index.php');
 
         // 画像がない場合
       } else {
@@ -116,6 +115,19 @@ class ArticleModel
   // 記事の詳細表示
   public function show()
   {
+    $id = '16'; // テスト用仮設定
+    // $id = $_GET["id"];
+    try {
+      // db_connectメソッドを呼び出す
+      $pdo = $this->db_connect();
+      $articles_show = $pdo->prepare(
+        "SELECT * FROM articles WHERE id=$id"
+      );
+      $articles_show->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $articles_show;
   }
 
 
@@ -200,7 +212,23 @@ class ArticleModel
   // 記事の検索
   public function search_index()
   {
+    $keyword = $_POST['keyword'];
+    try {
+      $pdo = $this->db_connect();
+      // キーワードがタイトル又は本文に入っているものを、更新日の降順で抽出
+      $search_articles = $pdo->prepare(
+        "SELECT * FROM articles
+        WHERE title LIKE CONCAT('%',':keyword','%') OR body LIKE CONCAT('%',':keyword','%')
+        ORDER BY updated_at DESC"
+      );
+      $search_articles->bindValue(':keyword', $keyword);
+      $search_articles->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $search_articles;
   }
+
 
   // 記事の編集
   public function edit()
@@ -213,7 +241,6 @@ class ArticleModel
       $articles = $pdo->prepare(
         "SELECT * FROM articles WHERE id=$id"
       );
-
       $articles->execute();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
@@ -242,8 +269,7 @@ class ArticleModel
       // ファイルの内容を全て読み込む
       $raw_data = file_get_contents($article_image['tmp_name']);
       // 拡張子を取り出し、ファイルの形式を判断する
-      $tmp = pathinfo($article_image["name"]);
-      $extension = $tmp["extension"];
+      $extension = pathinfo($article_image["name"], PATHINFO_EXTENSION);
       if ($extension === "jpg" || $extension === "jpeg" || $extension === "JPG" || $extension === "JPEG") {
         $extension = "jpeg";
       } elseif ($extension === "png" || $extension === "PNG") {
@@ -295,10 +321,7 @@ class ArticleModel
     }
 
     // 格納に成功すれば記事一覧画面に遷移
-    // return $articles;
-    // header("Location: ../view_admin/article_index.php");
-    $articles = "記事を更新しました。";
-    header("location:../view_admin/article_index.php?update=" . $articles);
+    header("location:../view_admin/article_index.php");
   }
 
 

@@ -2,12 +2,12 @@
 // セッションを宣言
 session_start();
 
-// // 管理者としてログインしているかチェック
-// if (isset($_SESSION['admin'])) {
-// } else {
-//   header("Location: admin_login.php");
-//   die();
-// }
+// 管理者としてログインしているかチェック
+if (isset($_SESSION['admin'])) {
+} else {
+  header("Location: admin_login.php");
+  die();
+}
 
 // ArticleModelファイルを読み込み
 require_once('../Model/ArticleModel.php');
@@ -50,22 +50,10 @@ if (isset($_POST['input_article'])) {
   $message = "";
 }
 
-// 更新完了のメッセージがあれば、変数に格納
-if (isset($_GET['update'])) {
-  $message = $_GET['update'];
-}
-
 //  Articleクラスを呼び出し
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
 $articles = $pdo->admin_index();
-
-// ItemModelファイルを読み込み
-require_once('../Model/ItemModel.php');
-// Itemクラスを呼び出し
-$pdo = new ItemModel();
-// indexメソッド呼び出し
-$items = $pdo->index();
 
 $message = htmlspecialchars($message);
 ?>
@@ -79,33 +67,39 @@ $message = htmlspecialchars($message);
       <?= $message; ?>
       <form method="post" enctype="multipart/form-data">
         <div class="form-group">
-          <label>タイトル</label>
-          <input type="text" name="title" class="form-control" value="<?= ($_SESSION['article']['title']) ?>">
-          <!-- <select name="article_id" class="form-select">
-            <option selected value="">関連商品</option>
-            <?php foreach ($items as $item) { ?>
-              <option value="<?php echo ($item['id']) ?>">
-                <?php echo ($item['name']) ?>
-              </option>
-            <?php } ?>
-          </select> -->
-          <label>本文</label>
-          <textarea name="body" class="form-control" rows="7"><?= ($_SESSION['article']['body']) ?></textarea>
-          <label>公開ステータス</label>
+          <div class="row mb-2">
+            <div class="col-2 d-flex align-items-center  justify-content-center">
+              <label>タイトル</label>
+            </div>
+            <div class="col-10">
+              <input type="text" name="title" class="form-control" value="<?= ($_SESSION['article']['title']) ?>">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-2 mb-2 d-flex align-items-center  justify-content-center">
+              <label>本文</label>
+            </div>
+            <div class="row ms-1">
+              <textarea name="body" class="form-control" rows="7"><?= ($_SESSION['article']['body']) ?></textarea>
+            </div>
+          </div>
+            <div class="row mb-2 ms-auto">
+            <input type="file" name="article_image" class="form-control" value="<?= ($_SESSION['article']['article_image']) ?>">
+          </div>
+          <div class="row mb-3 ms-auto">
+            <p> ※容量の大きい画像はエラーになることがあります。</p>
+          </div>
+        </div>
+        <div class="mb-3">
           <label><input type="radio" class="btn-check" name="is_status" value="disclosure">
             <div class="btn btn-outline-success">公開</div>
           </label>
           <label>
             <input type="radio" class="btn-check" name="is_status" value="private" checked>
             <div class="btn btn-outline-danger">非公開</div>
-          </label>
-          <div class="input-group mt-3 mb-3">
-            <input type="file" name="article_image" class="form-control-file" value="<?= ($_SESSION['article']['article_image']) ?>">
-            <p>※容量の大きい画像はエラーになることがあります。</p>
-          </div>
-          <div class="d-flex align-items-center justify-content-center">
-            <button type="submit" name="input_article" class="btn btn-outline-success btn-lg">記事を追加する</button>
-          </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-center">
+          <button type="submit" name="input_article" class="btn btn-outline-success btn-lg">記事を追加する</button>
         </div>
       </form>
       <div class="row d-flex justify-content-center">
@@ -128,7 +122,8 @@ $message = htmlspecialchars($message);
         <tbody>
           <tr bgcolor='#BCCDCF'>
             <th>タイトル</th>
-            <th>投稿日時</th>
+            <th>本文</th>
+            <th>画像</th>
             <th>更新日時</th>
             <th>公開ステータス</th>
             <th></th>
@@ -136,19 +131,19 @@ $message = htmlspecialchars($message);
           </tr>
           <?php
           foreach ($articles as $article) {
-            // $target = $row["article_image"];
+            $target = $article["article_image"];
           ?>
             <tr>
-              <!-- <td rowspan="2">
+              <?php echo "<h4>"; ?>
+              <td><?= $article['title']; ?></td>
+              <td class="col-3"><?= nl2br($article['body']); ?></td>
+              <td>
                 <?php
                 if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") {
                   echo ("<img src='../view_common/article_image.php?target=$target'width=200 height=200>");
                 }
                 ?>
-              </td> -->
-              <?php echo "<h4>"; ?>
-              <td><?= $article['title']; ?></td>
-              <td><?= date('Y/m/d H:i:s', strtotime($article['created_at'])); ?></td>
+              </td>
               <td><?= date('Y/m/d H:i:s', strtotime($article['updated_at'])); ?></td>
               <td><?php if ($article['is_status'] == 0) {
                     echo '非公開';
