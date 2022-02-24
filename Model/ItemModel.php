@@ -1,4 +1,4 @@
-<?php
+  <?php
 class ItemModel
 {
   protected $pdo;
@@ -82,8 +82,6 @@ class ItemModel
         } catch (PDOException $Exception) {
           die('接続エラー：' . $Exception->getMessage());
         }
-        // 格納に成功すれば商品一覧画面に遷移
-        header('Location: ../view_admin/admin_item_index.php');
 
         // 画像ファイルがない場合
       } else {
@@ -102,9 +100,9 @@ class ItemModel
         } catch (PDOException $Exception) {
           die('接続エラー：' . $Exception->getMessage());
         }
-        // 格納に成功すれば商品一覧画面に遷移
-        header('Location: ../view_admin/admin_item_index.php');
       }
+      // 格納に成功すれば商品一覧画面に遷移
+      header('Location: ../view_admin/admin_item_index.php');
 
       // 必須項目が入力されていなければ入力画面にリダイレクト
     } else {
@@ -148,13 +146,135 @@ class ItemModel
   }
 
   // 商品の更新
-  public function update()
+  public function update($item)
   {
+    $item = $item;
+    $item_id = $item['item_id'];
+    // var_dump($item_id);
+    // exit();
+    $genre_id = $_POST['genre_id'];
+    $article_id = $_POST['article_id'];
+    $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+    $introduction = htmlspecialchars($_POST['introduction'], ENT_QUOTES, 'UTF-8');
+    $item_image = $_FILES['item_image'];
+    $price = $_POST['price'];
+    // 購入ステータスの判定
+    if ($_POST['is_status'] == "buy_able") {
+      $is_status = 1;
+    } else {
+      $is_status = 0;
+    }
+    // 画像削除ボタンの判定
+    if ($_POST['delete_image'] == "delete_image") {
+      $delete_image = 1;
+    }
+
+    // 画像ファイルがあるかチェック
+    // 画像ファイルがある場合
+    if (isset($item_image['error']) && is_int($item_image['error']) && $item_image["name"] !== "") {
+      // ファイルの内容をすべて読み込む
+      $raw_data = file_get_contents($item_image['tmp_name']);
+      // 拡張子を取り出し、ファイルの形式を判別する
+      $tmp = pathinfo($item_image['name']);
+      $extension = $tmp["extension"];
+      if ($extension === "jpg" || $extension === "jpeg" || $extension === "JPG" || $extension === "JPEG") {
+        $extension = "jpeg";
+      } elseif ($extension === "png" || $extension === "PNG") {
+        $extension = "png";
+      } elseif ($extension === "gif" || $extension === "GIF") {
+        $extension = "gif";
+      } else {
+        echo "非対応のファイルです";
+        echo ("<button onclick=location.href='../view_admin/admin_item_index.php' class=btn btn-outline-secondary btn-lg>戻る</button>");
+      }
+      try {
+        // db_connectメソッドを呼び出す
+        $pdo = $this->db_connect();
+        $date = getdate();
+        // DBに格納するファイル名を設定
+        $item_image = $item_image['tmp_name'] . $date["year"] . $date["mon"] . $date["mday"] . $date["hours"] . $date["minutes"] . $date["seconds"];
+        $item_image = hash("sha256", $item_image);
+        // DBにデータを格納
+        $item = $pdo->prepare(
+          "UPDATE items SET genre_id = :genre_id, article_id = :article_id, name = :name, introduction = :introduction, price = :price, item_image = :item_image, extension = :extension, raw_data = :raw_data, is_status = :is_status, updated_at = now() WHERE id = $item_id"
+        );
+        $item->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
+        $item->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+        $item->bindParam(':name', $name, PDO::PARAM_STR);
+        $item->bindParam(':introduction', $introduction, PDO::PARAM_STR);
+        $item->bindParam(':price', $price, PDO::PARAM_STR);
+        $item->bindValue(":item_image", $item_image, PDO::PARAM_STR);
+        $item->bindValue(":extension", $extension, PDO::PARAM_STR);
+        $item->bindValue(":raw_data", $raw_data, PDO::PARAM_STR);
+        $item->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+        $item->execute();
+      } catch (PDOException $Exception) {
+        die('接続エラー：' . $Exception->getMessage());
+      }
+
+      // 「画像を削除」ボタンが押されている場合
+    } elseif ($delete_image) {
+      try {
+        // db_connectメソッドを呼び出す
+        $pdo = $this->db_connect();
+        // DBにデータを格納
+        $item = $pdo->prepare(
+          "UPDATE items SET genre_id = :genre_id, article_id = :article_id, name = :name, introduction = :introduction, price = :price, item_image = :item_image, extension = :extension, raw_data = :raw_data, is_status = :is_status, updated_at = now() WHERE id = $item_id"
+        );
+        $item->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
+        $item->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+        $item->bindParam(':name', $name, PDO::PARAM_STR);
+        $item->bindParam(':introduction', $introduction, PDO::PARAM_STR);
+        $item->bindParam(':price', $price, PDO::PARAM_STR);
+        $item->bindValue(":item_image", "", PDO::PARAM_STR);
+        $item->bindValue(":extension", "", PDO::PARAM_STR);
+        $item->bindValue(":raw_data", "", PDO::PARAM_STR);
+        $item->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+        $item->execute();
+      } catch (PDOException $Exception) {
+        die('接続エラー：' . $Exception->getMessage());
+      }
+
+      // 新規画像が選択されてない＆「画像を削除」ボタンが押されていない場合
+    } else {
+      try {
+        // db_connectメソッドを呼び出す
+        $pdo = $this->db_connect();
+        // DBにデータを格納
+        $item = $pdo->prepare(
+          "UPDATE items SET genre_id = :genre_id, article_id = :article_id, name = :name, introduction = :introduction, price = :price, is_status = :is_status, updated_at = now() WHERE id = $item_id"
+        );
+        $item->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
+        $item->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+        $item->bindParam(':name', $name, PDO::PARAM_STR);
+        $item->bindParam(':introduction', $introduction, PDO::PARAM_STR);
+        $item->bindParam(':price', $price, PDO::PARAM_STR);
+        $item->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+        $item->execute();
+      } catch (PDOException $Exception) {
+        die('接続エラー：' . $Exception->getMessage());
+      }
+    }
+    // 更新成功で商品一覧画面に遷移
+    header('Location: ../view_admin/admin_item_index.php');
   }
 
   // 商品の削除
   public function delete()
   {
+    $id = $_POST['id'];
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $item = $pdo->prepare(
+        "DELETE FROM items WHERE id = $id"
+      );
+      $item->execute();
+    } catch (PDOException $Exception) {
+      die('接続エラー：' . $Exception->getMessage());
+    }
+    $message = "商品が削除されました。";
+    return $message;
   }
 
   // 商品の詳細表示

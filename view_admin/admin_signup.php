@@ -2,28 +2,23 @@
 // セッションを宣言
 session_start();
 
-$name = $password = "";
-
 require_once('../Model/AdminModel.php');
 
+// ログアウト処理
+// Adminクラスを呼び出し
+$pdo = new AdminModel();
+// logoutメソッドを呼び出し
+$pdo = $pdo->logout();
+
 // 「ログイン」ボタンが押された場合
-if (isset($_POST['login'])) {
+if (isset($_POST['signup'])) {
   // AdminModelクラスを呼び出し
   $pdo = new AdminModel();
   // loginメソッドを呼び出し
-  $pdo = $pdo->login();
+  $pdo = $pdo->signup();
   $message = $pdo;
-
-  // ボタンが押されていない状態
-} else {
-  if (isset($_SESSION['admin_login'])) {
-    $name = $_SESSION['admin_login']['name'];
-    $password = $_SESSION['admin_login']['password'];
-  }
-  $message = "";
 }
 
-$message = htmlspecialchars($message);
 ?>
 
 <!DOCTYPE html>
@@ -48,35 +43,30 @@ $message = htmlspecialchars($message);
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand mb-0 h1 ms-5" href="../view_admin/admin_login.php">OUTDOOR</a>
+        <a class="navbar-brand mb-0 h1 ms-5" href="../view_admin/admin_signup.php">OUTDOOR</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           </ul>
-          <button class="btn btn-outline-secondary ms-5 me-5" onclick="location.href='admin_signup.php'">管理者サインアップ</button>
-          <button class="btn btn-outline-secondary me-5" onclick="location.href='../view_public/public_login.php'">ユーザーログインへ</button>
-          <button class="btn btn-outline-secondary me-5" onclick="location.href='../view_public/top.php'">ユーザートップへ</button>
+          <button class="btn btn-outline-secondary ms-5 me-5" onclick="location.href='admin_login.php'">管理者ログイン</button>
+          <button class="btn btn-outline-secondary me-5" onclick="location.href='../view_public/public_login.php'">ユーザーログイン</button>
+          <button class="btn btn-outline-secondary me-5" onclick="location.href='../view_public/top.php'">ユーザートップ</button>
         </div>
       </div>
     </nav>
   </header>
 
   <div class="container">
-    <h1 class="my-5 text-center">管理者ログイン</h1>
-    <div class="row d-flex justify-content-center mb-3">
-      <div class="col-sm-8 text-center">
-        <?= $message; ?>
-      </div>
-    </div>
+    <h1 class="my-5 text-center">管理者アカウント作成</h1>
     <form method="post">
       <div class="row d-flex justify-content-center g-3 mb-3">
         <div class="col-sm-4">
           <h4 class="text-center">管理者名</h4>
         </div>
         <div class="col-sm-4">
-          <input type="text" name="admin_name" class="form-control" value="<?= $name ?>">
+          <input type="text" name="admin_name" class="form-control">
         </div>
       </div>
       <div class="row d-flex justify-content-center g-3 mb-5">
@@ -84,12 +74,12 @@ $message = htmlspecialchars($message);
           <h4 class="text-center">パスワード</h4>
         </div>
         <div class="col-sm-4">
-          <input type="password" name="password" class="form-control" value="<?= $password ?>">
+          <input type="password" name="password" class="form-control">
         </div>
       </div>
       <div class="row d-flex justify-content-center mb-5">
         <div class="col-sm-8  d-flex justify-content-evenly">
-          <button type="submit" name="login" class="btn btn-outline-primary btn-lg">ログイン</button>
+          <button type="submit" name="signup" class="btn btn-outline-primary btn-lg">サインアップ</button>
         </div>
       </div>
     </form>
