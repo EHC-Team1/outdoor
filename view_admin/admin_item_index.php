@@ -26,10 +26,30 @@ if (isset($_POST['delete'])) {
   $message = "";
 }
 
+// 現在のページ数を取得
+if (isset($_GET['page'])) {
+  $page = (int)$_GET['page'];
+} else {
+  $page = 1;
+}
+// スタートのページを計算
+if ($page > 1) {
+  $start = ($page * 15) - 15;
+} else {
+  $start = 0;
+}
+
+// itemsテーブルから全データ件数を取得
+$pdo = new ItemModel();
+$pages = $pdo->page_count_index();
+$page_num = $pages->fetchColumn();
+// ページネーションの数を取得
+$pagination = ceil($page_num / 15);
+
 // Itemクラスを呼び出し
 $pdo = new ItemModel();
 // indexメソッドを呼び出し
-$items = $pdo->index();
+$items = $pdo->index($start);
 // モデルからreturnしてきた情報をitemsに格納
 $items = $items->fetchAll(PDO::FETCH_ASSOC);
 
@@ -102,6 +122,7 @@ $message = htmlspecialchars($message);
       </table>
     </div>
   </div>
+  <?php require_once '../view_common/paging.php'; ?>
 </div>
 
 <!-- バリデーション・アラート用jsファイル -->

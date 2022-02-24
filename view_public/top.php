@@ -27,20 +27,19 @@ $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-auto">
       <?php require_once '../view_public/sidebar.php'; ?>
     </div>
-
     <div class="col-sm-8 ms-3">
-      <div class="row row-cols-1 row-cols-sm-1 g-3">
+      <div class="row row-cols-1 row-cols-md-1 g-3">
+        <!-- 公開状態の記事のみ表示 -->
         <?php foreach ($articles as $article) {
           $target = $article["article_image"]; ?>
-          <!-- 公開状態の記事のみ表示 -->
-          <div class="card g-0" style="max-width: auto;">
-            <div class="row m-2">
-              <div class="col-sm-5 d-flex align-items-center">
+          <div class="card mb-2" style="max-width: auto;">
+            <div class="row g-0">
+              <div class="col-lg-5 d-flex align-items-center mt-2">
                 <?php if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") { ?>
                   <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
                 <?php } ?>
               </div>
-              <div class="col-sm-7">
+              <div class="col-lg-7">
                 <div class="card-body">
                   <h5 class="card-title"><?= $article['title'] ?></h5>
                   <p class="card-text"><?= $article['body'] ?></p>

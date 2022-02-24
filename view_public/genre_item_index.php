@@ -8,13 +8,34 @@ if (isset($_GET["genre_id"]) && $_GET["genre_id"] !== "") {
   return false;
 }
 
-// 選択ジャンル一覧表示
+// 該当ジャンル商品一覧表示
 // ItemModelファイルを読み込み
 require_once('../Model/ItemModel.php');
+
+// 現在のページ数を取得
+if (isset($_GET['page'])) {
+  $page = (int)$_GET['page'];
+} else {
+  $page = 1;
+}
+// スタートのページを計算
+if ($page > 1) {
+  $start = ($page * 15) - 15;
+} else {
+  $start = 0;
+}
+
+// itemsテーブルから該当ジャンルのデータ件数を取得
+$pdo = new ItemModel();
+$pages = $pdo->page_count_genre_index($genre_id);
+$page_num = $pages->fetchColumn();
+// ページネーションの数を取得
+$pagination = ceil($page_num / 15);
+
 // Itemクラスを呼び出し
 $pdo = new ItemModel();
 // genre_indexメソッドを呼び出し
-$items = $pdo->genre_index($genre_id);
+$items = $pdo->genre_index($genre_id, $start);
 // returnしてきた$itemsを$itemsに格納
 $items = $items->fetchAll(PDO::FETCH_ASSOC);
 
@@ -36,12 +57,12 @@ $selected_genre = $selected_genre->fetch(PDO::FETCH_ASSOC);
     <div class="col-auto">
       <?php require_once '../view_public/sidebar.php'; ?>
     </div>
-    <div class="col-md-8 ms-3">
+    <div class="col-sm-8 ms-3">
       <h3>TOP/<?= $selected_genre['name'] ?></h3>
       <div class="row">
         <?php foreach ($items as $item) {
           $target = $item["item_image"]; ?>
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <div class="card text-white bg-dark mb-3">
               <?php if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") { ?>
                 <img src="../view_common/item_image.php?target=<?= $target ?>" alt="item_image" class="card-img-top img-fluid">
@@ -59,6 +80,7 @@ $selected_genre = $selected_genre->fetch(PDO::FETCH_ASSOC);
       </div>
     </div>
   </div>
+  <?php require_once '../view_common/paging.php'; ?>
 </div>
 
 <?php require_once '../view_common/footer.php'; ?>
