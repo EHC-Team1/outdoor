@@ -40,6 +40,8 @@ if (isset($_POST['search'])) {
 
   //     // Articleが選択された場合
   //     if ($_POST['flexRadioDefault'] == 2) {
+  //     // ArticleModelファイルを読み込み
+  //       require_once('../Model/ArticleModel.php');
   //       // Articleクラスを呼び出し
   //       $pdo = new ArticleModel();
   //       // search_indexメソッドを呼び出し
