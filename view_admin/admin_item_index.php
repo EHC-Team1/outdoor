@@ -28,8 +28,22 @@ if (isset($_POST['delete'])) {
 
 // Itemクラスを呼び出し
 $pdo = new ItemModel();
+
+// 現在のページ数を取得
+if (isset($_GET['page'])) {
+  $page = (int)$_GET['page'];
+} else {
+  $page = 1;
+}
+// スタートのページを計算
+if ($page > 1) {
+  $start = ($page * 15) - 15;
+} else {
+  $start = 0;
+}
+
 // indexメソッドを呼び出し
-$items = $pdo->index();
+$items = $pdo->index($start);
 // モデルからreturnしてきた情報をitemsに格納
 $items = $items->fetchAll(PDO::FETCH_ASSOC);
 
@@ -97,9 +111,31 @@ $message = htmlspecialchars($message);
                 ?>
               </td>
             </tr>
-          <?php } ?>
+          <?php }
+          // itemsテーブルのデータ件数を取得
+          $pdo = new ItemModel();
+          $pages = $pdo->page_count();
+          $page_num = $pages->fetchColumn();
+          // ページネーションの数を取得
+          $pagination = ceil($page_num / 15);
+          ?>
         </tbody>
       </table>
+    </div>
+  </div>
+  <div class="row d-flex align-items-center justify-content-center mt-3 mb-5">
+    <div class="col-sm-10 d-flex align-items-center justify-content-center">
+      <nav aria-label="Page navigation example">
+        <ul class='pagination pagination-lg'>
+          <?php for ($x = 1; $x <= $pagination; $x++) { ?>
+            <li class='page-item'>
+              <a class="page-link" href="?page=<?= $x ?>">
+                <?= $x; ?>
+              </a>
+            </li>
+          <?php } ?>
+        </ul>
+      </nav>
     </div>
   </div>
 </div>

@@ -114,12 +114,13 @@
 
     // admin側のため全表示
     // 商品の一覧表示
-    public function index()
+    public function index($start)
     {
+      $start = $start;
       try {
         $pdo = $this->db_connect();
         $items = $pdo->prepare(
-          "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, items.is_status AS is_status, genres.name AS genre_name FROM items, genres WHERE items.genre_id = genres.id ORDER BY items.updated_at DESC"
+          "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, items.is_status AS is_status, genres.name AS genre_name FROM items, genres WHERE items.genre_id = genres.id ORDER BY items.updated_at DESC LIMIT {$start}, 15"
         );
         $items->execute();
       } catch (PDOException $Exception) {
@@ -326,5 +327,19 @@
         exit("接続エラー：" . $Exception->getMessage());
       }
       return $search_items;
+    }
+
+    public function page_count()
+    {
+      try {
+        $pdo = $this->db_connect();
+        $pages = $pdo->prepare(
+          "SELECT COUNT(*) id FROM items"
+        );
+        $pages->execute();
+      } catch (PDOException $Exception) {
+        exit("接続エラー：" . $Exception->getMessage());
+      }
+      return $pages;
     }
   }
