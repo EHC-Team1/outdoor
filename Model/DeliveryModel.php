@@ -97,24 +97,27 @@ class DeliveryModel
   }
 
   // 配送先の更新
-  public function update()
+  public function update($delivery)
   {
+    $delivery = $delivery;
+    $delivery_id = $delivery['id'];
+    $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+    $postal_code = htmlspecialchars($_POST['postal_code'], ENT_QUOTES, 'UTF-8');
+    $address = htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8');
     try {
       // DBに接続
       $pdo = $this->db_connect();
       $delivery = $pdo->prepare(
-        "UPDATE deliveries SET name = ?, postal_code = ?, address = ? WHERE id = ?"
+        "UPDATE deliveries SET name = :name, postal_code = :postal_code, address = :address WHERE id = $delivery_id"
       );
-      $delivery->execute(array(
-        $_POST['name'],
-        $_POST['postal_code'],
-        $_POST['address'],
-        $_POST['id'],
-      ));
+      $delivery->bindParam(':name', $name, PDO::PARAM_STR);
+      $delivery->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
+      $delivery->bindParam(':address', $address, PDO::PARAM_STR);
+      $delivery->execute();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
+      header('Location: mypage.php');
     }
-    header('Location: mypage.php');
   }
 
   // 配送先の削除

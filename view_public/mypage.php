@@ -30,43 +30,41 @@ if (isset($_POST['delete'])) {
   // indexメソッドを呼び出し
   $deliveries = $pdo->index();
 }
-
 ?>
-
-
 
 <?php require_once '../view_common/header.php'; ?>
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5 mb-5">お客様情報</h1>
-    <form action="customer_edit.php" method="POST">
-      <input type="submit" name="" class="btn btn-success btn-lg text-right" value="編集">
-    </form>
     <div class="col-md-10">
+      <form action="customer_edit.php" method="POST">
+        <input type="submit" class="btn btn-success btn-lg text-right" value="編集">
+      </form>
       <div class="card">
         <div class="card-body col-md-12">
           <table class="table table-borderless">
             <tbody>
+              <?php $customer = $customers->fetch(PDO::FETCH_ASSOC); ?>
               <tr>
                 <th scope="row" class="col-md-4 text-right">氏名</th>
-                <td class="col-md-8"><? $customers['name_last'] ?> <? $customer['name_first'] ?></td>
+                <td class="col-md-8"><?= $customer['name_last'] ?> <?= $customer['name_first'] ?></td>
               </tr>
               <tr>
                 <th scope="row" class="col-md-4 text-right">メールアドレス</th>
-                <td class="col-md-8"><? $customers['email'] ?></td>
+                <td class="col-md-8"><?= $customer['email'] ?></td>
               </tr>
               <tr>
                 <th scope="row" class="col-md-4 text-right">郵便番号</th>
-                <td class="col-md-8"><? $customers['postal_code'] ?></td>
+                <td class="col-md-8"><?= $customer['postal_code'] ?></td>
               </tr>
               <tr>
                 <th scope="row" class="col-md-4 text-right">住所</th>
-                <td class="col-md-8"><? $customers['address'] ?></td>
+                <td class="col-md-8"><?= $customer['address'] ?></td>
               </tr>
               <tr>
                 <th scope="row" class="col-md-4 text-right">電話番号</th>
-                <td class="col-md-8"><? $customers['telephone_num'] ?></td>
+                <td class="col-md-8"><?= $customer['telephone_num'] ?></td>
               </tr>
             </tbody>
           </table>
@@ -74,10 +72,10 @@ if (isset($_POST['delete'])) {
       </div>
     </div>
     <h1 class="text-center mt-5 mb-5">配送先一覧</h1>
-    <form action="delivery_input.php" method="POST">
-      <input type="submit" name="" class="btn btn-primary btn-lg text-right" value="配送先追加">
-    </form>
     <div class="col-md-10">
+      <form action="delivery_input.php" method="POST">
+        <input type="submit" name="" class="btn btn-primary btn-lg text-right" value="配送先追加">
+      </form>
       <!-- 配送先を繰り返しで表示 -->
       <div class="card mb-3">
         <div class="card-body">
