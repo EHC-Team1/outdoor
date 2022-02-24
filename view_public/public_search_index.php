@@ -4,6 +4,54 @@ session_start();
 
 // 検索が実行されていなけばトップへリダイレクト
 if ($_POST['flexRadioDefault']) {
+  // 検索ワードが入力されているかチェック
+  if ($_POST['keyword']) {
+    // セッションに値を挿入
+    $_SESSION['search'] = $_POST['keyword'];
+
+    // 現在のページ数を取得
+    if (isset($_GET['page'])) {
+      $page = (int)$_GET['page'];
+    } else {
+      $page = 1;
+    }
+    // スタートのページを計算
+    if ($page > 1) {
+      $start = ($page * 15) - 15;
+    } else {
+      $start = 0;
+    }
+
+    // Itemが選択された場合
+    if ($_POST['flexRadioDefault'] == 1) {
+      // ItemModelファイルを読み込み
+      require_once('../Model/ItemModel.php');
+
+      // itemsテーブルから該当ジャンルのデータ件数を取得
+      $pdo = new ItemModel();
+      $pages = $pdo->page_count_search_index();
+      $page_num = $pages->fetchColumn();
+      // ページネーションの数を取得
+      $pagination = ceil($page_num / 15);
+
+      // Itemクラスを呼び出し
+      $pdo = new ItemModel();
+      // search_indexメソッドを呼び出し
+      $search_items = $pdo->search_index($start);
+    }
+
+    // Articleが選択された場合
+    if ($_POST['flexRadioDefault'] == 2) {
+      // Articleクラスを呼び出し
+      $pdo = new ArticleModel();
+      // search_indexメソッドを呼び出し
+      $search_articles = $pdo->search_index();
+    }
+
+    // 検索ワードが入力されていない場合
+  } else {
+    header('Location: ../view_public/top.php');
+  }
 } else {
   header('Location: ../view_public/top.php');
 }
@@ -12,7 +60,7 @@ if ($_POST['flexRadioDefault']) {
 <?php require_once '../view_common/header.php'; ?>
 
 <div class="container">
-  <div class="row d-flex justify-content-center align-items-start my-5">
+  <div class="row d-flex justify-content-center align-items-start mt-5">
     <div class="col-auto">
       <?php require_once '../view_public/sidebar.php'; ?>
     </div>
@@ -45,14 +93,14 @@ if ($_POST['flexRadioDefault']) {
 
     <!-- articleが検索された場合 -->
     <?php if ($_POST['flexRadioDefault'] == 2) { ?>
-      <div class="col-md-8 ms-3">
+      <div class="col-sm-8 ms-3">
         <h3>TOP/<?= $_SESSION['search'] ?></h3>
-        <?php foreach ($search_articles as $search_article) {
-          $target = $search_article["article_image"]; ?>
-          <div class="row row-cols-1 row-cols-md-1 g-3">
-            <div class="card g-0" style="max-width: auto;">
-              <div class="row m-2">
-                <div class="col-md-5">
+        <div class="row row-cols-1 row-cols-md-1 g-3">
+          <?php foreach ($search_articles as $search_article) {
+            $target = $search_article["article_image"]; ?>
+            <div class="card mb-2" style="max-width: auto;">
+              <div class="row g-0">
+                <div class="col-lg-5 d-flex align-items-center mt-2">
                   <?php if ($search_article["extension"] == "jpeg" || $search_article["extension"] == "png" || $search_article["extension"] == "gif") { ?>
                     <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
                   <?php } ?>
@@ -66,11 +114,12 @@ if ($_POST['flexRadioDefault']) {
                 </div>
               </div>
             </div>
-          </div>
-        <?php } ?>
+          <?php } ?>
+        </div>
       </div>
     <?php } ?>
   </div>
+  <?php require_once '../view_common/paging.php'; ?>
 </div>
 
 <?php require_once '../view_common/footer.php'; ?>
