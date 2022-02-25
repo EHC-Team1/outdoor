@@ -25,41 +25,39 @@ if (isset($_POST['update_customer'])) {
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5 mb-5">会員情報編集</h1>
-    <div class="col-md-10">
+    <div class="col-md-8">
       <form method="POST">
         <input type="hidden" name="id" value="<?= $customer['id'] ?>">
         <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
-              <th scope="row" class="col-md-4 text-right">氏名</th>
-              <td class="col-md-4">
-                <input type="text" name="name_last" class="form-control" id="customer_name_last" value="<?= $customer['name_last'] ?>">
-                <input type="text" name="name_first" class="form-control" id="customer_name_first" value="<?= $customer['name_first'] ?>">
-              </td>
+              <th scope="row">氏名</th>
+              <td><input type="text" name="name_last" class="form-control" id="customer_name_last" value="<?= $customer['name_last'] ?>"></td>
+              <td><input type="text" name="name_first" class="form-control" id="customer_name_first" value="<?= $customer['name_first'] ?>"></td>
             </tr>
             <tr>
-              <th scope="row" class="col-md-4 text-right">メールアドレス</th>
-              <td class="col-md-8">
-                <input type="text" name="email" class="form-control" id="customer_email" value="<?= $customer['email'] ?>">
-              </td>
+              <th scope="row">メールアドレス</th>
+              <td colspan="2"><input type="text" name="email" class="form-control" id="customer_email" value="<?= $customer['email'] ?>"></td>
             </tr>
             <tr>
-              <th scope="row" class="col-md-4 text-right">郵便番号</th>
-              <td class="col-md-8">
-                <input type="text" name="postal_code" class="form-control" id="customer_postal_code" value="<?= $customer['postal_code'] ?>">
-              </td>
+              <th scope="row">郵便番号</th>
+              <td colspan="2"><input type="text" name="postal_code" class="form-control" id="customer_postal_code" value="<?= $customer['postal_code'] ?>"></td>
             </tr>
             <tr>
-              <th scope="row" class="col-md-4 text-right">住所</th>
-              <td class="col-md-8">
-                <input type="text" name="address" class="form-control" id="customer_address" value="<?= $customer['address'] ?>">
-              </td>
+              <th scope="row">住所</th>
+              <td colspan="2"><input type="text" name="address" class="form-control" id="customer_address" value="<?= $customer['address'] ?>"></td>
             </tr>
             <tr>
-              <th scope="row" class="col-md-4 text-right">電話番号</th>
-              <td class="col-md-8">
-                <input type="text" name="telephone_num" class="form-control" id="customer_telephone_num" value="<?= $customer['telephone_num'] ?>">
-              </td>
+              <th scope="row">電話番号</th>
+              <td colspan="2"><input type="text" name="telephone_num" class="form-control" id="customer_telephone_num" value="<?= $customer['telephone_num'] ?>"></td>
             </tr>
           </tbody>
         </table>

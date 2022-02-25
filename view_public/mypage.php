@@ -37,7 +37,7 @@ if (isset($_POST['delete'])) {
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5 mb-5">お客様情報</h1>
-    <div class="col-md-10">
+    <div class="col-md-8">
       <form action="customer_edit.php" method="POST">
         <input type="submit" class="btn btn-success btn-lg text-right" value="編集">
       </form>
@@ -47,24 +47,24 @@ if (isset($_POST['delete'])) {
             <tbody>
               <?php $customer = $customers->fetch(PDO::FETCH_ASSOC); ?>
               <tr>
-                <th scope="row" class="col-md-4 text-right">氏名</th>
-                <td class="col-md-8"><?= $customer['name_last'] ?> <?= $customer['name_first'] ?></td>
+                <th scope="row">氏名</th>
+                <td><?= $customer['name_last'] ?> <?= $customer['name_first'] ?></td>
               </tr>
               <tr>
-                <th scope="row" class="col-md-4 text-right">メールアドレス</th>
-                <td class="col-md-8"><?= $customer['email'] ?></td>
+                <th scope="row">メールアドレス</th>
+                <td><?= $customer['email'] ?></td>
               </tr>
               <tr>
-                <th scope="row" class="col-md-4 text-right">郵便番号</th>
-                <td class="col-md-8"><?= $customer['postal_code'] ?></td>
+                <th scope="row">郵便番号</th>
+                <td><?= $customer['postal_code'] ?></td>
               </tr>
               <tr>
-                <th scope="row" class="col-md-4 text-right">住所</th>
-                <td class="col-md-8"><?= $customer['address'] ?></td>
+                <th scope="row">住所</th>
+                <td><?= $customer['address'] ?></td>
               </tr>
               <tr>
-                <th scope="row" class="col-md-4 text-right">電話番号</th>
-                <td class="col-md-8"><?= $customer['telephone_num'] ?></td>
+                <th scope="row">電話番号</th>
+                <td><?= $customer['telephone_num'] ?></td>
               </tr>
             </tbody>
           </table>
@@ -72,7 +72,7 @@ if (isset($_POST['delete'])) {
       </div>
     </div>
     <h1 class="text-center mt-5 mb-5">配送先一覧</h1>
-    <div class="col-md-10">
+    <div class="col-md-8">
       <form action="delivery_input.php" method="POST">
         <input type="submit" name="" class="btn btn-primary btn-lg text-right" value="配送先追加">
       </form>

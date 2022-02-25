@@ -2,12 +2,24 @@
 // セッションを宣言
 session_start();
 
+// OrderModelファイルを読み込み
 require_once('../Model/OrderModel.php');
+// Orderクラスを呼び出し
 $pdo = new OrderModel();
 
-// Customerクラス呼び出し
+// CustomerModelファイルを読み込み
 require_once('../Model/CustomerModel.php');
+// Customerクラス呼び出し
 $pdo = new CustomerModel();
+// showメソッドを呼び出し
+$customers = $pdo->show();
+
+// Deliveryクラス呼び出し
+require_once('../Model/DeliveryModel.php');
+// Deliveryクラスを呼び出し
+$pdo = new DeliveryModel();
+// indexメソッドを呼び出し
+$deliveries = $pdo->index();
 
 // 確認ボタンが押された場合
 if (isset($_POST['input_order'])) {
@@ -31,58 +43,76 @@ $message = "";
     <div class="col-md-10">
       <form action="public_order_check.php" method="POST">
         <div class="form-group">
-          <label>支払方法</label>
+          <h4><label class="row">支払方法</label></h4>
           <ul>
-            <li>
-              <label><input type="radio" id="transfer" name="payment-way" value="振込み"></label>
+            <li class="list-unstyled">
+              <label><input type="radio" id="transfer" name="payment-way" value="振込み" checked></label>
               <label for="transfer">振込み</label>
             </li>
-            <li>
+            <li class="list-unstyled">
               <label><input type="radio" id="card" name="payment-way" value="クレジットカード"></label>
               <label for="card">クレジットカード</label>
             </li>
           </ul>
-          <label>お届け先</label>
+        </div>
+
+        <div class="form-group">
+          <h4><label class="row">お届け先</label></h4>
           <ul>
-            <li>
-              <input type="radio" id="my-address" name="delivery-target">
-              <label for="my-address">ご自身の住所</label><br>
-              <!-- ログインユーザーの住所を取得 -->
-              <?php ?>
+            <li class="list-unstyled">
+              <input type="radio" id="my-address" name="delivery-target" checked>
+              <label for="my-address">ご自身の住所</label>
+              <div class="mb-2">
+                <?php $customer = $customers->fetch(PDO::FETCH_ASSOC); ?>
+                〒<?= $customer['postal_code']; ?> <?= $customer['address']; ?> <?= $customer['name_last']; ?><?= $customer['name_first']; ?>
+              </div>
             </li>
-            <li>
+            <li class="list-unstyled">
               <input type="radio" id="registration-address" name="delivery-target">
               <label for="registration-address">登録先住所から選択</label><br>
-              <select name="address" id="address-select">
-                <option selected>
-                  <!-- ユーザーが登録している住所を取得 -->
-                  <?php  ?>
-                </option>
+              <select class="form-select mt-2 mb-2" name="address" id="address-select">
+                <?php $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($deliveries as $delivery) { ?>
+                  <option selected>〒<?= $delivery['postal_code'], $delivery['address'], $delivery['name']; ?></option>
+                <?php } ?>
               </select>
             </li>
-            <li>
-              <input type="radio" id="new-address" name="delivery-target">
-              <label for="new-address">新しいお届け先</label><br>
-              <label for="">郵便番号(ハイフンなし)</label>
-              <input type="text" placeholder="0001111"><br>
-              <label for="">住所</label>
-              <input type="text" placeholder="東京都豊島区池袋0-0-0"><br>
-              <label for="">宛名</label>
-              <input type="text" placeholder="藤浪翔平"><br>
+            <li class="list-unstyled">
+              <input type="radio" id="new-delivery" name="delivery-target">
+              <label for="new-delivery">新しいお届け先</label>
+              <table class="table table-borderless">
+                <thead>
+                  <tr>
+                    <th class="col-2"></th>
+                    <th class="col-4"></th>
+                    <th class="col-4"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><label for="new_postal_code">郵便番号(ハイフンなし)</label></td>
+                    <td><input type="text" class="form-control" id="new_postal_code" placeholder="0001111"></td>
+                  </tr>
+                  <tr>
+                    <td><label for="new_address">住所</label></td>
+                    <td><input type="text" class="form-control" id="new_address" placeholder="東京都豊島区池袋0-0-0"></td>
+                  </tr>
+                  <tr>
+                    <td><label for="new_name">宛名</label></td>
+                    <td><input type="text" class="form-control" id="new_name" placeholder="藤浪翔平"></td>
+                  </tr>
+                </tbody>
+              </table>
             </li>
           </ul>
-          <input type="submit" name="input_order" class="btn btn-outline-primary btn-lg" value="確認画面へ">
+        </div>
+        <div class="d-flex align-items-center justify-content-center">
+          <input type="submit" name="input_order" class="btn btn-outline-primary btn-lg" id="order_confirm_btn" value="確認画面へ進む">
         </div>
       </form>
     </div>
   </div>
 </div>
 
-
-
-
-
-
-
-
+<script src="../js/public_order_input.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
