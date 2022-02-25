@@ -51,5 +51,7 @@ $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
         <?php } ?>
       </div>
     </div>
+  </div>
+</div>
 
-    <?php require_once '../view_common/footer.php'; ?>
+<?php require_once '../view_common/footer.php'; ?>

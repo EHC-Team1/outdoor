@@ -2,61 +2,49 @@
 
 // 「検索」ボタンが押された場合
 if (isset($_POST['search'])) {
-  //   // 検索ワードが入力されているかチェック
-  //   if ($_POST['keyword']) {
-  // セッションに値を挿入
-  $_SESSION['search'] = $_POST['keyword'];
+  // 検索ワードが入力されているかチェック
+  if ($_POST['keyword']) {
+    // セッションに値を挿入
+    $_SESSION['search'] = $_POST['keyword'];
 
-  //     // 現在のページ数を取得
-  //     if (isset($_GET['page'])) {
-  //       $page = (int)$_GET['page'];
-  //     } else {
-  //       $page = 1;
-  //     }
-  //     // スタートのページを計算
-  //     if ($page > 1) {
-  //       $start = ($page * 15) - 15;
-  //     } else {
-  //       $start = 0;
-  //     }
+    // 現在のページ数を取得
+    if (isset($_GET['page'])) {
+      $page = (int)$_GET['page'];
+    } else {
+      $page = 1;
+    }
+    // スタートのページを計算
+    if ($page > 1) {
+      $start = ($page * 15) - 15;
+    } else {
+      $start = 0;
+    }
 
-  //     // Itemが選択された場合
-  //     if ($_POST['flexRadioDefault'] == 1) {
-  //       // ItemModelファイルを読み込み
-  //       require_once('../Model/ItemModel.php');
+    // Itemが選択された場合
+    if ($_POST['flexRadioDefault'] == 1) {
+      // 検索結果一覧画面に遷移
+      header('Location: ../view_public/public_search_item_index.php');
+    }
 
-  //       // itemsテーブルから該当ジャンルのデータ件数を取得
-  //       $pdo = new ItemModel();
-  //       $pages = $pdo->page_count_search_index();
-  //       $page_num = $pages->fetchColumn();
-  //       // ページネーションの数を取得
-  //       $pagination = ceil($page_num / 15);
+    // Articleが選択された場合
+    if ($_POST['flexRadioDefault'] == 2) {
+      // ArticleModelファイルを読み込み
+      require_once('../Model/ArticleModel.php');
+      // Articleクラスを呼び出し
+      $pdo = new ArticleModel();
+      // search_indexメソッドを呼び出し
+      $search_articles = $pdo->search_index();
+    }
 
-  //       // Itemクラスを呼び出し
-  //       $pdo = new ItemModel();
-  //       // search_indexメソッドを呼び出し
-  //       $search_items = $pdo->search_index($start);
-  //     }
-
-  //     // Articleが選択された場合
-  //     if ($_POST['flexRadioDefault'] == 2) {
-  //     // ArticleModelファイルを読み込み
-  //       require_once('../Model/ArticleModel.php');
-  //       // Articleクラスを呼び出し
-  //       $pdo = new ArticleModel();
-  //       // search_indexメソッドを呼び出し
-  //       $search_articles = $pdo->search_index();
-  //     }
-
-  //     // 検索ワードが入力されていない場合
-  //   } else {
-  //     header('Location: ../view_public/top.php');
-  //   }
+    // 検索ワードが入力されていない場合
+  } else {
+    header('Location: ../view_public/top.php');
+  }
 
   // 押されていない状態
 } else {
   // セッションを初期化
-  $_SESSION['search'] = "";
+  // $_SESSION['search'] = "";
 }
 
 // ArticleModelファイルを読み込み
@@ -78,7 +66,7 @@ $genres = $pdo->index();
 $genres = $genres->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<form action="public_search_index.php" method="POST">
+<form method="POST">
   <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value=1 checked>
     <label class="form-check-label" for="flexRadioDefault1">
