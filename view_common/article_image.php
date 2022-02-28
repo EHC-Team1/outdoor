@@ -15,7 +15,7 @@ try {
   $user = "root";
   $pass = "password";
   $pdo = new PDO("mysql:host=127.0.0.1;dbname=outdoor;charset=utf8", $user, $pass);
-  $stmt = $pdo->prepare("SELECT * FROM articles WHERE article_image = :target;");
+  $stmt = $pdo->prepare("SELECT extension, raw_data FROM articles WHERE article_image = :target;");
   $stmt->bindValue(":target", $target, PDO::PARAM_STR);
   $stmt->execute();
   $row = $stmt->fetch(PDO::FETCH_ASSOC);

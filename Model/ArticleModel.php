@@ -68,14 +68,14 @@ class ArticleModel
           $article_image = hash("sha256", $article_image);
           // SQL文　
           $articles = $pdo->prepare("INSERT INTO articles ( title, body, article_image, extension, raw_data, is_status, created_at, updated_at)
-          VALUES ( :title, :body, :article_image, :extension, :row_data, :is_status, now(), now());");
+          VALUES ( :title, :body, :article_image, :extension, :raw_data, :is_status, now(), now());");
 
           // 値をセット
           $articles->bindParam(':title', $title, PDO::PARAM_STR);
           $articles->bindParam(':body', $body, PDO::PARAM_STR);
           $articles->bindValue(':article_image', $article_image, PDO::PARAM_STR);
           $articles->bindValue(':extension', $extension, PDO::PARAM_STR);
-          $articles->bindValue(':row_data', $raw_data, PDO::PARAM_STR);
+          $articles->bindValue(':raw_data', $raw_data, PDO::PARAM_STR);
           $articles->bindParam(':is_status', $is_status, PDO::PARAM_INT);
           $articles->execute();
         } catch (PDOException $Exception) {
@@ -113,15 +113,15 @@ class ArticleModel
 
 
   // 記事の詳細表示
-  public function show()
+  public function show($article_id)
   {
-    $id = '16'; // テスト用仮設定
-    // $id = $_GET["id"];
+    // $id = '16'; // テスト用仮設定
+    $article_id =  $article_id;
     try {
       // db_connectメソッドを呼び出す
       $pdo = $this->db_connect();
       $articles_show = $pdo->prepare(
-        "SELECT * FROM articles WHERE id=$id"
+        "SELECT * FROM articles WHERE id=$article_id"
       );
       $articles_show->execute();
     } catch (PDOException $Exception) {
@@ -130,6 +130,25 @@ class ArticleModel
     return $articles_show;
   }
 
+  // 該当商品の詳細表示 ------- ItemModelに移動する？--------------
+  public function article_item($article_id)
+  {
+    $article_id =  $article_id;
+    try {
+      // db_connectメソッドを呼び出す
+      $pdo = $this->db_connect();
+      $item = $pdo->prepare(
+        "SELECT genres.name AS genre_name,
+        items.id AS item_id, items.article_id AS item_article_id, items.name AS name, items.price AS price, items.item_image AS item_image, items.extension AS item_extension, items.is_status AS item_is_status
+        FROM genres,items WHERE items.article_id=$article_id"
+      );
+      $item->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $item;
+  }
+  // --------------------------- 2022.02.25---------------------
 
   // 記事の一覧表示
   public function index()
@@ -204,11 +223,6 @@ class ArticleModel
     return $article;
   }
 
-  // 該当ジャンルの商品の一覧
-  public function genre_index()
-  {
-  }
-
   // 記事の検索
   public function search_index()
   {
@@ -237,7 +251,7 @@ class ArticleModel
     try {
       // DBに接続
       $pdo = $this->db_connect();
-      // SQL文 一致したidの全データを抽出
+      // SQL文 一致したidのデータを抽出
       $articles = $pdo->prepare(
         "SELECT * FROM articles WHERE id=$id"
       );
@@ -264,6 +278,11 @@ class ArticleModel
       $is_status = 0;
     }
 
+    // 画像削除ボタンの判定
+    if (isset($_POST['delete_image'])) {
+      $delete_image = 1;
+    }
+
     // 画像ファイルがある場合
     if (isset($article_image['error']) && is_int($article_image['error']) && $article_image['name'] !== "") {
       // ファイルの内容を全て読み込む
@@ -288,28 +307,45 @@ class ArticleModel
         $article_image = $article_image['tmp_name'] . $date["year"] . $date["mon"] . $date["mday"] . $date["hours"] . $date["minutes"] . $date["seconds"];
         $article_image = hash("sha256", $article_image);
         // SQL文　idが一致するデータへ更新処理
-        $articles = $pdo->prepare("UPDATE articles SET title =:title, body =:body, article_image = :article_image, extension = :extension, raw_data=:row_data, is_status = :is_status, updated_at = now() WHERE id =$id");
-
+        $articles = $pdo->prepare("UPDATE articles SET title =:title, body =:body, article_image = :article_image, extension = :extension, raw_data=:raw_data, is_status = :is_status, updated_at = now() WHERE id =$id");
         // 値をセット
         $articles->bindParam(':title', $title, PDO::PARAM_STR);
         $articles->bindParam(':body', $body, PDO::PARAM_STR);
         $articles->bindValue(':article_image', $article_image, PDO::PARAM_STR);
         $articles->bindValue(':extension', $extension, PDO::PARAM_STR);
-        $articles->bindValue(':row_data', $raw_data, PDO::PARAM_STR);
+        $articles->bindValue(':raw_data', $raw_data, PDO::PARAM_STR);
         $articles->bindParam(':is_status', $is_status, PDO::PARAM_INT);
         $articles->execute();
       } catch (PDOException $Exception) {
         die('接続エラー：' . $Exception->getMessage());
       }
 
-      // 画像がない場合
+      // 「画像削除」ボタンが押された場合
+    } elseif ($delete_image) {
+      try {
+        // DB接続
+        $pdo = $this->db_connect();
+        // SQL文　idが一致するデータへ更新処理
+        $articles = $pdo->prepare("UPDATE articles SET title =:title, body =:body, article_image = :article_image, extension = :extension, raw_data=:raw_data, is_status = :is_status, updated_at = now() WHERE id =$id");
+        // 値をセット
+        $articles->bindParam(':title', $title, PDO::PARAM_STR);
+        $articles->bindParam(':body', $body, PDO::PARAM_STR);
+        $articles->bindValue(':article_image', "", PDO::PARAM_STR);
+        $articles->bindValue(':extension', "", PDO::PARAM_STR);
+        $articles->bindValue(':raw_data', "", PDO::PARAM_STR);
+        $articles->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+        $articles->execute();
+      } catch (PDOException $Exception) {
+        die('接続エラー：' . $Exception->getMessage());
+      }
+
+      // 新規画像が選択されてない＆「画像削除」ボタンが押されていない場合
     } else {
       try {
         // DB接続
         $pdo = $this->db_connect();
         // SQL文 idが一致するデータへ更新処理
         $articles = $pdo->prepare("UPDATE articles SET title =:title, body =:body, is_status = :is_status, updated_at = now() WHERE id =$id");
-
         // 値をセット
         $articles->bindParam(':title', $title, PDO::PARAM_STR);
         $articles->bindParam(':body', $body, PDO::PARAM_STR);

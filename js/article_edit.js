@@ -9,5 +9,10 @@ $('#article_update_btn').click(function () {
   }
 
   // 更新に成功した場合
-    alert("記事を更新しました。");
+  value = $('#article_update_is_status').prop("checked");
+  if (value == true) {
+    alert("公開設定で、記事を更新しました。");
+  } else {
+    alert("非公開設定で、記事を更新しました。");
+  }
 });
