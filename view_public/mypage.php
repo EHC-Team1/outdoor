@@ -60,7 +60,7 @@ if (isset($_POST['delete'])) {
               </tr>
               <tr>
                 <th scope="row">住所</th>
-                <td><?= $customer['address'] ?></td>
+                <td><?= $customer['address'] . $customer['house_num']?></td>
               </tr>
               <tr>
                 <th scope="row">電話番号</th>
@@ -86,7 +86,7 @@ if (isset($_POST['delete'])) {
                 <tr>
                   <td><?= $delivery['name'] ?> 様</td>
                   <td><?= $delivery['postal_code'] ?></td>
-                  <td><?= $delivery['address'] ?></td>
+                  <td><?= $delivery['address'] . $delivery['house_num'] ?></td>
                   <td>
                     <form action="delivery_edit.php" method="post" class="d-flex align-items-center justify-content-center">
                       <input type="hidden" name="id" value="<?php echo $delivery['id'] ?>">
