@@ -148,7 +148,7 @@ class ArticleModel
     }
     return $item;
   }
- 
+
 
   // 記事の一覧表示
   public function index()
@@ -231,9 +231,7 @@ class ArticleModel
       $pdo = $this->db_connect();
       // キーワードがタイトル又は本文に入っているものを、更新日の降順で抽出
       $search_articles = $pdo->prepare(
-        "SELECT * FROM articles
-        WHERE title LIKE CONCAT('%',':keyword','%') OR body LIKE CONCAT('%',':keyword','%')
-        ORDER BY updated_at DESC"
+        "SELECT * FROM articles WHERE body LIKE CONCAT('%',:keyword,'%') AND is_status = 1 ORDER BY updated_at"
       );
       $search_articles->bindValue(':keyword', $keyword);
       $search_articles->execute();

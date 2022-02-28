@@ -1,3 +1,5 @@
+</main>
+
 <footer>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-2 text-center">
