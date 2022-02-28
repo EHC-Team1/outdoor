@@ -147,7 +147,6 @@ class CustomerModel
   // ユーザー登録
   public function input()
   {
-
     // セッションの値を変数に代入 (パスワードのみハッシュ化)
     $name_last = htmlspecialchars($_SESSION['signup']['name_last'], ENT_QUOTES, 'UTF-8');
     $name_first = htmlspecialchars($_SESSION['signup']['name_first'], ENT_QUOTES, 'UTF-8');

@@ -67,36 +67,43 @@ $message = htmlspecialchars($message);
       <?= $message; ?>
       <form method="post" enctype="multipart/form-data">
         <div class="form-group">
-          <div class="row mb-2">
-            <div class="col-2 d-flex align-items-center  justify-content-center">
+          <div class="row">
+            <div class="col mb-2 ms-3">
               <label>タイトル</label>
-            </div>
-            <div class="col-10">
-              <input type="text" name="title" class="form-control" value="<?= ($_SESSION['article']['title']) ?>">
             </div>
           </div>
           <div class="row mb-3">
-            <div class="col-2 mb-2 d-flex align-items-center  justify-content-center">
+            <div class="col">
+              <input type="text" name="title" class="form-control" value="<?= ($_SESSION['article']['title']) ?>" autofocus>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-2 ms-4">
               <label>本文</label>
             </div>
-            <div class="row ms-1">
+          </div>
+          <div class="row mb-3">
+            <div class="col">
               <textarea name="body" class="form-control" rows="7"><?= ($_SESSION['article']['body']) ?></textarea>
             </div>
           </div>
-            <div class="row mb-2 ms-auto">
-            <input type="file" name="article_image" class="form-control" value="<?= ($_SESSION['article']['article_image']) ?>">
+          <div class="row">
+            <div class="col mb-2">
+              <!-- <div class="row mb-2 ms-auto"> -->
+              <input type="file" name="article_image" class="form-control" value="<?= ($_SESSION['article']['article_image']) ?>">
+            </div>
           </div>
           <div class="row mb-3 ms-auto">
             <p> ※容量の大きい画像はエラーになることがあります。</p>
           </div>
         </div>
-        <div class="mb-3">
+        <div class="mb-3 d-flex align-items-center justify-content-evenly text-center">
           <label><input type="radio" class="btn-check" name="is_status" value="disclosure">
-            <div class="btn btn-outline-success">公開</div>
+            <div class="btn btn-outline-success">公開記事に設定する</div>
           </label>
           <label>
             <input type="radio" class="btn-check" name="is_status" value="private" checked>
-            <div class="btn btn-outline-danger">非公開</div>
+            <div class="btn btn-outline-danger">非公開記事に設定する</div>
         </div>
         <div class="d-flex align-items-center justify-content-center">
           <button type="submit" name="input_article" class="btn btn-outline-success btn-lg">記事を追加する</button>
@@ -136,7 +143,7 @@ $message = htmlspecialchars($message);
             <tr>
               <?php echo "<h4>"; ?>
               <td><?= $article['title']; ?></td>
-              <td class="col-3"><?= nl2br($article['body']); ?></td>
+              <td class="col-2"><?= nl2br($article['body']); ?></td>
               <td>
                 <?php
                 if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") {

@@ -17,7 +17,7 @@ if (isset($_POST['input'])) {
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 style="text-align:center" class="mt-5">アカウント新規作成</h1>
-    <h6 class="text-center mb-5">下記の内容でよろしければ、「登録」ボタンを押して下さい。</h6>
+    <h6 class="text-center mb-5">下記の内容でよろしければ、「登録する」ボタンを押して下さい。</h6>
     <div class="col-md-8">
       <div style="text-align:center">
         <div class="row p-2 border-bottom">
