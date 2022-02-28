@@ -29,13 +29,13 @@ class CustomerModel
   // 必須項目の入力チェック
   public function check()
   {
-    //----------------------------------- 62～71行 if外に持ってきただけ --------------------------------------------
     // 空白除去(文頭・文末)して、変数に代入
     $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_last']);
     $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_first']);
     $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
     $postal_code = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['postal_code']);
     $address = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['address']);
+    $house_num = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['house_num']);
     $telephone_num = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['telephone_num']);
     $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
     // パスワード(確認)時間あれば
@@ -44,31 +44,12 @@ class CustomerModel
     // 変数をセッションに格納
     $_SESSION['signup'] = [
       'name_last' => $name_last, 'name_first' => $name_first, 'email' => $email,
-      'postal_code' => $postal_code, 'address' => $address,
+      'postal_code' => $postal_code, 'address' => $address, 'house_num' => $house_num,
       'telephone_num' => $telephone_num, 'password' => $password
     ];
-    //-------------------------------------- 2022.02.17 --------------------------------------------
-
-    // POSTデータをセッションに格納
-    // $_SESSION['signup'] = [
-    //   'name_last' => $_POST['name_last'], 'name_first' => $_POST['name_first'], 'email' => $_POST['email'],
-    //   'postal_code' => $_POST['postal_code'], 'address' => $_POST['address'],
-    //   'telephone_num' => $_POST['telephone_num'], 'password' => $_POST['password']
-    // ];
 
     // 各値が入力されている場合
-    if ($_POST['name_last'] && $_POST['name_first'] && $_POST['email'] && $_POST['email'] && $_POST['postal_code'] && $_POST['address'] && $_POST['telephone_num'] && $_POST['password']) {
-
-      // 空白除去(文頭・文末)して、変数に代入
-      // $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_last']);
-      // $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_first']);
-      // $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
-      // $postal_code = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['postal_code']);
-      // $address = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['address']);
-      // $telephone_num = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['telephone_num']);
-      // $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
-      // パスワード(確認)時間あれば
-      // $password2 = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password2']);
+    if ($_POST['name_last'] && $_POST['name_first'] && $_POST['email'] && $_POST['email'] && $_POST['postal_code'] && $_POST['address'] && $_POST['house_num'] && $_POST['telephone_num'] && $_POST['password']) {
 
       // 名前(姓)のバリデーション 30文字以下
       if (20 <= mb_strlen($name_last, 'UTF-8')) {
@@ -116,6 +97,12 @@ class CustomerModel
         return $message;
       }
 
+      // 番地・建物名のバリデーション 300文字以下
+      if (300 <= mb_strlen($house_num, 'UTF-8')) {
+        $message = '番地・建物名は、300文字以下で入力して下さい。';
+        return $message;
+      }
+
       // 電話番号のバリデーション 数字30桁以内ハイフン無し
       if (!preg_match("/^[0-9]{3,30}+$/", $telephone_num)) {
         $message = '電話番号は、半角数字ハイフン無しで入力して下さい。';
@@ -153,6 +140,7 @@ class CustomerModel
     $email = $_SESSION['signup']['email'];
     $postal_code = $_SESSION['signup']['postal_code'];
     $address = htmlspecialchars($_SESSION['signup']['address'], ENT_QUOTES, 'UTF-8');
+    $house_num = htmlspecialchars($_SESSION['signup']['house_num'], ENT_QUOTES, 'UTF-8');
     $telephone_num = $_SESSION['signup']['telephone_num'];
     $password = password_hash($_SESSION['signup']['password'], PASSWORD_DEFAULT);
 
@@ -160,8 +148,8 @@ class CustomerModel
       // DB接続
       $pdo = $this->db_connect();
       // SQL文
-      $customers = $pdo->prepare('INSERT INTO customers ( name_last, name_first, email, postal_code, address, telephone_num, password )
-      VALUES( :name_last, :name_first, :email, :postal_code, :address, :telephone_num, :password )');
+      $customers = $pdo->prepare('INSERT INTO customers ( name_last, name_first, email, postal_code, address, house_num, telephone_num, password )
+      VALUES( :name_last, :name_first, :email, :postal_code, :address, :house_num, :telephone_num, :password )');
 
       // BDのカラムへ、各値をセット
       $customers->bindParam(':name_last', $name_last, PDO::PARAM_STR);
@@ -169,6 +157,7 @@ class CustomerModel
       $customers->bindParam(':email', $email, PDO::PARAM_STR);
       $customers->bindParam(':postal_code', $postal_code, PDO::PARAM_INT);
       $customers->bindParam(':address', $address, PDO::PARAM_STR);
+      $customers->bindParam(':house_num', $house_num, PDO::PARAM_STR);
       $customers->bindParam(':telephone_num', $telephone_num, PDO::PARAM_INT);
       $customers->bindParam(':password', $password, PDO::PARAM_STR);
       // 実行
@@ -208,7 +197,7 @@ class CustomerModel
         unset($_SESSION['login']['email'], $_SESSION['password']);
         // セッションにユーザー情報を格納
         $_SESSION['customer'] = [
-          'id' => $result['id'], 'name_last' => $result['name_last'], 'name_first' => $result['name_first'], 'email' => $result['email'], 'postal_code' => $result['postal_code'], 'address' => $result['address'], 'telephone_num' => $result['telephone_num'], 'password' => $result['password']
+          'id' => $result['id'], 'name_last' => $result['name_last'], 'name_first' => $result['name_first'], 'email' => $result['email'], 'postal_code' => $result['postal_code'], 'address' => $result['address'], 'house_num' => $result['house_num'], 'telephone_num' => $result['telephone_num'], 'password' => $result['password']
         ];
         // TOP画面へリダイレクト
         header('Location: ./top.php');
@@ -290,18 +279,23 @@ class CustomerModel
     $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
     $postal_code = htmlspecialchars($_POST['postal_code'], ENT_QUOTES, 'UTF-8');
     $address = htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8');
+    $house_num = htmlspecialchars($_POST['house_num'], ENT_QUOTES, 'UTF-8');
     $telephone_num = htmlspecialchars($_POST['telephone_num'], ENT_QUOTES, 'UTF-8');
     try {
       // DBに接続
       $pdo = $this->db_connect();
       $customer = $pdo->prepare(
-        "UPDATE customers SET name_last = :name_last, name_first = :name_first, email = :email, postal_code = :postal_code, address = :address, telephone_num = :telephone_num WHERE id = $customer_id"
+        // "UPDATE customers SET name_last = :name_last, name_first = :name_first, email = :email, postal_code = :postal_code, address = :address, telephone_num = :telephone_num WHERE id = $customer_id"
+        "UPDATE customers SET name_last = :name_last, name_first = :name_first, email = :email, postal_code = :postal_code,
+        address = :address, house_num = :house_num, telephone_num = :telephone_num WHERE id = $customer_id"
+
       );
       $customer->bindParam('name_last', $name_last, PDO::PARAM_STR);
       $customer->bindParam('name_first', $name_first, PDO::PARAM_STR);
       $customer->bindParam('email', $email, PDO::PARAM_STR);
       $customer->bindParam('postal_code', $postal_code, PDO::PARAM_STR);
       $customer->bindParam('address', $address, PDO::PARAM_STR);
+      $customer->bindParam('house_num', $house_num, PDO::PARAM_STR);
       $customer->bindParam('telephone_num', $telephone_num, PDO::PARAM_STR);
       $customer->execute();
     } catch (PDOException $Exception) {

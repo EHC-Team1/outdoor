@@ -148,7 +148,7 @@ class ArticleModel
     }
     return $item;
   }
- 
+
 
   // 記事の一覧表示
   public function index()

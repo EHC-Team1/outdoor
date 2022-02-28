@@ -3,11 +3,11 @@
 session_start();
 
 // 管理者としてログインしているかチェック
-if (isset($_SESSION['admin'])) {
-} else {
-  header("Location: admin_login.php");
-  die();
-}
+// if (isset($_SESSION['admin'])) {
+// } else {
+//   header("Location: admin_login.php");
+//   die();
+// }
 
 // ArticleModelファイルを読み込み
 require_once('../Model/ArticleModel.php');
