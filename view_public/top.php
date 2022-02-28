@@ -4,10 +4,31 @@ session_start();
 
 // ArticleModelファイルを読み込み
 require_once('../Model/ArticleModel.php');
+
+// 現在のページ数を取得
+if (isset($_GET['page'])) {
+  $page = (int)$_GET['page'];
+} else {
+  $page = 1;
+}
+// スタートのページを計算
+if ($page > 1) {
+  $start = ($page * 15) - 15;
+} else {
+  $start = 0;
+}
+
+// Articlesテーブルから該当ジャンルのデータ件数を取得
+$pdo = new ArticleModel();
+$pages = $pdo->page_count_public_index();
+$page_num = $pages->fetchColumn();
+// ページネーションの数を取得
+$pagination = ceil($page_num / 15);
+
 // Articleクラスを呼び出し
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
-$articles = $pdo->index();
+$articles = $pdo->public_index($start);
 // モデルからreturnしてきた情報をarticlesに格納
 $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -62,6 +83,7 @@ $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
   </div>
+  <?php require_once '../view_common/paging.php'; ?>
 </div>
 
 <?php require_once '../view_common/footer.php'; ?>

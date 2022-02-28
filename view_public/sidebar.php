@@ -43,7 +43,7 @@ require_once('../Model/ArticleModel.php');
 // Articleクラスを呼び出し
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
-$articles = $pdo->index();
+$articles = $pdo->sidebar_index();
 // モデルからreturnしてきた情報をarticlesに格納
 $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
 
@@ -90,13 +90,20 @@ $genres = $genres->fetchAll(PDO::FETCH_ASSOC);
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($articles as $article) { ?>
+      <?php $i = 0;
+      foreach ($articles as $article) {
+        if ($i >= 3) {
+          break;
+        } ?>
         <tr>
           <td class="text-center">
-            <h6><?= $article['title'] ?></h6>
+            <a href="../view_public/article_show.php?article_id=<?= $article['id'] ?>" style="text-decoration:none">
+              <h5 style="color:black"><?= $article['title'] ?></h5>
+            </a>
           </td>
         </tr>
-      <?php } ?>
+      <?php $i++;
+      } ?>
     </tbody>
   </table>
 </div>

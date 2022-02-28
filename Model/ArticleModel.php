@@ -149,9 +149,8 @@ class ArticleModel
     return $item;
   }
 
-
-  // 記事の一覧表示
-  public function index()
+  // サイドバー内コラム一覧表示
+  public function sidebar_index()
   {
     try {
       // DBに接続
@@ -168,16 +167,32 @@ class ArticleModel
     return $articles;
   }
 
+  // public_indexページング用データ数取得
+  public function page_count_public_index()
+  {
+    try {
+      $pdo = $this->db_connect();
+      $pages = $pdo->prepare(
+        "SELECT COUNT(*) id FROM articles WHERE is_status = 1"
+      );
+      $pages->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $pages;
+  }
+
   // ------------------------------ indexメソッド分けた ---------------------------
   // 記事の一覧表示(ユーザー側)
-  public function public_index()
+  public function public_index($start)
   {
+    $start = $start;
     try {
       // DBに接続
       $pdo = $this->db_connect();
       //SQL文 投稿日時の降順で取得
       $articles = $pdo->prepare(
-        "SELECT * FROM articles WHERE is_status = 1 ORDER BY created_at DESC;"
+        "SELECT * FROM articles WHERE is_status = 1 ORDER BY created_at DESC LIMIT {$start}, 15"
       );
       $articles->execute();
     } catch (PDOException $Exception) {
