@@ -224,7 +224,6 @@ class CustomerModel
     }
   }
 
-
   // ユーザー情報 登録内容表示
   public function show()
   {
