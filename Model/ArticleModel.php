@@ -130,7 +130,7 @@ class ArticleModel
     return $articles_show;
   }
 
-  // 該当商品の詳細表示 ------- ItemModelに移動する？--------------
+
   public function article_item($article_id)
   {
     $article_id =  $article_id;
@@ -148,7 +148,7 @@ class ArticleModel
     }
     return $item;
   }
-  // --------------------------- 2022.02.25---------------------
+ 
 
   // 記事の一覧表示
   public function index()
