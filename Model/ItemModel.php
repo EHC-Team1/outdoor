@@ -376,32 +376,14 @@
       return $items;
     }
 
-    // search_indexページング用データ数取得
-    public function page_count_search_index()
-    {
-      $keyword = $_SESSION['search'];
-      try {
-        $pdo = $this->db_connect();
-        $pages = $pdo->prepare(
-          "SELECT COUNT(*) id FROM items WHERE name LIKE CONCAT('%',:keyword,'%') AND is_status = 1"
-        );
-        $pages->bindValue(':keyword', $keyword);
-        $pages->execute();
-      } catch (PDOException $Exception) {
-        exit("接続エラー：" . $Exception->getMessage());
-      }
-      return $pages;
-    }
-
     // 検索該当商品の一覧表示
-    public function search_index($start)
+    public function search_index()
     {
-      $keyword = $_SESSION['search'];
-      $start = $start;
+      $keyword = $_POST['keyword'];
       try {
         $pdo = $this->db_connect();
         $search_items = $pdo->prepare(
-          "SELECT items.id AS item_id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE items.introduction LIKE CONCAT('%',:keyword,'%') AND items.is_status = 1 AND items.genre_id = genres.id ORDER BY items.updated_at DESC LIMIT {$start}, 15"
+          "SELECT items.id AS item_id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE items.introduction LIKE CONCAT('%',:keyword,'%') AND items.is_status = 1 AND items.genre_id = genres.id ORDER BY items.updated_at"
         );
         $search_items->bindValue(':keyword', $keyword);
         $search_items->execute();

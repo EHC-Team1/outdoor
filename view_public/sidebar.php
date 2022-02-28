@@ -7,29 +7,18 @@ if (isset($_POST['search'])) {
     // セッションに値を挿入
     $_SESSION['search'] = $_POST['keyword'];
 
-    // 現在のページ数を取得
-    if (isset($_GET['page'])) {
-      $page = (int)$_GET['page'];
-    } else {
-      $page = 1;
-    }
-    // スタートのページを計算
-    if ($page > 1) {
-      $start = ($page * 15) - 15;
-    } else {
-      $start = 0;
-    }
-
     // Itemが選択された場合
     if ($_POST['flexRadioDefault'] == 1) {
-      // 検索結果一覧画面に遷移
-      header('Location: ../view_public/public_search_item_index.php');
+      // ItemModelファイルを読み込み
+      require_once('../Model/ItemModel.php');
+      // Itemクラスを呼び出し
+      $pdo = new ItemModel();
+      // search_indexメソッドを呼び出し
+      $search_items = $pdo->search_index();
     }
 
     // Articleが選択された場合
     if ($_POST['flexRadioDefault'] == 2) {
-      // ArticleModelファイルを読み込み
-      require_once('../Model/ArticleModel.php');
       // Articleクラスを呼び出し
       $pdo = new ArticleModel();
       // search_indexメソッドを呼び出し
@@ -44,7 +33,7 @@ if (isset($_POST['search'])) {
   // 押されていない状態
 } else {
   // セッションを初期化
-  // $_SESSION['search'] = "";
+  $_SESSION['search'] = "";
 }
 
 // ArticleModelファイルを読み込み
@@ -66,7 +55,7 @@ $genres = $pdo->index();
 $genres = $genres->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<form method="POST">
+<form action="public_search_index.php" method="POST">
   <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value=1 checked>
     <label class="form-check-label" for="flexRadioDefault1">
