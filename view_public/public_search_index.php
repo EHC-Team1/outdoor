@@ -52,15 +52,25 @@ if ($_POST['flexRadioDefault']) {
             $target = $article["article_image"]; ?>
             <div class="card mb-2" style="max-width: auto;">
               <div class="row g-0">
-                <div class="col-lg-5 d-flex align-items-center mt-2">
+                <div class="col-lg-5 d-flex align-items-center my-2">
                   <?php if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") { ?>
                     <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
                   <?php } ?>
                 </div>
-                <div class="col-lg-7">
+                <div class="col-lg-7 d-flex align-items-center">
                   <div class="card-body">
                     <h5 class="card-title"><?= $article['title'] ?></h5>
-                    <p class="card-text"><?= $article['body'] ?></p>
+                    <p class="card-text">
+                      <?php
+                      $article['body'];
+                      if (mb_strlen($article['body']) > 100) {
+                        $body_start = mb_substr($article['body'], 0, 100);
+                        echo ($body_start . "・・・・");
+                      } else {
+                        echo ($article['body']);
+                      }
+                      ?>
+                    </p>
                     <p class="card-text"><small class="text-muted"><?= $article['updated_at'] ?></small></p>
                   </div>
                 </div>
