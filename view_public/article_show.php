@@ -26,10 +26,6 @@ $articles_show = $pdo->show($article_id);
 // 取得データを配列に格納
 $articles_show = $articles_show->fetch(PDO::FETCH_ASSOC);
 
-// ItemModelファイルを読み込み
-// require_once('../Model/ItemModel.php');
-//  Articleクラスを呼び出し
-// $pdo = new ItemModel();
 // article_itemメソッドを呼び出し
 $item = $pdo->article_item($article_id);
 // 取得データを配列に格納
