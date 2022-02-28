@@ -42,11 +42,7 @@ class CustomerModel
     // $password2 = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password2']);
 
     // 変数をセッションに格納
-    $_SESSION['signup'] = [
-      'name_last' => $name_last, 'name_first' => $name_first, 'email' => $email,
-      'postal_code' => $postal_code, 'address' => $address, 'house_num' => $house_num,
-      'telephone_num' => $telephone_num, 'password' => $password
-    ];
+    $_SESSION['signup'] = ['name_last' => $name_last, 'name_first' => $name_first, 'email' => $email, 'postal_code' => $postal_code, 'address' => $address, 'house_num' => $house_num, 'telephone_num' => $telephone_num, 'password' => $password ];
 
     // 各値が入力されている場合
     if ($_POST['name_last'] && $_POST['name_first'] && $_POST['email'] && $_POST['email'] && $_POST['postal_code'] && $_POST['address'] && $_POST['house_num'] && $_POST['telephone_num'] && $_POST['password']) {
@@ -147,10 +143,7 @@ class CustomerModel
     try {
       // DB接続
       $pdo = $this->db_connect();
-      // SQL文
-      $customers = $pdo->prepare('INSERT INTO customers ( name_last, name_first, email, postal_code, address, house_num, telephone_num, password )
-      VALUES( :name_last, :name_first, :email, :postal_code, :address, :house_num, :telephone_num, :password )');
-
+      $customers = $pdo->prepare('INSERT INTO customers ( name_last, name_first, email, postal_code, address, house_num, telephone_num, password ) VALUES( :name_last, :name_first, :email, :postal_code, :address, :house_num, :telephone_num, :password )');
       // BDのカラムへ、各値をセット
       $customers->bindParam(':name_last', $name_last, PDO::PARAM_STR);
       $customers->bindParam(':name_first', $name_first, PDO::PARAM_STR);
@@ -284,12 +277,7 @@ class CustomerModel
     try {
       // DBに接続
       $pdo = $this->db_connect();
-      $customer = $pdo->prepare(
-        // "UPDATE customers SET name_last = :name_last, name_first = :name_first, email = :email, postal_code = :postal_code, address = :address, telephone_num = :telephone_num WHERE id = $customer_id"
-        "UPDATE customers SET name_last = :name_last, name_first = :name_first, email = :email, postal_code = :postal_code,
-        address = :address, house_num = :house_num, telephone_num = :telephone_num WHERE id = $customer_id"
-
-      );
+      $customer = $pdo->prepare( "UPDATE customers SET name_last = :name_last, name_first = :name_first, email = :email, postal_code = :postal_code, address = :address, house_num = :house_num, telephone_num = :telephone_num WHERE id = $customer_id" );
       $customer->bindParam('name_last', $name_last, PDO::PARAM_STR);
       $customer->bindParam('name_first', $name_first, PDO::PARAM_STR);
       $customer->bindParam('email', $email, PDO::PARAM_STR);
