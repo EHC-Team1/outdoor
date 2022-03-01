@@ -13,7 +13,7 @@ require_once('../Model/CustomerModel.php');
 $pdo = new CustomerModel();
 // showメソッドを呼び出し
 $customers = $pdo->show();
-<?php $customer = $customers->fetch(PDO::FETCH_ASSOC); ?>
+$deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
 
 // Deliveryクラス呼び出し
 require_once('../Model/DeliveryModel.php');
@@ -21,10 +21,18 @@ require_once('../Model/DeliveryModel.php');
 $pdo = new DeliveryModel();
 // indexメソッドを呼び出し
 $deliveries = $pdo->index();
-$deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
-// var_dump($deliveries);
-// exit;
 
+// 確認ボタンが押された場合
+if (isset($_POST['input_order'])) {
+  // Orderクラスを呼び出し
+  require_once('../Model/OrderModel.php');
+  $pdo = new OrderModel();
+  // inputクラスを呼び出し
+  $pdo = $pdo->input();
+  // エラーメッセージを$messageに格納
+  $message = $pdo;
+}
+$message = "";
 
 ?>
 
@@ -53,25 +61,24 @@ $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
           <h4><label class="row">お届け先</label></h4>
           <ul>
             <li class="list-unstyled">
-              <input type="radio" id="my-address" name="delivery" value=0 checked>
+              <input type="radio" id="my-address" name="delivery-target" checked>
               <label for="my-address">ご自身の住所</label>
               <div class="mb-2">
+                
                 〒<?= $customer['postal_code']; ?> <?= $customer['address']; ?> <?= $customer['name_last']; ?><?= $customer['name_first']; ?>
               </div>
             </li>
             <li class="list-unstyled">
-              <input type="radio" id="registration-address" name="delivery" value=1>
+              <input type="radio" id="registration-address" name="delivery-target">
               <label for="registration-address">登録先住所から選択</label><br>
-              <select class="form-select mt-2 mb-2" name="delivery_id" id="address-select">
-                <?php
+              <select class="form-select mt-2 mb-2" name="address" id="address-select">
+                <?php 
                 foreach ($deliveries as $delivery) { ?>
-                  <option value="<?= $delivery['id'] ?>">
-                    〒<?= $delivery['postal_code']; ?> <?= $delivery['address']; ?> <?= $delivery['name']; ?>
-                  </option>
+                  <option selected>〒<?= $delivery['postal_code'], $delivery['address'], $delivery['name']; ?></option>
                 <?php } ?>
               </select>
             </li>
-            <!-- <li class="list-unstyled">
+            <li class="list-unstyled">
               <input type="radio" id="new-delivery" name="delivery-target">
               <label for="new-delivery">新しいお届け先</label>
               <table class="table table-borderless">
@@ -97,7 +104,7 @@ $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
                   </tr>
                 </tbody>
               </table>
-            </li> -->
+            </li>
           </ul>
         </div>
         <div class="d-flex align-items-center justify-content-center">

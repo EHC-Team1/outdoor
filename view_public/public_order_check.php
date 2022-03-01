@@ -13,7 +13,7 @@ require_once('../Model/CartItemModel.php');
 $pdo = new CartItemModel();
 // indexメソッド呼び出し
 $cart_items = $pdo->index();
-$customers = $customers->fetch(PDO::FETCH_ASSOC);
+$cart_items = $cart_items->fetchAll(PDO::FETCH_ASSOC);
 
 // 注文を確定するボタンが押された場合
 if (isset($_POST['fixed_order'])) {
@@ -31,6 +31,7 @@ if ($_POST['delivery'] == 0) {
   $pdo = new CustomerModel();
   // showメソッドを呼び出し
   $customers = $pdo->show();
+  $customers = $customers->fetch(PDO::FETCH_ASSOC);
 } else {
   $delivery_id = $_POST['delivery_id'];
   // Deliveryクラス呼び出し
@@ -62,7 +63,7 @@ if ($_POST['delivery'] == 0) {
             </tr>
           </thead>
           <!-- 購入商品の表示 -->
-          <?php $cart_items = $cart_items->fetchAll(PDO::FETCH_ASSOC);
+          <?php
           // 合計の初期値は0
           $total = 0;
           foreach ($cart_items as $cart_item) {
