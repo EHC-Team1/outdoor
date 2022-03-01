@@ -22,7 +22,6 @@ if (isset($_POST['fixed_order'])) {
   $order = $pdo->input();
   header('Location: public_order_complete.php');
 }
-
 if ($_POST['delivery'] == 0) {
   // CustomerModelファイルを読み込み
   require_once('../Model/CustomerModel.php');
@@ -45,7 +44,6 @@ if ($_POST['delivery'] == 0) {
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
-
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5 mb-5">注文情報の確認</h1>
@@ -62,7 +60,7 @@ if ($_POST['delivery'] == 0) {
             </tr>
           </thead>
           <!-- 購入商品の表示 -->
-          <?php
+          <?php $cart_items = $cart_items->fetchAll(PDO::FETCH_ASSOC);
           // 合計の初期値は0
           $total = 0;
           foreach ($cart_items as $cart_item) {
