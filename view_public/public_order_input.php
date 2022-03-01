@@ -13,7 +13,6 @@ require_once('../Model/CustomerModel.php');
 $pdo = new CustomerModel();
 // showメソッドを呼び出し
 $customers = $pdo->show();
-$deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
 
 // Deliveryクラス呼び出し
 require_once('../Model/DeliveryModel.php');
@@ -64,7 +63,7 @@ $message = "";
               <input type="radio" id="my-address" name="delivery-target" checked>
               <label for="my-address">ご自身の住所</label>
               <div class="mb-2">
-                
+              <?php $customer = $customers->fetch(PDO::FETCH_ASSOC); ?>
                 〒<?= $customer['postal_code']; ?> <?= $customer['address']; ?> <?= $customer['name_last']; ?><?= $customer['name_first']; ?>
               </div>
             </li>

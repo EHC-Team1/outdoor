@@ -13,7 +13,6 @@ require_once('../Model/CartItemModel.php');
 $pdo = new CartItemModel();
 // indexメソッド呼び出し
 $cart_items = $pdo->index();
-$cart_items = $cart_items->fetchAll(PDO::FETCH_ASSOC);
 
 // 注文を確定するボタンが押された場合
 if (isset($_POST['fixed_order'])) {
