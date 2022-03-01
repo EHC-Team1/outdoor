@@ -63,14 +63,29 @@ class DeliveryModel
     }
   }
 
+  public function show($delivery_id)
+  {
+    $id = $delivery_id;
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $customers = $pdo->prepare(
+        "SELECT * FROM deliveries WHERE id = $id"
+      );
+      $customers->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $customers;
+  }
+
   // 配送先の一覧表示
   public function index()
   {
+    $customer_id = $_SESSION['customer']['id'];
     try {
-      $customer_id = $_SESSION['customer']['id'];
       // DBに接続
       $pdo = $this->db_connect();
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $deliveries = $pdo->prepare(
         "SELECT * FROM deliveries WHERE customer_id = $customer_id"
       );
