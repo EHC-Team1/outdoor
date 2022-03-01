@@ -3,11 +3,11 @@
 session_start();
 
 // 管理者としてログインしているかチェック
-if (isset($_SESSION['admin'])) {
-} else {
-  header("Location: admin_login.php");
-  die();
-}
+// if (isset($_SESSION['admin'])) {
+// } else {
+//   header("Location: admin_login.php");
+//   die();
+// }
 
 // CustomerModelファイルを読み込み
 require_once('../Model/CustomerModel.php');
@@ -49,7 +49,7 @@ $customers = $pdo->index();
               <td><?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?> 様</td>
               <td><?= $customer['email'] ?></td>
               <td><?= '〒' . '&nbsp' . substr_replace($customer['postal_code'], '-', 3, 0) ?></td>
-              <td><?= $customer['address'] ?></td>
+              <td><?= $customer['address'] .'<br>'. $customer['house_num'] ?></td>
               <td><?= $customer['telephone_num'] ?></td>
               <?php echo "<h4>"; ?>
             </tr>

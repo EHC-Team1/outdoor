@@ -2,56 +2,35 @@
 
 // 「検索」ボタンが押された場合
 if (isset($_POST['search'])) {
-  //   // 検索ワードが入力されているかチェック
-  //   if ($_POST['keyword']) {
-  // セッションに値を挿入
-  $_SESSION['search'] = $_POST['keyword'];
+  // 検索ワードが入力されているかチェック
+  if ($_POST['keyword']) {
+    // セッションに値を挿入
+    $_SESSION['search'] = $_POST['keyword'];
 
-  //     // 現在のページ数を取得
-  //     if (isset($_GET['page'])) {
-  //       $page = (int)$_GET['page'];
-  //     } else {
-  //       $page = 1;
-  //     }
-  //     // スタートのページを計算
-  //     if ($page > 1) {
-  //       $start = ($page * 15) - 15;
-  //     } else {
-  //       $start = 0;
-  //     }
+    // Itemが選択された場合
+    if ($_POST['flexRadioDefault'] == 1) {
+      // ItemModelファイルを読み込み
+      require_once('../Model/ItemModel.php');
+      // Itemクラスを呼び出し
+      $pdo = new ItemModel();
+      // search_indexメソッドを呼び出し
+      $search_items = $pdo->search_index();
+    }
 
-  //     // Itemが選択された場合
-  //     if ($_POST['flexRadioDefault'] == 1) {
-  //       // ItemModelファイルを読み込み
-  //       require_once('../Model/ItemModel.php');
+    // Articleが選択された場合
+    if ($_POST['flexRadioDefault'] == 2) {
+      // ArticleModelファイルを読み込み
+      require_once('../Model/ArticleModel.php');
+      // Articleクラスを呼び出し
+      $pdo = new ArticleModel();
+      // search_indexメソッドを呼び出し
+      $search_articles = $pdo->search_index();
+    }
 
-  //       // itemsテーブルから該当ジャンルのデータ件数を取得
-  //       $pdo = new ItemModel();
-  //       $pages = $pdo->page_count_search_index();
-  //       $page_num = $pages->fetchColumn();
-  //       // ページネーションの数を取得
-  //       $pagination = ceil($page_num / 15);
-
-  //       // Itemクラスを呼び出し
-  //       $pdo = new ItemModel();
-  //       // search_indexメソッドを呼び出し
-  //       $search_items = $pdo->search_index($start);
-  //     }
-
-  //     // Articleが選択された場合
-  //     if ($_POST['flexRadioDefault'] == 2) {
-  //     // ArticleModelファイルを読み込み
-  //       require_once('../Model/ArticleModel.php');
-  //       // Articleクラスを呼び出し
-  //       $pdo = new ArticleModel();
-  //       // search_indexメソッドを呼び出し
-  //       $search_articles = $pdo->search_index();
-  //     }
-
-  //     // 検索ワードが入力されていない場合
-  //   } else {
-  //     header('Location: ../view_public/top.php');
-  //   }
+    // 検索ワードが入力されていない場合
+  } else {
+    header('Location: ../view_public/top.php');
+  }
 
   // 押されていない状態
 } else {
@@ -64,7 +43,7 @@ require_once('../Model/ArticleModel.php');
 // Articleクラスを呼び出し
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
-$articles = $pdo->index();
+$articles = $pdo->sidebar_index();
 // モデルからreturnしてきた情報をarticlesに格納
 $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
 
@@ -111,13 +90,20 @@ $genres = $genres->fetchAll(PDO::FETCH_ASSOC);
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($articles as $article) { ?>
+      <?php $i = 0;
+      foreach ($articles as $article) {
+        if ($i >= 3) {
+          break;
+        } ?>
         <tr>
           <td class="text-center">
-            <h6><?= $article['title'] ?></h6>
+            <a href="../view_public/article_show.php?article_id=<?= $article['id'] ?>" style="text-decoration:none">
+              <h5 style="color:black"><?= $article['title'] ?></h5>
+            </a>
           </td>
         </tr>
-      <?php } ?>
+      <?php $i++;
+      } ?>
     </tbody>
   </table>
 </div>

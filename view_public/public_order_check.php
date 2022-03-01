@@ -62,7 +62,7 @@ if ($_POST['delivery'] == 0) {
             </tr>
           </thead>
           <!-- 購入商品の表示 -->
-          <?php $cart_items = $cart_items->fetchAll(PDO::FETCH_ASSOC);
+          <?php
           // 合計の初期値は0
           $total = 0;
           foreach ($cart_items as $cart_item) {

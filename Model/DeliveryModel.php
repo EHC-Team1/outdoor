@@ -31,8 +31,9 @@ class DeliveryModel
     $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
     $postal_code = htmlspecialchars($_POST['postal_code'], ENT_QUOTES, 'UTF-8');
     $address = htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8');
+    $house_num = htmlspecialchars($_POST['house_num'], ENT_QUOTES, 'UTF-8');
     // 必要項目が入っているかチェック
-    if (empty($name && $postal_code && $address)) {
+    if (empty($name && $postal_code && $address && $house_num)) {
       // 入っていなければdelivery_input.phpへリダイレクト
       header('Location: delivery_input.php');
       $message = "必須項目を入力してください。";
@@ -42,12 +43,13 @@ class DeliveryModel
         // DBに接続
         $pdo = $this->db_connect();
         $delivery = $pdo->prepare(
-          "INSERT INTO deliveries (customer_id, name, postal_code, address) VALUES(:customer_id, :name, :postal_code, :address)"
+          "INSERT INTO deliveries (customer_id, name, postal_code, address, house_num) VALUES(:customer_id, :name, :postal_code, :address, :house_num)"
         );
         $delivery->bindParam(':customer_id', $customer_id, PDO::PARAM_STR);
         $delivery->bindParam(':name', $name, PDO::PARAM_STR);
         $delivery->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
         $delivery->bindParam(':address', $address, PDO::PARAM_STR);
+        $delivery->bindParam(':house_num', $house_num, PDO::PARAM_STR);
         $delivery->execute();
       } catch (PDOException $Exception) {
         die('接続エラー：' . $Exception->getMessage());
@@ -119,15 +121,17 @@ class DeliveryModel
     $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
     $postal_code = htmlspecialchars($_POST['postal_code'], ENT_QUOTES, 'UTF-8');
     $address = htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8');
+    $house_num = htmlspecialchars($_POST['house_num'], ENT_QUOTES, 'UTF-8');
     try {
       // DBに接続
       $pdo = $this->db_connect();
       $delivery = $pdo->prepare(
-        "UPDATE deliveries SET name = :name, postal_code = :postal_code, address = :address WHERE id = $delivery_id"
+        "UPDATE deliveries SET name = :name, postal_code = :postal_code, address = :address, house_num = :house_num WHERE id = $delivery_id"
       );
       $delivery->bindParam(':name', $name, PDO::PARAM_STR);
       $delivery->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
       $delivery->bindParam(':address', $address, PDO::PARAM_STR);
+      $delivery->bindParam(':house_num', $house_num, PDO::PARAM_STR);
       $delivery->execute();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());

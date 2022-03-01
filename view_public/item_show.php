@@ -2,13 +2,6 @@
 // セッションの宣言
 session_start();
 
-// // ログインしているかチェック
-// if (isset($_SESSION['customer'])) {
-// } else {
-//   header("Location: ../view_public/top.php");
-//   die();
-// }
-
 if (isset($_GET["item_id"]) && $_GET["item_id"] !== "") {
   $item_id = $_GET["item_id"];
 } else {
@@ -47,14 +40,24 @@ if ($item['article_is_status'] == 1) {
 
 // 「購入」ボタンが押された場合
 if (isset($_POST['buy'])) {
-  // CartItemModelファイルを読み込み
-  require_once('../Model/CartItemModel.php');
-  // CartItemクラスを呼び出し
-  $pdo = new CartItemModel();
-  // inputメソッドを呼び出し
-  $cart_items = $pdo->input();
-  // エラーメッセージを$messageに格納
-  $message = $cart_items;
+  // // ログインしているかチェック
+  if (isset($_SESSION['customer'])) {
+    // ログインしている場合
+    // CartItemModelファイルを読み込み
+    require_once('../Model/CartItemModel.php');
+    // CartItemクラスを呼び出し
+    $pdo = new CartItemModel();
+    // inputメソッドを呼び出し
+    $cart_items = $pdo->input();
+    // エラーメッセージを$messageに格納
+    $message = $cart_items;
+
+    // ログインしていない場合
+  } else {
+    // 新規登録画面に遷移
+    header("Location: ../view_public/public_signup.php");
+    die();
+  }
 
   // 押されていない状態
 } else {

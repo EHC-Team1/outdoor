@@ -17,7 +17,7 @@ if (isset($_POST['input'])) {
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 style="text-align:center" class="mt-5">アカウント新規作成</h1>
-    <h6 class="text-center mb-5">下記の内容でよろしければ、「登録」ボタンを押して下さい。</h6>
+    <h6 class="text-center mb-5">下記の内容でよろしければ、「登録する」ボタンを押して下さい。</h6>
     <div class="col-md-8">
       <div style="text-align:center">
         <div class="row p-2 border-bottom">
@@ -33,8 +33,12 @@ if (isset($_POST['input'])) {
           <div class="col-md-6">〒 <?= substr_replace($_SESSION['signup']['postal_code'], '-', 3, 0) ?></div>
         </div>
         <div class="row p-2 border-bottom">
-          <div class="col-md-6">住所</div>
+          <div class="col-md-6">市区町村</div>
           <div class="col-md-6"><?= $_SESSION['signup']['address'] ?></div>
+        </div>
+        <div class="row p-2 border-bottom">
+          <div class="col-md-6">番地・建物名</div>
+          <div class="col-md-6"><?= $_SESSION['signup']['house_num'] ?></div>
         </div>
         <div class="row p-2 border-bottom">
           <div class="col-md-6">電話番号</div>

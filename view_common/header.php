@@ -16,6 +16,18 @@
   <title>Outdoor</title>
 </head>
 
+<?php
+// 「ログアウト」ボタンが押された時
+if (isset($_POST['logout'])) {
+  // CustomerModelファイルを呼び出し
+  require_once('../Model/CustomerModel.php');
+  // Customerクラスを呼び出し
+  $pdo = new CustomerModel();
+  // logoutメソッドを呼び出し
+  $pdo = $pdo->logout();
+}
+?>
+
 <body>
   <header>
     <!-- ログイン状態か判別 -->
@@ -72,15 +84,4 @@
       </nav>
     <?php } ?>
   </header>
-
-  <?php
-  // 「ログアウト」ボタンが押された時
-  if (isset($_POST['logout'])) {
-    // CustomerModelファイルを呼び出し
-    require_once('../Model/CustomerModel.php');
-    // Customerクラスを呼び出し
-    $pdo = new CustomerModel();
-    // logoutメソッドを呼び出し
-    $pdo = $pdo->logout();
-  }
-  ?>
+  <main>

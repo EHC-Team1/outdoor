@@ -41,15 +41,15 @@ if ($page > 1) {
 
 // itemsテーブルから全データ件数を取得
 $pdo = new ItemModel();
-$pages = $pdo->page_count_index();
+$pages = $pdo->page_count_admin_index();
 $page_num = $pages->fetchColumn();
 // ページネーションの数を取得
 $pagination = ceil($page_num / 15);
 
 // Itemクラスを呼び出し
 $pdo = new ItemModel();
-// indexメソッドを呼び出し
-$items = $pdo->index($start);
+// admin_indexメソッドを呼び出し
+$items = $pdo->admin_index($start);
 // モデルからreturnしてきた情報をitemsに格納
 $items = $items->fetchAll(PDO::FETCH_ASSOC);
 

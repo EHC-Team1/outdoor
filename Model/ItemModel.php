@@ -113,7 +113,7 @@
     }
 
     // admin_item_indexページング用データ数取得
-    public function page_count_index()
+    public function page_count_admin_index()
     {
       try {
         $pdo = $this->db_connect();
@@ -129,7 +129,7 @@
 
     // admin側のため全表示
     // 商品の一覧表示
-    public function index($start)
+    public function admin_index($start)
     {
       $start = $start;
       try {
@@ -293,6 +293,38 @@
       return $message;
     }
 
+    // public_item_indexページング用データ数取得
+    public function page_count_public_index()
+    {
+      try {
+        $pdo = $this->db_connect();
+        $pages = $pdo->prepare(
+          "SELECT COUNT(*) id FROM items WHERE is_status = 1"
+        );
+        $pages->execute();
+      } catch (PDOException $Exception) {
+        exit("接続エラー：" . $Exception->getMessage());
+      }
+      return $pages;
+    }
+
+    // public側
+    // 商品の一覧表示
+    public function public_index($start)
+    {
+      $start = $start;
+      try {
+        $pdo = $this->db_connect();
+        $items = $pdo->prepare(
+          "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, items.is_status AS is_status, genres.name AS genre_name FROM items, genres WHERE items.genre_id = genres.id AND items.is_status = 1 ORDER BY items.updated_at DESC LIMIT {$start}, 15"
+        );
+        $items->execute();
+      } catch (PDOException $Exception) {
+        exit("接続エラー：" . $Exception->getMessage());
+      }
+      return $items;
+    }
+
     // 商品の詳細表示
     public function show($item_id)
     {
@@ -335,7 +367,7 @@
         // db_connectメソッドを呼び出す
         $pdo = $this->db_connect();
         $items = $pdo->prepare(
-          "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE genres.id = items.genre_id AND items.genre_id = $genre_id  AND items.is_status = 1 ORDER BY items.updated_at DESC LIMIT {$start}, 15"
+          "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE genres.id = items.genre_id AND items.genre_id = $genre_id AND items.is_status = 1 ORDER BY items.updated_at DESC LIMIT {$start}, 15"
         );
         $items->execute();
       } catch (PDOException $Exception) {
@@ -344,36 +376,16 @@
       return $items;
     }
 
-    // search_indexページング用データ数取得
-    public function page_count_search_index()
-    {
-      $keyword = $_POST['keyword'];
-      try {
-        $pdo = $this->db_connect();
-        $pages = $pdo->prepare(
-          "SELECT COUNT(*) id FROM items WHERE name LIKE CONCAT('%',:keyword1,'%') OR introduction LIKE CONCAT('%',:keyword2,'%') AND is_status = 1"
-        );
-        $pages->bindValue(':keyword1', $keyword);
-        $pages->bindValue(':keyword2', $keyword);
-        $pages->execute();
-      } catch (PDOException $Exception) {
-        exit("接続エラー：" . $Exception->getMessage());
-      }
-      return $pages;
-    }
-
     // 検索該当商品の一覧表示
-    public function search_index($start)
+    public function search_index()
     {
       $keyword = $_POST['keyword'];
-      $start = $start;
       try {
         $pdo = $this->db_connect();
         $search_items = $pdo->prepare(
-          "SELECT items.id AS item_id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE items.name LIKE CONCAT('%',:keyword1,'%') OR items.introduction LIKE CONCAT('%',:keyword2,'%') AND items.is_status = 1 AND items.genre_id = genres.id ORDER BY items.updated_at DESC LIMIT {$start}, 15"
+          "SELECT items.id AS item_id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE items.introduction LIKE CONCAT('%',:keyword,'%') AND items.is_status = 1 AND items.genre_id = genres.id ORDER BY items.updated_at"
         );
-        $search_items->bindValue(':keyword1', $keyword);
-        $search_items->bindValue(':keyword2', $keyword);
+        $search_items->bindValue(':keyword', $keyword);
         $search_items->execute();
       } catch (PDOException $Exception) {
         exit("接続エラー：" . $Exception->getMessage());
