@@ -30,6 +30,16 @@ if (isset($_POST['delete'])) {
   // indexメソッドを呼び出し
   $deliveries = $pdo->index();
 }
+
+// 退会ボタンが押下された時
+if (isset($_POST['is_customer_flag'])) {
+  // Customerクラスを呼び出し
+  $pdo = new CustomerModel();
+  // is_customer_flagメソッドを呼び出し
+  $customer_status = $pdo->is_customer_flag();
+}
+
+
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -38,33 +48,57 @@ if (isset($_POST['delete'])) {
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5 mb-5">お客様情報</h1>
     <div class="col-md-8">
-      <form action="customer_edit.php" method="POST">
-        <input type="submit" class="btn btn-success btn-lg text-right" value="編集">
-      </form>
+      <?php $customer = $customers->fetch(PDO::FETCH_ASSOC); ?>
+      <div class="row">
+        <div class="col-md-1">
+          <form action="customer_edit.php" method="POST">
+            <input type="submit" class="btn btn-success btn-lg" value="編集">
+          </form>
+        </div>
+        <div class="col ms-2">
+          <form method="post">
+            <input type="hidden" name="id" value="<?php echo $customer['id'] ?>">
+            <button type="submit" name="is_customer_flag" class="btn btn-outline-secondary btn-lg" id="is_customer_flag_btn">退会</button>
+          </form>
+        </div>
+      </div>
       <div class="card">
         <div class="card-body col-md-12">
           <table class="table table-borderless">
             <tbody>
-              <?php $customer = $customers->fetch(PDO::FETCH_ASSOC); ?>
               <tr>
-                <th scope="row">氏名</th>
-                <td><?= $customer['name_last'] ?> <?= $customer['name_first'] ?></td>
+                <th scope="row">
+                  氏名
+                </th>
+                <td><?= $customer['name_last'] ?> <?= $customer['name_first'] ?>
+                </td>
               </tr>
               <tr>
-                <th scope="row">メールアドレス</th>
-                <td><?= $customer['email'] ?></td>
+                <th scope="row">
+                  メールアドレス
+                </th>
+                <td><?= $customer['email'] ?>
+                </td>
               </tr>
               <tr>
-                <th scope="row">郵便番号</th>
+                <th scope="row">
+                  郵便番号
+                </th>
                 <td><?= $customer['postal_code'] ?></td>
               </tr>
               <tr>
-                <th scope="row">住所</th>
-                <td><?= $customer['address'] . $customer['house_num']?></td>
+                <th scope="row">
+                  住所
+                </th>
+                <td><?= $customer['address'] . $customer['house_num'] ?>
+                </td>
               </tr>
               <tr>
-                <th scope="row">電話番号</th>
-                <td><?= $customer['telephone_num'] ?></td>
+                <th scope="row">
+                  電話番号
+                </th>
+                <td><?= $customer['telephone_num'] ?>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -84,9 +118,13 @@ if (isset($_POST['delete'])) {
               <?php $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
               foreach ($deliveries as $delivery) { ?>
                 <tr>
-                  <td><?= $delivery['name'] ?> 様</td>
-                  <td><?= $delivery['postal_code'] ?></td>
-                  <td><?= $delivery['address'] . $delivery['house_num'] ?></td>
+                  <td><?= $delivery['name'] ?>
+                    様
+                  </td>
+                  <td><?= $delivery['postal_code'] ?>
+                  </td>
+                  <td><?= $delivery['address'] . $delivery['house_num'] ?>
+                  </td>
                   <td>
                     <form action="delivery_edit.php" method="post" class="d-flex align-items-center justify-content-center">
                       <input type="hidden" name="id" value="<?php echo $delivery['id'] ?>">
