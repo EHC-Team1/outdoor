@@ -64,9 +64,15 @@ if (isset($_GET['id']) ) {
         <!-- <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">退会済み</a>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="#">2022年</a></li>
-      <li><a class="dropdown-item" href="#">2021年</a></li>
-      <li><a class="dropdown-item" href="#">2020年</a></li>
+      <li>
+        <a class="dropdown-item" href="#">2022年</a>
+      </li>
+      <li>
+        <a class="dropdown-item" href="#">2021年</a>
+      </li>
+      <li>
+        <a class="dropdown-item" href="#">2020年</a>
+      </li>
     </ul>
   </li> -->
       </ul>
