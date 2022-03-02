@@ -51,7 +51,7 @@ $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
               <label for="my-address">ご自身の住所</label>
               <div class="mb-2">
                 <?php $customer = $customers->fetch(PDO::FETCH_ASSOC); ?>
-                〒<?= $customer['postal_code']; ?> <?= $customer['address']; ?> <?= $customer['name_last']; ?><?= $customer['name_first']; ?>
+                <?= '〒' . '&nbsp' . substr_replace($customer['postal_code'], '-', 3, 0) . '&nbsp' . $customer['address'] . $customer['house_num'] . '&nbsp' . $customer['name_last'] . $customer['name_first'] ?>
               </div>
             </li>
             <li class="list-unstyled">
@@ -61,7 +61,7 @@ $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
                 <?php
                 foreach ($deliveries as $delivery) { ?>
                   <option value="<?= $delivery['id'] ?>">
-                    〒<?= $delivery['postal_code']; ?> <?= $delivery['address']; ?> <?= $delivery['name']; ?>
+                    <?= '〒' . '&nbsp' . substr_replace($delivery['postal_code'], '-', 3, 0) . '&nbsp' . $delivery['address'] . $customer['house_num'] . '&nbsp' . $delivery['name'] ?>
                   </option>
                 <?php } ?>
               </select>
