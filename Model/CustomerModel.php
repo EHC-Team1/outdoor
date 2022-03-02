@@ -351,7 +351,7 @@ class CustomerModel
 
 
   // ユーザー退会(管理者側)
-  public function admin_is_customer_flag($id, $secession_member_id)
+  public function admin_customer_flag($id, $secession_member_id)
   {
     $id = $id;
     $secession_member_id = $secession_member_id;
