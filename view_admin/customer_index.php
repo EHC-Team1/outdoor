@@ -53,7 +53,7 @@ if (isset($_GET['id'])) {
   // Customerクラスを呼び出し
   $pdo = new CustomerModel();
   // admin_is_customer_flagメソッドを呼び出し
-  $customer_status = $pdo->admin_is_customer_flag($id, $secession_member_id);
+  $customer_status = $pdo->admin_customer_flag($id, $secession_member_id);
 }
 
 // 「退会済み」タグ選択時、「名前」クリックで再入会処理
@@ -62,7 +62,7 @@ if (isset($_GET['secession_member_id'])) {
   // Customerクラスを呼び出し
   $pdo = new CustomerModel();
   // admin_is_customer_flagメソッドを呼び出し
-  $customer_status = $pdo->admin_is_customer_flag($id, $secession_member_id);
+  $customer_status = $pdo->admin_customer_flag($id, $secession_member_id);
 }
 
 
