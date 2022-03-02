@@ -38,9 +38,9 @@ class OrderDetailModel
         "INSERT INTO order_details (order_id, item_id, price, quantity) VALUES(:order_id, :item_id, :price, :quantity)"
       );
       $order_detail->bindParam(':order_id', $order_id, PDO::PARAM_INT);
-      $order_detail->bindParam(':item_id', $item_id, PDO::PARAM_STR);
-      $order_detail->bindParam(':price', $price, PDO::PARAM_STR);
-      $order_detail->bindParam(':quantity', $quantity, PDO::PARAM_STR);
+      $order_detail->bindParam(':item_id', $item_id, PDO::PARAM_INT);
+      $order_detail->bindParam(':price', $price, PDO::PARAM_INT);
+      $order_detail->bindParam(':quantity', $quantity, PDO::PARAM_INT);
       $order_detail->execute();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
