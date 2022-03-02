@@ -246,9 +246,10 @@ class ArticleModel
       $pdo = $this->db_connect();
       // キーワードがタイトル又は本文に入っているものを、更新日の降順で抽出
       $search_articles = $pdo->prepare(
-        "SELECT * FROM articles WHERE body LIKE CONCAT('%',:keyword,'%') AND is_status = 1 ORDER BY updated_at"
+        "SELECT * FROM articles WHERE body LIKE CONCAT('%',:keyword_body,'%') OR title LIKE CONCAT('%',:keyword_title,'%') AND is_status = 1 ORDER BY updated_at"
       );
-      $search_articles->bindValue(':keyword', $keyword);
+      $search_articles->bindValue(':keyword_body', $keyword);
+      $search_articles->bindValue(':keyword_title', $keyword);
       $search_articles->execute();
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
