@@ -117,7 +117,7 @@ if (isset($_GET['id']) ) {
                 <?= '&emsp;' . $customer['address'] . '<br>' . '&emsp;' . $customer['house_num'] ?>
               </div>
               <div class="col-md-2 p-0">
-                <td><?= $customer['telephone_num'] ?>
+                <?= $customer['telephone_num'] ?>
               </div>
             </div>
           </tbody>
