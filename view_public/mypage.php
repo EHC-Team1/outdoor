@@ -67,24 +67,38 @@ if (isset($_POST['is_customer_flag'])) {
           <table class="table table-borderless">
             <tbody>
               <tr>
-                <th scope="row">氏名</th>
-                <td><?= $customer['name_last'] ?> <?= $customer['name_first'] ?></td>
+                <th scope="row">
+                  氏名
+                </th>
+                <td><?= $customer['name_last'] ?> <?= $customer['name_first'] ?>
+                </td>
               </tr>
               <tr>
-                <th scope="row">メールアドレス</th>
-                <td><?= $customer['email'] ?></td>
+                <th scope="row">
+                  メールアドレス
+                </th>
+                <td><?= $customer['email'] ?>
+                </td>
               </tr>
               <tr>
-                <th scope="row">郵便番号</th>
+                <th scope="row">
+                  郵便番号
+                </th>
                 <td><?= $customer['postal_code'] ?></td>
               </tr>
               <tr>
-                <th scope="row">住所</th>
-                <td><?= $customer['address'] . $customer['house_num'] ?></td>
+                <th scope="row">
+                  住所
+                </th>
+                <td><?= $customer['address'] . $customer['house_num'] ?>
+                </td>
               </tr>
               <tr>
-                <th scope="row">電話番号</th>
-                <td><?= $customer['telephone_num'] ?></td>
+                <th scope="row">
+                  電話番号
+                </th>
+                <td><?= $customer['telephone_num'] ?>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -104,9 +118,13 @@ if (isset($_POST['is_customer_flag'])) {
               <?php $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
               foreach ($deliveries as $delivery) { ?>
                 <tr>
-                  <td><?= $delivery['name'] ?> 様</td>
-                  <td><?= $delivery['postal_code'] ?></td>
-                  <td><?= $delivery['address'] . $delivery['house_num'] ?></td>
+                  <td><?= $delivery['name'] ?>
+                    様
+                  </td>
+                  <td><?= $delivery['postal_code'] ?>
+                  </td>
+                  <td><?= $delivery['address'] . $delivery['house_num'] ?>
+                  </td>
                   <td>
                     <form action="delivery_edit.php" method="post" class="d-flex align-items-center justify-content-center">
                       <input type="hidden" name="id" value="<?php echo $delivery['id'] ?>">
