@@ -53,7 +53,7 @@ $message = htmlspecialchars($message);
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
-    <h1 class="text-center mt-5 mb-5">商品登録フォーム</h1>
+    <h1 class="text-center my-5">商品登録フォーム</h1>
     <div class="col-sm-10">
       <?= $message; ?>
       <form action="item_input.php" method="post" enctype="multipart/form-data">
@@ -123,7 +123,7 @@ $message = htmlspecialchars($message);
     </div>
   </div>
   <div class="row d-flex justify-content-center">
-    <div class="col-md-10 d-flex flex-row-reverse">
+    <div class="col-sm-10 d-flex flex-row-reverse">
       <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg mt-3">戻る</button>
     </div>
   </div>

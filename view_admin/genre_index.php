@@ -58,7 +58,7 @@ $message = htmlspecialchars($message);
       </div>
     </div>
   </form>
-  <h1 class="text-center mt-5 mb-5">ジャンル一覧</h1>
+  <h1 class="text-center my-5">ジャンル一覧</h1>
   <div class="row d-flex align-items-center justify-content-center">
     <div class="col-md-10">
       <?= $message; ?>

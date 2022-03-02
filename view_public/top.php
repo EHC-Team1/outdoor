@@ -68,7 +68,6 @@ $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
                     <h5 class="card-title"><?= $article['title'] ?></h5>
                     <p class="card-text">
                       <?php
-                      $article['body'];
                       if (mb_strlen($article['body']) > 100) {
                         $body_start = mb_substr($article['body'], 0, 100);
                         echo ($body_start . "・・・・");

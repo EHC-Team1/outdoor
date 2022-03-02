@@ -67,17 +67,17 @@ class ArticleModel
           $article_image = $article_image['tmp_name'] . $date["year"] . $date["mon"] . $date["mday"] . $date["hours"] . $date["minutes"] . $date["seconds"];
           $article_image = hash("sha256", $article_image);
           // SQL文　
-          $articles = $pdo->prepare(
+          $article = $pdo->prepare(
             "INSERT INTO articles ( title, body, article_image, extension, raw_data, is_status, created_at, updated_at) VALUES ( :title, :body, :article_image, :extension, :raw_data, :is_status, now(), now());"
           );
           // 値をセット
-          $articles->bindParam(':title', $title, PDO::PARAM_STR);
-          $articles->bindParam(':body', $body, PDO::PARAM_STR);
-          $articles->bindValue(':article_image', $article_image, PDO::PARAM_STR);
-          $articles->bindValue(':extension', $extension, PDO::PARAM_STR);
-          $articles->bindValue(':raw_data', $raw_data, PDO::PARAM_STR);
-          $articles->bindParam(':is_status', $is_status, PDO::PARAM_INT);
-          $articles->execute();
+          $article->bindParam(':title', $title, PDO::PARAM_STR);
+          $article->bindParam(':body', $body, PDO::PARAM_STR);
+          $article->bindValue(':article_image', $article_image, PDO::PARAM_STR);
+          $article->bindValue(':extension', $extension, PDO::PARAM_STR);
+          $article->bindValue(':raw_data', $raw_data, PDO::PARAM_STR);
+          $article->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+          $article->execute();
         } catch (PDOException $Exception) {
           die('接続エラー：' . $Exception->getMessage());
         }
@@ -88,14 +88,14 @@ class ArticleModel
           // DB接続
           $pdo = $this->db_connect();
           // SQL文
-          $articles = $pdo->prepare(
+          $article = $pdo->prepare(
             "INSERT INTO articles ( title, body, is_status, created_at, updated_at) VALUES (:title, :body, :is_status, now(), now());"
           );
           // 値をセット
-          $articles->bindParam(':title', $title, PDO::PARAM_STR);
-          $articles->bindParam(':body', $body, PDO::PARAM_STR);
-          $articles->bindParam(':is_status', $is_status, PDO::PARAM_INT);
-          $articles->execute();
+          $article->bindParam(':title', $title, PDO::PARAM_STR);
+          $article->bindParam(':body', $body, PDO::PARAM_STR);
+          $article->bindParam(':is_status', $is_status, PDO::PARAM_INT);
+          $article->execute();
         } catch (PDOException $Exception) {
           die('接続エラー：' . $Exception->getMessage());
         }
@@ -197,6 +197,21 @@ class ArticleModel
     return $articles;
   }
 
+  // public_indexページング用データ数取得
+  public function page_count_admin_index()
+  {
+    try {
+      $pdo = $this->db_connect();
+      $pages = $pdo->prepare(
+        "SELECT COUNT(*) id FROM articles"
+      );
+      $pages->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $pages;
+  }
+
   // 記事の一覧表示(管理者側)
   public function admin_index()
   {
@@ -251,21 +266,21 @@ class ArticleModel
   }
 
   // 記事の編集
-  public function edit()
+  public function edit($article_id)
   {
-    $id = $_POST['id'];
+    $id = $article_id;
     try {
       // DBに接続
       $pdo = $this->db_connect();
       // SQL文 一致したidのデータを抽出
-      $articles = $pdo->prepare(
+      $article = $pdo->prepare(
         "SELECT * FROM articles WHERE id=$id"
       );
-      $articles->execute();
+      $article->execute();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
-    return $articles;
+    return $article;
   }
 
   // 記事の更新
@@ -380,11 +395,11 @@ class ArticleModel
       // DBに接続
       $pdo = $this->db_connect();
       // SQL文 一致したidの全データを削除
-      $articles = $pdo->prepare(
+      $article = $pdo->prepare(
         "DELETE FROM articles WHERE id=:id"
       );
-      $articles->bindParam(':id', $id, PDO::PARAM_INT);
-      $articles->execute();
+      $article->bindParam(':id', $id, PDO::PARAM_INT);
+      $article->execute();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
