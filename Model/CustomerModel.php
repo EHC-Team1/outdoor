@@ -42,7 +42,7 @@ class CustomerModel
     // $password2 = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password2']);
 
     // 変数をセッションに格納
-    $_SESSION['signup'] = ['name_last' => $name_last, 'name_first' => $name_first, 'email' => $email, 'postal_code' => $postal_code, 'address' => $address, 'house_num' => $house_num, 'telephone_num' => $telephone_num, 'password' => $password ];
+    $_SESSION['signup'] = ['name_last' => $name_last, 'name_first' => $name_first, 'email' => $email, 'postal_code' => $postal_code, 'address' => $address, 'house_num' => $house_num, 'telephone_num' => $telephone_num, 'password' => $password];
 
     // 各値が入力されている場合
     if ($_POST['name_last'] && $_POST['name_first'] && $_POST['email'] && $_POST['email'] && $_POST['postal_code'] && $_POST['address'] && $_POST['house_num'] && $_POST['telephone_num'] && $_POST['password']) {
@@ -143,7 +143,9 @@ class CustomerModel
     try {
       // DB接続
       $pdo = $this->db_connect();
-      $customers = $pdo->prepare('INSERT INTO customers ( name_last, name_first, email, postal_code, address, house_num, telephone_num, password ) VALUES( :name_last, :name_first, :email, :postal_code, :address, :house_num, :telephone_num, :password )');
+      $customers = $pdo->prepare(
+        'INSERT INTO customers ( name_last, name_first, email, postal_code, address, house_num, telephone_num, password ) VALUES( :name_last, :name_first, :email, :postal_code, :address, :house_num, :telephone_num, :password )'
+      );
       // BDのカラムへ、各値をセット
       $customers->bindParam(':name_last', $name_last, PDO::PARAM_STR);
       $customers->bindParam(':name_first', $name_first, PDO::PARAM_STR);
@@ -183,8 +185,9 @@ class CustomerModel
       // 抽出データを配列に格納
       $result = $customers->fetch(PDO::FETCH_ASSOC);
 
-      // ハッシュ化したパスワードの認証
-      if (password_verify($password, $result['password'])) {
+
+      // ハッシュ化したパスワードの認証 & 退会済みユーザーではないことを確認
+      if (password_verify($password, $result['password']) && $result['is_customer_flag'] == 0) {
         // ログイン認証に成功した場合
         // loginセッションを削除
         unset($_SESSION['login']['email'], $_SESSION['password']);
@@ -225,20 +228,50 @@ class CustomerModel
   }
 
 
+  // customer_indexページング用データ数取得
+  public function page_count_admin_index()
+  {
+    try {
+      $pdo = $this->db_connect();
+      $pages = $pdo->prepare(
+        "SELECT COUNT(*) id FROM customers"
+      );
+      $pages->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $pages;
+  }
+
+
   // ユーザー情報の一覧表示
   public function index()
   {
-    try {
-      // DBに接続
-      $pdo = $this->db_connect();
+    // 退会済みユーザーのみを取得
+    if (isset($_GET['secession_members'])) {
+      try {
+        // DBに接続
+        $pdo = $this->db_connect();
+        $customers = $pdo->prepare(
+          "SELECT * FROM customers WHERE is_customer_flag = 1"
+        );
+        $customers->execute();
+      } catch (PDOException $Exception) {
+        exit("接続エラー：" . $Exception->getMessage());
+      }
 
-      // SQL文 customersテーブルの情報を全て抽出
-      $customers = $pdo->prepare(
-        "SELECT * FROM customers"
-      );
-      $customers->execute();
-    } catch (PDOException $Exception) {
-      exit("接続エラー：" . $Exception->getMessage());
+      // 会員ユーザーのみを取得
+    } else {
+      try {
+        // DBに接続
+        $pdo = $this->db_connect();
+        $customers = $pdo->prepare(
+          "SELECT * FROM customers WHERE is_customer_flag = 0"
+        );
+        $customers->execute();
+      } catch (PDOException $Exception) {
+        exit("接続エラー：" . $Exception->getMessage());
+      }
     }
     return $customers;
   }
@@ -276,7 +309,9 @@ class CustomerModel
     try {
       // DBに接続
       $pdo = $this->db_connect();
-      $customer = $pdo->prepare( "UPDATE customers SET name_last = :name_last, name_first = :name_first, email = :email, postal_code = :postal_code, address = :address, house_num = :house_num, telephone_num = :telephone_num WHERE id = $customer_id" );
+      $customer = $pdo->prepare(
+        "UPDATE customers SET name_last = :name_last, name_first = :name_first, email = :email, postal_code = :postal_code, address = :address, house_num = :house_num, telephone_num = :telephone_num WHERE id = $customer_id"
+      );
       $customer->bindParam('name_last', $name_last, PDO::PARAM_STR);
       $customer->bindParam('name_first', $name_first, PDO::PARAM_STR);
       $customer->bindParam('email', $email, PDO::PARAM_STR);
@@ -290,6 +325,73 @@ class CustomerModel
       header('Location: mypage.php');
     }
   }
+
+
+  // ユーザー退会(ユーザー側)
+  public function is_customer_flag()
+  {
+    $id = $_POST['id'];
+    $is_customer_flag = 1;
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $customer_status = $pdo->prepare(
+        "UPDATE customers SET is_customer_flag = :is_customer_flag WHERE id = $id"
+      );
+      $customer_status->bindParam('is_customer_flag', $is_customer_flag, PDO::PARAM_INT);
+      $customer_status->execute();
+    } catch (PDOException $Exception) {
+      die('接続エラー：' . $Exception->getMessage());
+    }
+    // 処理後、ログアウトしてTOPへ画面遷移
+    $pdo = new CustomerModel();
+    $customer_status = $pdo->logout();
+    header('location: top.php');
+  }
+
+
+  // ユーザー退会(管理者側)
+  public function admin_customer_flag($id, $secession_member_id)
+  {
+    $id = $id;
+    $secession_member_id = $secession_member_id;
+
+    // 再入会処理
+    if ($secession_member_id) {
+      $is_customer_flag = 0;
+      try {
+        // DBに接続
+        $pdo = $this->db_connect();
+        $customer_status = $pdo->prepare(
+          "UPDATE customers SET is_customer_flag = :is_customer_flag WHERE id = $secession_member_id"
+        );
+        $customer_status->bindParam('is_customer_flag', $is_customer_flag, PDO::PARAM_INT);
+        $customer_status->execute();
+      } catch (PDOException $Exception) {
+        die('接続エラー：' . $Exception->getMessage());
+      }
+      // 処理後、ユーザー一覧(会員タグ)へ画面遷移
+      header('location: customer_index.php');
+
+      // 退会処理
+    } else {
+      $is_customer_flag = 1;
+      try {
+        // DBに接続
+        $pdo = $this->db_connect();
+        $customer_status = $pdo->prepare(
+          "UPDATE customers SET is_customer_flag = :is_customer_flag WHERE id = $id"
+        );
+        $customer_status->bindParam('is_customer_flag', $is_customer_flag, PDO::PARAM_INT);
+        $customer_status->execute();
+      } catch (PDOException $Exception) {
+        die('接続エラー：' . $Exception->getMessage());
+      }
+      // 処理後、ユーザー一覧(退会済みタグ)へ画面遷移
+      header('location: customer_index.php?secession_members');
+    }
+  }
+
 
   public function logout()
   {

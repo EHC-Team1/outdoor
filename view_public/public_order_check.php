@@ -14,14 +14,26 @@ $pdo = new CartItemModel();
 // indexメソッド呼び出し
 $cart_items = $pdo->index();
 
-// 注文を確定するボタンが押された場合
+// 注文を確定するボタンが押された場合⓵
 if (isset($_POST['fixed_order'])) {
   // Orderクラスを呼び出し
   $pdo = new OrderModel();
-  // inputメソッドを呼び出し
+  // inputメソッドを呼び出してordersテーブルへ格納
   $order = $pdo->input();
   header('Location: public_order_complete.php');
 }
+// 注文を確定するボタンが押された場合⓶
+if (isset($_POST['fixed_order'])) {
+  // OrderDetailModelファイル読み込み
+  require_once('../Model/OrderDetailModel.php');
+  // OrderDetailクラス呼び出し
+  $pdo = new OrderDetailModel();
+  // inputメソッドを呼び出してorder_detailsテーブルへ格納
+  $order_details = $pdo->input();
+  header('Location: public_order_complete.php');
+}
+
+// ご自身の住所が選択された場合
 if ($_POST['delivery'] == 0) {
   // CustomerModelファイルを読み込み
   require_once('../Model/CustomerModel.php');
@@ -30,6 +42,7 @@ if ($_POST['delivery'] == 0) {
   // showメソッドを呼び出し
   $customers = $pdo->show();
   $customers = $customers->fetch(PDO::FETCH_ASSOC);
+  // 登録済の配送先が選択された場合
 } else {
   $delivery_id = $_POST['delivery_id'];
   // Deliveryクラス呼び出し
@@ -95,7 +108,8 @@ if ($_POST['delivery'] == 0) {
               <tbody>
                 <tr>
                   <th scope="col" class="table-active">送料</th>
-                  <td name="postage" value="500">500</td>
+                  <td>500</td>
+                  <input type="hidden" name="postage" value="500">
                 </tr>
                 <tr>
                   <th scope="col" class="table-active">商品合計</th>
@@ -103,7 +117,8 @@ if ($_POST['delivery'] == 0) {
                 </tr>
                 <tr>
                   <th scope="col" class="table-active">請求額</th>
-                  <td name="total_payment" value="<?= number_format($total + 500); ?>"><?= number_format($total + 500); ?></td>
+                  <td><?= number_format($total + 500); ?></td>
+                  <input type="hidden" name="total_payment" value="<?= $total + 500 ?>">
                 </tr>
               </tbody>
             </table>
@@ -112,18 +127,32 @@ if ($_POST['delivery'] == 0) {
             <h5><label class="row">支払方法</label></h5>
             <ul>
               <li class="list-unstyled">
-                <?= (htmlspecialchars($_POST['payment-way'], ENT_QUOTES)); ?>
+                <?php if ($_POST['payment-way'] == '振込み') { ?>
+                  <?= $_POST['payment-way']; ?>
+                  <input type="hidden" name="payment_way" value=0>
+                <?php } else { ?>
+                  <?= $_POST['payment-way']; ?>
+                  <input type="hidden" name="payment_way" value=1>
+                <?php } ?>
+                <!-- <input type="hidden" name="payment-way" value=0> -->
               </li>
             </ul>
             <h5><label class="row">お届け先</label></h5>
             <ul>
               <li class="list-unstyled">
-                <?php
-                if ($_POST['delivery'] == 0) {
-                  echo ($customers['postal_code'] . $customers['address'] . $customers['name_last'] . $customers['name_first']);
-                } else {
-                  echo ($customers['postal_code'] . $customers['address'] . $customers['name']);
-                } ?>
+                <?php if ($_POST['delivery'] == 0) { ?>
+                  <?= '〒' . '&nbsp' . substr_replace($customers['postal_code'], '-', 3, 0) . '&nbsp' . $customers['address'] . $customers['house_num'] . '&nbsp' . $customers['name_last'] . $customers['name_first']; ?>
+                  <input type="hidden" name="postal_code" value="<?= $customers['postal_code'] ?>">
+                  <input type="hidden" name="address" value="<?= $customers['address'] ?>">
+                  <input type="hidden" name="house_num" value="<?= $customers['house_num'] ?>">
+                  <input type="hidden" name="orderer_name" value="<?= $customers['name_last'] . $customers['name_first'] ?>">
+                <?php } else { ?>
+                  <?= '〒' . '&nbsp' . substr_replace($customers['postal_code'], '-', 3, 0) . '&nbsp' . $customers['address'] . $customers['house_num'] . '&nbsp' . $customers['name']; ?>
+                  <input type="hidden" name="postal_code" value="<?= $customers['postal_code'] ?>">
+                  <input type="hidden" name="address" value="<?= $customers['address'] ?>">
+                  <input type="hidden" name="house_num" value="<?= $customers['house_num'] ?>">
+                  <input type="hidden" name="orderer_name" value="<?= $customers['name'] ?>">
+                <?php } ?>
               </li>
             </ul>
           </div>
