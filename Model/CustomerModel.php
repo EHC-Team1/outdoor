@@ -350,7 +350,7 @@ class CustomerModel
 
 
   // ユーザー退会(ユーザー側)
-  public function is_customer_flag($id)
+  public function public_switch_status($id)
   {
     $id = $id;
     $is_customer_flag = 1;
