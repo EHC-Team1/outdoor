@@ -105,32 +105,30 @@ if (isset($_POST['article_update'])) {
           </div>
         <?php } ?>
 
-        <!-- 公開記事に設定されている場合 -->
-        <?php if ($article["is_status"] == 1) { ?>
-          <div class="mb-3 d-flex align-items-center justify-content-evenly text-center">
-            <label><input type="radio" class="btn-check" name="is_status" value="disclosure" id="article_update_is_status" checked>
-              <div class="btn btn-outline-success">公開記事に設定中</div>
-            </label>
-            <label>
-              <input type="radio" class="btn-check" name="is_status" value="private">
-              <div class="btn btn-outline-danger">非公開に設定する</div>
-            </label>
-          </div>
-        <?php } ?>
-
-        <!-- 非公開記事に設定されている場合 -->
-        <?php if ($article["is_status"] == 0) { ?>
-          <div class="mb-3 d-flex align-items-center justify-content-evenly text-center">
-            <label><input type="radio" class="btn-check" name="is_status" value="disclosure" id="article_update_is_status">
-              <div class="btn btn-outline-success">公開記事に設定する</div>
-            </label>
-            <label>
-              <input type="radio" class="btn-check" name="is_status" value="private" checked>
-              <div class="btn btn-outline-danger">非公開記事に設定中</div>
-            </label>
-          </div>
-        <?php } ?>
-
+        <div class="row mb-3 d-flex justify-content-evenly">
+          <!-- 公開記事に設定されている場合 -->
+          <?php if ($article["is_status"] == 1) { ?>
+            <div class="col-sm-3 text-center">
+              <input type="radio" class="btn-check" name="is_status" id="success-outlined" value="disclosure" autocomplete="off" checked>
+              <label class="btn btn-outline-success" for="success-outlined">公開記事に設定中</label>
+            </div>
+            <div class="col-sm-3 text-center">
+              <input type="radio" class="btn-check" name="is_status" id="danger-outlined" value="private" autocomplete="off">
+              <label class="btn btn-outline-danger" for="danger-outlined">非公開に設定する</label>
+            </div>
+          <?php } ?>
+          <!-- 非公開記事に設定されている場合 -->
+          <?php if ($article["is_status"] == 0) { ?>
+            <div class="col-sm-3 text-center">
+              <input type="radio" class="btn-check" name="is_status" id="success-outlined" value="disclosure" autocomplete="off">
+              <label class="btn btn-outline-success" for="success-outlined">公開記事に設定する</label>
+            </div>
+            <div class="col-sm-3 text-center">
+              <input type="radio" class="btn-check" name="is_status" id="danger-outlined" value="private" autocomplete="off" checked>
+              <label class="btn btn-outline-danger" for="danger-outlined">非公開記事に設定中</label>
+            </div>
+          <?php } ?>
+        </div>
         <div class="d-flex align-items-center justify-content-center">
           <input type="hidden" name="id" value="<?= $article['id'] ?>">
           <button type="submit" name="article_update" class="btn btn-outline-success btn-lg" id="article_update_btn">記事を更新する</button>
