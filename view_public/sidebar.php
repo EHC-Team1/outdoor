@@ -2,35 +2,6 @@
 
 // 「検索」ボタンが押された場合
 if (isset($_POST['search'])) {
-  // 検索ワードが入力されているかチェック
-  if ($_POST['keyword']) {
-    // セッションに値を挿入
-    $_SESSION['search'] = $_POST['keyword'];
-
-    // Itemが選択された場合
-    if ($_POST['flexRadioDefault'] == 1) {
-      // ItemModelファイルを読み込み
-      require_once('../Model/ItemModel.php');
-      // Itemクラスを呼び出し
-      $pdo = new ItemModel();
-      // search_indexメソッドを呼び出し
-      $search_items = $pdo->search_index();
-    }
-
-    // Articleが選択された場合
-    if ($_POST['flexRadioDefault'] == 2) {
-      // ArticleModelファイルを読み込み
-      require_once('../Model/ArticleModel.php');
-      // Articleクラスを呼び出し
-      $pdo = new ArticleModel();
-      // search_indexメソッドを呼び出し
-      $search_articles = $pdo->search_index();
-    }
-
-    // 検索ワードが入力されていない場合
-  } else {
-    header('Location: ../view_public/top.php');
-  }
 
   // 押されていない状態
 } else {

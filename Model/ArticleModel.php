@@ -119,14 +119,14 @@ class ArticleModel
     try {
       // db_connectメソッドを呼び出す
       $pdo = $this->db_connect();
-      $article = $pdo->prepare(
+      $article_show = $pdo->prepare(
         "SELECT * FROM articles WHERE id = $article_id"
       );
-      $article->execute();
+      $article_show->execute();
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
     }
-    return $article;
+    return $article_show;
   }
 
   public function article_item($article_id)
@@ -237,14 +237,14 @@ class ArticleModel
     $article_id = $article_id;
     try {
       $pdo = $this->db_connect();
-      $article = $pdo->prepare(
+      $article_show = $pdo->prepare(
         "SELECT * FROM articles WHERE id = $article_id AND is_status = 1"
       );
-      $article->execute();
+      $article_show->execute();
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
     }
-    return $article;
+    return $article_show;
   }
 
   // 記事の検索

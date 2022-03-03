@@ -320,7 +320,7 @@
       try {
         $pdo = $this->db_connect();
         $items = $pdo->prepare(
-          "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, items.is_status AS is_status, genres.name AS genre_name FROM items, genres WHERE items.genre_id = genres.id AND items.is_status = 1 ORDER BY items.updated_at DESC LIMIT {$start}, 15"
+          "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, items.is_status AS is_status, genres.name AS genre_name FROM items, genres WHERE items.genre_id = genres.id AND items.is_status = 1 ORDER BY items.updated_at DESC LIMIT {$start}, 16"
         );
         $items->execute();
       } catch (PDOException $Exception) {
@@ -371,7 +371,7 @@
         // db_connectメソッドを呼び出す
         $pdo = $this->db_connect();
         $items = $pdo->prepare(
-          "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE genres.id = items.genre_id AND items.genre_id = $genre_id AND items.is_status = 1 ORDER BY items.updated_at DESC LIMIT {$start}, 15"
+          "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE genres.id = items.genre_id AND items.genre_id = $genre_id AND items.is_status = 1 ORDER BY items.updated_at DESC LIMIT {$start}, 16"
         );
         $items->execute();
       } catch (PDOException $Exception) {
