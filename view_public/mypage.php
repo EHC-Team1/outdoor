@@ -36,8 +36,8 @@ if (isset($_POST['is_customer_flag'])) {
   $id = $_POST['id'];
   // Customerクラスを呼び出し
   $pdo = new CustomerModel();
-  // is_customer_flagメソッドを呼び出し
-  $customer_status = $pdo->is_customer_flag($id);
+  // public_switch_statusメソッドを呼び出し
+  $customer_status = $pdo->public_switch_status($id);
 }
 
 
