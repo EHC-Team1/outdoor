@@ -14,7 +14,6 @@ require_once('../Model/ArticleModel.php');
 
 // 「記事追加」ボタンが押された場合
 if (isset($_POST['input_article'])) {
-
   // POSTデータをSESSIONに格納
   $_SESSION['article'] = [
     'title' => htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'),
@@ -24,23 +23,18 @@ if (isset($_POST['input_article'])) {
   // Articleクラスを呼び出し
   $pdo = new ArticleModel();
   // inputメソッド呼び出し
-  $articles = $pdo->input();
+  $article = $pdo->input();
   // エラーメッセージを$messageに格納
-  $message = $articles;
+  $message = $article;
 
   // 「削除」ボタンが押された場合
 } elseif (isset($_POST['delete'])) {
   // ArticleModelファイルを読み込み
   $pdo = new ArticleModel();
   // deleteメソッドを呼び出し
-  $articles = $pdo->delete();
+  $article = $pdo->delete();
   // サクセスメッセージを$messageに格納
-  $message = $articles;
-
-  //  Articleクラスを呼び出し
-  $pdo = new ArticleModel();
-  // indexメソッドを呼び出し 記事一覧を再取得
-  $articles = $pdo->index();
+  $message = $article;
 
   // 押されていない状態
 } else {
@@ -50,124 +44,136 @@ if (isset($_POST['input_article'])) {
   $message = "";
 }
 
+// 現在のページ数を取得
+if (isset($_GET['page'])) {
+  $page = (int)$_GET['page'];
+} else {
+  $page = 1;
+}
+// スタートのページを計算
+if ($page > 1) {
+  $start = ($page * 15) - 15;
+} else {
+  $start = 0;
+}
+
+// articlesテーブルから全データ件数を取得
+$pdo = new ArticleModel();
+$pages = $pdo->page_count_admin_index();
+$page_num = $pages->fetchColumn();
+// ページネーションの数を取得
+$pagination = ceil($page_num / 15);
+
 //  Articleクラスを呼び出し
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
-$articles = $pdo->admin_index();
+$articles = $pdo->admin_index($start);
+// モデルからreturnしてきた情報をarticlesに格納
+$articles = $articles->fetchAll(PDO::FETCH_ASSOC);
 
 $message = htmlspecialchars($message);
 ?>
-<!-- ------------------------------ 表示画面 --------------------------------- -->
+
 <?php require_once '../view_common/header.php'; ?>
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
-    <h1 class="text-center mt-5 mb-5">記事作成フォーム</h1>
-    <div class="col-md-10">
+    <h1 class="text-center my-5">記事作成フォーム</h1>
+    <div class="col-sm-10">
       <?= $message; ?>
       <form method="post" enctype="multipart/form-data">
-        <div class="form-group">
-          <div class="row">
-            <div class="col mb-2 ms-3">
-              <label>タイトル</label>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col">
-              <input type="text" name="title" class="form-control" value="<?= ($_SESSION['article']['title']) ?>" autofocus>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col mb-2 ms-4">
-              <label>本文</label>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col">
-              <textarea name="body" class="form-control" rows="7"><?= ($_SESSION['article']['body']) ?></textarea>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col mb-2">
-              <!-- <div class="row mb-2 ms-auto"> -->
-              <input type="file" name="article_image" class="form-control" value="<?= ($_SESSION['article']['article_image']) ?>">
-            </div>
-          </div>
-          <div class="row mb-3 ms-auto">
-            <p> ※容量の大きい画像はエラーになることがあります。</p>
+        <div class="row mb-2">
+          <label class="col-sm-2 col-form-label text-center">タイトル</label>
+          <div class="col-sm-10">
+            <input type="text" name="title" class="form-control" value="<?= ($_SESSION['article']['title']) ?>" autofocus>
           </div>
         </div>
-        <div class="mb-3 d-flex align-items-center justify-content-evenly text-center">
-          <label><input type="radio" class="btn-check" name="is_status" value="disclosure">
-            <div class="btn btn-outline-success">公開記事に設定する</div>
-          </label>
-          <label>
-            <input type="radio" class="btn-check" name="is_status" value="private" checked>
-            <div class="btn btn-outline-danger">非公開記事に設定する</div>
+        <div class="row mb-1">
+          <label class="col-sm-2 col-form-label text-center">本文</label>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <textarea name="body" class="form-control" rows="7"><?= ($_SESSION['article']['body']) ?></textarea>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-6">
+            <input type="file" name="article_image" class="form-control" id="formFile" value="<?= ($_SESSION['article']['article_image']) ?>">
+          </div>
+          <label class="col-sm-6 col-form-label">※容量の大きい画像はエラーになることがあります。</label>
+        </div>
+        <div class="row mb-3 d-flex justify-content-evenly">
+          <div class="col-sm-6 text-center">
+            <input type="radio" class="btn-check" name="is_status" id="success-outlined" value="disclosure" autocomplete="off">
+            <label class="btn btn-outline-success" for="success-outlined">公開記事に設定する</label>
+          </div>
+          <div class="col-sm-6 text-center">
+            <input type="radio" class="btn-check" id="danger-outlined" name="is_status" value="private" autocomplete="off" checked>
+            <label class="btn btn-outline-danger" for="danger-outlined">非公開記事に設定する</label>
+          </div>
         </div>
         <div class="d-flex align-items-center justify-content-center">
-          <button type="submit" name="input_article" class="btn btn-outline-success btn-lg">記事を追加する</button>
+          <button type="submit" name="input_article" class="btn btn-outline-primary btn-lg">記事を追加する</button>
         </div>
       </form>
-      <div class="row d-flex justify-content-center">
-        <div class="col-md-12 d-flex flex-row-reverse">
-          <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg mt-3">戻る</button>
-        </div>
+    </div>
+    <div class="row d-flex justify-content-center">
+      <div class="col-sm-10 d-flex flex-row-reverse">
+        <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg mt-3">戻る</button>
       </div>
     </div>
   </div>
-</div>
-<div class="container">
-  <form method="post">
-    <div class="row d-flex align-items-center justify-content-center mt-5">
-    </div>
-  </form>
-  <h1 class="text-center mt-5 mb-5">記事一覧</h1>
-  <div class="row d-flex align-items-center justify-content-center">
-    <div class="col-md-10">
+  <h1 class="text-center my-4">記事一覧</h1>
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm-10">
       <table class="table">
         <tbody>
-          <tr bgcolor='#BCCDCF'>
-            <th>タイトル</th>
-            <th>本文</th>
-            <th>画像</th>
-            <th>更新日時</th>
-            <th>公開ステータス</th>
-            <th></th>
-            <th></th>
-          </tr>
           <?php
           foreach ($articles as $article) {
-            $target = $article["article_image"];
-          ?>
+            $target = $article["article_image"]; ?>
             <tr>
-              <?php echo "<h4>"; ?>
-              <td><?= $article['title']; ?></td>
-              <td class="col-2"><?= nl2br($article['body']); ?></td>
-              <td>
-                <?php
-                if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") {
-                  echo ("<img src='../view_common/article_image.php?target=$target'width=200 height=200>");
-                }
-                ?>
-              </td>
-              <td><?= date('Y/m/d H:i:s', strtotime($article['updated_at'])); ?></td>
-              <td><?php if ($article['is_status'] == 0) {
-                    echo '非公開';
-                  } else {
-                    echo '' ?><?php } ?></td>
-              <?php echo "</h4>"; ?>
-              <td>
-                <form action="article_edit.php" method="post" class="d-flex align-items-center justify-content-center">
-                  <input type="hidden" name="id" value="<?php echo $article['id'] ?>">
-                  <button type="submit" name="edit" class="btn btn-outline-success">編集</button>
+              <td rowspan="2" class="align-middle col-sm-2">
+                <form class="d-flex align-items-center justify-content-center mb-4">
+                  <?php if ($article['is_status'] == 1) { ?>
+                    <button type='button' class='btn btn-success' disabled>公開中</button>
+                  <?php } else { ?>
+                    <button type='button' class='btn btn-danger' disabled>非公開</button>
+                  <?php } ?>
                 </form>
-              </td>
-              <td>
                 <form method="post" class="d-flex align-items-center justify-content-center">
-                  <input type="hidden" name="id" value="<?php echo $article['id'] ?>">
+                  <input type="hidden" name="id" value="<?= $article['id'] ?>">
                   <button type="submit" name="delete" class="btn btn-outline-danger" id="article_delete_btn">削除</button>
                 </form>
+              </td>
+              <td class="col-sm-4 text-center" rowspan="2">
+                <a href=" ../view_admin/article_edit.php?article_id=<?= $article['id'] ?>" style="text-decoration:none">
+                  <?php if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") { ?>
+                    <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
+                  <?php } ?>
+                </a>
+              </td>
+              <td class="co-sm-6 align-middle">
+                <a href=" ../view_admin/article_edit.php?article_id=<?= $article['id'] ?>" style="text-decoration:none">
+                  <h4 style="color:black"><?= $article['title'] ?></h4>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td class="co-sm-6 align-middle">
+                <a href=" ../view_admin/article_edit.php?article_id=<?= $article['id'] ?>" style="text-decoration:none">
+                  <?php
+                  $body_start = mb_substr($article['body'], 0, 40);
+                  if (mb_strlen($article['body']) > 40) { ?>
+                    <p style="color:black">
+                      <?= $body_start ?>・・・・
+                    </p>
+                  <?php } else { ?>
+                    <p style="color:black">
+                      <?= $article['body'] ?>
+                    </p>
+                  <?php } ?>
+                  <p class="text-end" style="color:black"><?= date('Y/m/d H:i:s', strtotime($article['updated_at'])); ?></p>
+                </a>
               </td>
             </tr>
           <?php } ?>
@@ -175,7 +181,9 @@ $message = htmlspecialchars($message);
       </table>
     </div>
   </div>
+  <?php require_once '../view_common/paging.php'; ?>
 </div>
+
 <!-- 削除ボタンバリデーション用jsファイル -->
 <script src="../js/article_index.js"></script>
 <?php require_once '../view_common/footer.php'; ?>

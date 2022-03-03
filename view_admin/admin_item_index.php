@@ -60,7 +60,7 @@ $message = htmlspecialchars($message);
 
 <div class="container">
   <div class="row d-flex justify-content-center">
-    <div class="col-md-11 d-flex flex-row-reverse">
+    <div class="col-sm-10 d-flex flex-row-reverse">
       <button onclick="location.href='customer_index.php'" class="btn btn-outline-secondary btn-lg mt-5">ユーザー一覧</button>
     </div>
   </div>
@@ -72,7 +72,7 @@ $message = htmlspecialchars($message);
       <button onclick="location.href='genre_index.php'" class="btn btn-outline-info btn-lg">ジャンル一覧</button>
     </div>
   </div>
-  <h1 style="text-align:center" class="mt-5 mb-5">商品一覧</h1>
+  <h1 class="text-center my-5">商品一覧</h1>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-10">
       <?= $message; ?>
@@ -96,11 +96,12 @@ $message = htmlspecialchars($message);
                 </form>
               </td>
               <td class="col-sm-3 text-center" rowspan="2">
-                <?php
-                if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") {
-                  echo ("<img src='../view_common/item_image.php?target=$target'width=200 height=200>");
-                }
-                ?>
+                <a href=" ../view_admin/item_edit.php?item_id=<?= $item['id'] ?>" style="text-decoration:none">
+                  <?php
+                  if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") { ?>
+                    <img src="../view_common/item_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
+                  <?php } ?>
+                </a>
               </td>
               <td class="co-sm-6 align-middle">
                 <a href=" ../view_admin/item_edit.php?item_id=<?= $item['id'] ?>" style="text-decoration:none">
@@ -110,11 +111,9 @@ $message = htmlspecialchars($message);
             </tr>
             <tr>
               <td class="col-sm-6 align-middle">
-                <?php
-                echo "<h4>￥";
-                echo ($item['price']);
-                echo "円</h4>"
-                ?>
+                <a href=" ../view_admin/item_edit.php?item_id=<?= $item['id'] ?>" style="text-decoration:none">
+                  <h4 style="color:black">￥<?= $item['price'] ?>円</h4>
+                </a>
               </td>
             </tr>
           <?php } ?>

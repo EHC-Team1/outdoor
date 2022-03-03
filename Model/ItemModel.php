@@ -68,7 +68,9 @@
             $item_image = $item_image['tmp_name'] . $date["year"] . $date["mon"] . $date["mday"] . $date["hours"] . $date["minutes"] . $date["seconds"];
             $item_image = hash("sha256", $item_image);
             // DBにデータを格納
-            $item = $pdo->prepare("INSERT INTO items(genre_id, article_id, name, introduction, price, item_image, extension, raw_data, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :item_image, :extension, :raw_data, :is_status, now(), now());");
+            $item = $pdo->prepare(
+              "INSERT INTO items(genre_id, article_id, name, introduction, price, item_image, extension, raw_data, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :item_image, :extension, :raw_data, :is_status, now(), now());"
+            );
             $item->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
             $item->bindParam(':article_id', $article_id, PDO::PARAM_INT);
             $item->bindParam(':name', $name, PDO::PARAM_STR);
@@ -89,7 +91,9 @@
             // db_connectメソッドを呼び出す
             $pdo = $this->db_connect();
             // DBにデータを格納
-            $item = $pdo->prepare("INSERT INTO items(genre_id, article_id, name, introduction, price, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :is_status, now(), now());");
+            $item = $pdo->prepare(
+              "INSERT INTO items(genre_id, article_id, name, introduction, price, is_status, created_at, updated_at) VALUES (:genre_id, :article_id, :name, :introduction, :price, :is_status, now(), now());"
+            );
             $item->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
             $item->bindParam(':article_id', $article_id, PDO::PARAM_INT);
             $item->bindParam(':name', $name, PDO::PARAM_STR);
@@ -383,7 +387,7 @@
       try {
         $pdo = $this->db_connect();
         $search_items = $pdo->prepare(
-          "SELECT items.id AS item_id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE items.introduction LIKE CONCAT('%',:keyword,'%') AND items.is_status = 1 AND items.genre_id = genres.id ORDER BY items.updated_at"
+          "SELECT items.id AS item_id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE items.introduction LIKE CONCAT('%',:keyword,'%') AND items.is_status = 1 AND items.genre_id = genres.id ORDER BY items.updated_at DESC"
         );
         $search_items->bindValue(':keyword', $keyword);
         $search_items->execute();

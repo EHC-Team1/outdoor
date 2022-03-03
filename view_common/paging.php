@@ -16,14 +16,25 @@
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
-        <?php }
-        for ($x = 1; $x <= $pagination; $x++) { ?>
-          <li class='page-item'>
-            <a class="page-link" href="?page=<?= $x ?>">
-              <?= $x; ?>
-            </a>
-          </li>
-        <?php }
+          <?php }
+        for ($x = 1; $x <= $pagination; $x++) {
+          // 現在のページの場合、disabledに
+          if ($x == $page) { ?>
+            <li class='page-item disabled'>
+              <a class="page-link" href="?page=<?= $x ?>">
+                <?= $x; ?>
+              </a>
+            </li>
+          <?php
+            // 現在のページでなければ有効
+          } else { ?>
+            <li class='page-item'>
+              <a class="page-link" href="?page=<?= $x ?>">
+                <?= $x; ?>
+              </a>
+            </li>
+          <?php }
+        }
         if ($pagination > $page) { ?>
           <!-- 最終ページでなければ有効 -->
           <li class="page-item">

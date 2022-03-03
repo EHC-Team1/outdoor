@@ -108,21 +108,23 @@ if (isset($_POST['buy'])) {
         <!-- 関連記事が公開状態の時に表示 -->
         <?php if ($item['article_is_status'] == 1) { ?>
           <div class='card' style='max-width: auto;'>
-            <div class="row g-0">
-              <div class="col-lg-5 d-flex align-items-center my-2">
-                <?php $target = $article["article_image"]; ?>
-                <?php if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") { ?>
-                  <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
-                <?php } ?>
-              </div>
-              <div class="col-lg-7">
-                <div class="card-body">
-                  <h5 class="card-title"><?= $article['title'] ?></h5>
-                  <p class="card-text"><?= $article['body'] ?></p>
-                  <p class="card-text"><small class="text-muted"><?= $article['updated_at'] ?></small></p>
+            <a href="../view_public/article_show.php?article_id=<?= $article["id"] ?>" class="text-dark" style="text-decoration:none">
+              <div class="row g-0">
+                <div class="col-lg-5 d-flex align-items-center my-2">
+                  <?php $target = $article["article_image"]; ?>
+                  <?php if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") { ?>
+                    <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
+                  <?php } ?>
+                </div>
+                <div class="col-lg-7">
+                  <div class="card-body">
+                    <h5 class="card-title"><?= $article['title'] ?></h5>
+                    <p class="card-text"><?= $article['body'] ?></p>
+                    <p class="card-text"><small class="text-muted"><?= $article['updated_at'] ?></small></p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </a>
           </div>
         <?php } ?>
       </div>

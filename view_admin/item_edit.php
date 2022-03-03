@@ -65,7 +65,7 @@ $articles = $pdo->admin_index();
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5">商品編集フォーム</h1>
     <div class="col-sm-10">
-      <div class="row mt-3 mb-3">
+      <div class="row my-3">
         <?php if ($item['is_status'] == 1) { ?>
           <button type='button' class='btn btn-success' disabled>販売中</button>
         <?php } else { ?>
@@ -84,8 +84,8 @@ $articles = $pdo->admin_index();
             <select name="genre_id" class="form-select">
               <option selected value="<?= $item['genre_id'] ?>"><?= $item['genre_name'] ?></option>
               <?php foreach ($genres as $genre) { ?>
-                <option value="<?php echo ($genre['id']) ?>">
-                  <?php echo ($genre['name']) ?>
+                <option value="<?= $genre['id'] ?>">
+                  <?= $genre['name'] ?>
                 </option>
               <?php } ?>
             </select>
@@ -94,8 +94,8 @@ $articles = $pdo->admin_index();
             <select name="article_id" class="form-select">
               <option selected value="<?= $item['article_id'] ?>"><?= $item['article_title'] ?></option>
               <?php foreach ($articles as $article) { ?>
-                <option value="<?php echo ($article['id']) ?>">
-                  <?php echo ($article['title']) ?>
+                <option value="<?= $article['id'] ?>">
+                  <?= $article['title'] ?>
                 </option>
               <?php } ?>
             </select>
@@ -111,8 +111,8 @@ $articles = $pdo->admin_index();
         </div>
         <div class="row mb-2">
           <div class="col text-center">
-            <?php $target = $item["item_image"]; ?>
-            <?php if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") { ?>
+            <?php $target = $item["item_image"];
+            if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") { ?>
               <img src="../view_common/item_image.php?target=<?= $target ?>" alt="item_image" class="img-fluid">
             <?php } ?>
           </div>
@@ -153,7 +153,7 @@ $articles = $pdo->admin_index();
     </div>
   </div>
   <div class="row d-flex justify-content-center mt-3 mb-5">
-    <div class="col-md-10 d-flex justify-content-evenly">
+    <div class="col-sm-10 d-flex justify-content-evenly">
       <form method="POST">
         <input type="hidden" name="id" value="<?= $item['item_id'] ?>">
         <button type="submit" name="delete_item" class="btn btn-outline-danger btn-lg" id="delete_btn">削除する</button>
