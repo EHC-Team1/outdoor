@@ -65,13 +65,9 @@ $articles = $pdo->admin_index();
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5">商品編集フォーム</h1>
     <div class="col-sm-10">
-      <div class="row my-3">
-        <?php if ($item['is_status'] == 1) { ?>
-          <button type='button' class='btn btn-success' disabled>販売中</button>
-        <?php } else { ?>
-          <button type='button' class='btn btn-danger' disabled>販売停止中</button>
-        <?php } ?>
-      </div>
+
+
+
       <form method="post" enctype="multipart/form-data">
         <div class="row mb-3">
           <label class="col-sm-2 col-form-label text-center">商品名</label>
@@ -137,14 +133,27 @@ $articles = $pdo->admin_index();
           <label class="col-sm-6 col-form-label text-center">※容量の大きい画像はエラーになることがあります。</label>
         </div>
         <div class="row mb-3 d-flex justify-content-evenly">
-          <div class="col-sm-3 text-center">
-            <input type="radio" class="btn-check" name="is_status" id="success-outlined" value="buy_able" autocomplete="off" checked>
-            <label class="btn btn-outline-success" for="success-outlined">購入可能状態</label>
-          </div>
-          <div class="col-sm-3 text-center">
-            <input type="radio" class="btn-check" name="is_status" id="danger-outlined" value="buy_unable" autocomplete="off">
-            <label class="btn btn-outline-danger" for="danger-outlined">販売停止状態</label>
-          </div>
+          <!-- 販売可能状態に設定中 -->
+          <?php if ($item['is_status'] == 1) { ?>
+            <div class="col-sm-3 text-center">
+              <input type="radio" class="btn-check" name="is_status" id="success-outlined" value="buy_able" autocomplete="off" checked>
+              <label class="btn btn-outline-success" for="success-outlined">購入可能状態に設定中</label>
+            </div>
+            <div class="col-sm-3 text-center">
+              <input type="radio" class="btn-check" name="is_status" id="danger-outlined" value="buy_unable" autocomplete="off">
+              <label class="btn btn-outline-danger" for="danger-outlined">販売停止状態にする</label>
+            </div>
+            <!-- 販売停止状態に設定中 -->
+          <?php } else { ?>
+            <div class="col-sm-3 text-center">
+              <input type="radio" class="btn-check" name="is_status" id="success-outlined" value="buy_able" autocomplete="off">
+              <label class="btn btn-outline-success" for="success-outlined">購入可能状態にする</label>
+            </div>
+            <div class="col-sm-3 text-center">
+              <input type="radio" class="btn-check" name="is_status" id="danger-outlined" value="buy_unable" autocomplete="off" checked>
+              <label class="btn btn-outline-danger" for="danger-outlined">販売停止状態に設定中</label>
+            </div>
+          <?php } ?>
         </div>
         <div class="d-flex align-items-center justify-content-center">
           <button type="submit" name="update_item" class="btn btn-outline-success btn-lg" id="item_update_btn">商品を更新する</button>
