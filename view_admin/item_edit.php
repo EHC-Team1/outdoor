@@ -56,7 +56,6 @@ $pdo = new ArticleModel();
 // indexメソッドを呼び出し
 $articles = $pdo->admin_index();
 
-
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -65,9 +64,6 @@ $articles = $pdo->admin_index();
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5">商品編集フォーム</h1>
     <div class="col-sm-10">
-
-
-
       <form method="post" enctype="multipart/form-data">
         <div class="row mb-3">
           <label class="col-sm-2 col-form-label text-center">商品名</label>
