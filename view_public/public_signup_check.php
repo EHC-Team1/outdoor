@@ -8,17 +8,17 @@ if (isset($_POST['input'])) {
   $pdo = new CustomerModel();
 
   // CustomerModelのinputメソッドを呼び出して登録処理 → 登録完了画面へ
-  $customers = $pdo->input();
+  $customer = $pdo->input();
 }
 ?>
-<!-- ------------------------------ 表示画面 --------------------------------- -->
+
 <?php require_once '../view_common/header.php'; ?>
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 style="text-align:center" class="mt-5">アカウント新規作成</h1>
     <h6 class="text-center mb-5">下記の内容でよろしければ、「登録する」ボタンを押して下さい。</h6>
-    <div class="col-md-8">
+    <div class="col-sm-8">
       <div style="text-align:center">
         <div class="row p-2 border-bottom">
           <div class="col-md-6">ユーザー名</div>
@@ -49,7 +49,7 @@ if (isset($_POST['input'])) {
           <div class="col-md-6"><?= $_SESSION['signup']['password'] ?></div>
         </div>
       </div>
-      <div class="d-flex align-items-center justify-content-evenly mt-5 md-5">
+      <div class="d-flex align-items-center justify-content-evenly my-5">
         <button onclick="location.href='public_signup.php'" class="btn btn-outline-secondary btn-lg">戻る</button>
         <form method="post">
           <button type="submit" name="input" class="btn btn-outline-primary btn-lg">登録する</button>

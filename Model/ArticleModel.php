@@ -255,7 +255,7 @@ class ArticleModel
       $pdo = $this->db_connect();
       // キーワードがタイトル又は本文に入っているものを、更新日の降順で抽出
       $search_articles = $pdo->prepare(
-        "SELECT * FROM articles WHERE body LIKE CONCAT('%',:keyword_body,'%') OR title LIKE CONCAT('%',:keyword_title,'%') AND is_status = 1 ORDER BY updated_at DESC"
+        "SELECT * FROM articles WHERE body LIKE CONCAT('%',:keyword_body,'%') AND is_status = 1 OR title LIKE CONCAT('%',:keyword_title,'%') AND is_status = 1 ORDER BY updated_at DESC"
       );
       $search_articles->bindValue(':keyword_body', $keyword);
       $search_articles->bindValue(':keyword_title', $keyword);
