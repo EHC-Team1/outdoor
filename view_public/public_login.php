@@ -31,14 +31,14 @@ if (isset($_POST['login'])) {
 $message = htmlspecialchars($message);
 
 ?>
-<!-- ------------------------------ 表示画面 --------------------------------- -->
+
 <?php require_once('../view_common/header.php'); ?>
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
     <h1 style="text-align:center" class="mt-5">会員ログイン</h1>
     <h6 class="text-center mb-5">商品のご購入には、ログインが必要です。</h6>
-    <div class="col-md-8">
+    <div class="col-sm-8">
       <?= $message; ?>
       <form method="post" action="">
         <div style="text-align:center">
@@ -55,7 +55,7 @@ $message = htmlspecialchars($message);
             </div>
           </div>
         </div>
-        <div class="d-flex align-items-center justify-content-evenly mt-5 md-5">
+        <div class="d-flex align-items-center justify-content-evenly my-5">
           <button type="submit" formaction="public_signup.php" name="signup" class="btn btn-outline-success btn-lg">新規登録</button>
           <button type="submit" name="login" class="btn btn-outline-primary btn-lg">ログイン</button>
         </div>
@@ -63,5 +63,6 @@ $message = htmlspecialchars($message);
     </div>
   </div>
 </div>
+
 
 <?php require_once('../view_common/footer.php'); ?>

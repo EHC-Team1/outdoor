@@ -3,11 +3,11 @@
 session_start();
 
 // 管理者としてログインしているかチェック
-// if (isset($_SESSION['admin'])) {
-// } else {
-//   header("Location: admin_login.php");
-//   die();
-// }
+if (isset($_SESSION['admin'])) {
+} else {
+  header("Location: admin_login.php");
+  die();
+}
 
 // CustomerModelファイルを読み込み
 require_once('../Model/CustomerModel.php');
@@ -15,6 +15,7 @@ require_once('../Model/CustomerModel.php');
 // 現在のページ数を取得
 if (isset($_GET['page'])) {
   $page = (int)$_GET['page'];
+  var_dump($page);
 } else {
   $page = 1;
 }
@@ -25,7 +26,7 @@ if ($page > 1) {
   $start = 0;
 }
 
-// customerテーブルから全データ件数を取得
+// customerテーブルから、会員の全データ件数を取得
 $pdo = new CustomerModel();
 $pages = $pdo->page_count_admin_index();
 $page_num = $pages->fetchColumn();
@@ -35,21 +36,31 @@ $pagination = ceil($page_num / 15);
 // Customerクラスを呼び出し
 $pdo = new CustomerModel();
 // indexメソッドを呼び出し
-$customers = $pdo->index();
+$customers = $pdo->index($start);
+// モデルからreturnしてきた情報を変数に格納
+$customers = $customers->fetchAll(PDO::FETCH_ASSOC);
 
 
 // 「退会済み」タグ クリックでユーザー一覧切り替え
 if (isset($_GET['secession_members'])) {
   // Customerクラスを呼び出し
   $pdo = new CustomerModel();
+
+  // customerテーブルから、退会済み会員の全データ件数を取得
+  $pages = $pdo->page_count_admin_index();
+  $page_num = $pages->fetchColumn();
+  // ページネーションの数を取得
+  $pagination = ceil($page_num / 15);
+
   // admin_is_customer_flagメソッドを呼び出し
-  $customers = $pdo->index();
+  $customers = $pdo->index($start);
+  // モデルからreturnしてきた情報を変数に格納
+  $customers = $customers->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // 「会員」タグ選択時、「名前」クリックで退会処理
 if (isset($_GET['id'])) {
   $id = $_GET["id"];
-
   // Customerクラスを呼び出し
   $pdo = new CustomerModel();
   // admin_is_customer_flagメソッドを呼び出し
@@ -76,81 +87,23 @@ if (isset($_GET['secession_member_id'])) {
     </div>
   </form>
   <div class="row d-flex justify-content-center">
-    <div class="col-md-10 d-flex flex-row-reverse">
+    <div class="col-sm-10 d-flex flex-row-reverse">
       <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg mt-3">戻る</button>
     </div>
   </div>
-  <h1 class="text-center mt-5 mb-5">ユーザー一覧</h1>
+  <h1 class="text-center my-5">ユーザー一覧</h1>
   <div class="row d-flex align-items-center justify-content-center">
-    <div class="col-md-10">
+    <div class="col-sm-10">
 
-      <!-- 退会済みタブ選択時 -->
+      <!-- 退会済みタブ選択時 部分テンプレート使用 -->
       <?php if (isset($_GET['secession_members'])) { ?>
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link h5" style="color:black" aria-current="page" href="customer_index.php">会員</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active bg-dark text-white h5" href="customer_index.php?secession_members" style="color:black">退会済み</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">&emsp;名前をクリックすると、「再入会」処理を実行します</a>
-          </li>
-        </ul>
-        <div class="card-body pt-0 px-0">
-          <div class="row h5 py-4 mx-0 bg-dark text-white">
-            <div class="d-flex align-items-center">
-              <div class="col-md-2">
-                名前
-              </div>
-              <div class="col-md-3">
-                メールアドレス
-              </div>
-              <div class="col-md-5">
-                住所
-              </div>
-              <div class="col-md-2">
-                電話番号
-              </div>
-            </div>
-          </div>
-          <?php foreach ($customers as $customer) { ?>
-            <!-- <div class="table table-bordered table-striped table-hover">  ホバーで色変える、隔行で色変えたい-->
-            <tbody>
-              <div class="row d-flex align-items-center px-4 py-3 border-bottom">
-                <div class="col-md-2 p-0 h5">
-                  <!-- 出来たらアラートに苗字だけ表示したい -->
-                  <!-- <a href="#?id=<?= $customer["id"], $customer["name_last"] ?>" name="secession" class="secession_btn" style="text-decoration:none"> -->
-                  <a href="customer_index.php?secession_member_id=<?= $customer["id"] ?>" class="rejoign_btn" style="text-decoration:none">
-                    <div class="text-dark">
-                      <?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?>
-                    </div>
-                  </a>
-                </div>
-                <div class="col-md-3 p-0">
-                  <td><?= $customer['email'] ?>
-                </div>
-                <div class="col-md-5 p-0">
-                  <div class="mb-1">
-                    <?= '〒' . substr_replace($customer['postal_code'], '-', 3, 0) . '<br>' ?>
-                  </div>
-                  <?= '&emsp;' . $customer['address'] . '<br>' . '&emsp;' . $customer['house_num'] ?>
-                </div>
-                <div class="col-md-2 p-0">
-                  <?= $customer['telephone_num'] ?>
-                </div>
-              </div>
-            </tbody>
-          <?php } ?>
-          </tbody>
-          </table>
-        </div>
+        <?php require_once 'customer_index_secession.php'; ?>
 
         <!-- 会員タブ選択時 -->
       <?php } else { ?>
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link active bg-secondary text-white h5" aria-current="page" href="customer_index.php">会員</a>
+            <a class="nav-link active bg-secondary text-white h5" href="#">会員</a>
           </li>
           <li class="nav-item">
             <a class="nav-link h5" href="customer_index.php?secession_members" style="color:black">退会済み</a>
@@ -162,17 +115,17 @@ if (isset($_GET['secession_member_id'])) {
         <div class="card-body pt-0 px-0">
           <div class="row h5 py-4 mx-0 bg-secondary text-white">
             <div class="d-flex align-items-center">
-              <div class="col-md-2">
-                名前
+              <div class="col-sm-2">
+                &nbsp;名前
               </div>
               <div class="col-md-3">
-                メールアドレス
+                &nbsp;メールアドレス
               </div>
               <div class="col-md-5">
-                住所
+                &nbsp;住所
               </div>
               <div class="col-md-2">
-                電話番号
+                &nbsp;電話番号
               </div>
             </div>
           </div>
@@ -180,37 +133,35 @@ if (isset($_GET['secession_member_id'])) {
             <!-- <div class="table table-bordered table-striped table-hover">  ホバーで色変える、隔行で色変えたい-->
             <tbody>
               <div class="row d-flex align-items-center px-4 py-3 border-bottom">
-                <div class="col-md-2 p-0 h5">
+                <div class="col-md-2 h5">
                   <!-- 出来たらアラートに苗字だけ表示したい -->
-                  <!-- <a href="#?id=<?= $customer["id"], $customer["name_last"] ?>" name="secession" class="secession_btn" style="text-decoration:none"> -->
-                  <a href="customer_index.php?id=<?= $customer["id"] ?>" class="secession_btn" style="text-decoration:none">
+                  <!-- <a href="customer_index.php?id=<?= $customer["id"] ?> & <?= $customer["name_last"] ?>" name="secession" class="secession_btn" style="text-decoration:none"> -->
+                  <a href="customer_index.php?id=<?= $customer["id"] ?>" name="secession" class="secession_btn" style="text-decoration:none">
                     <div class="text-dark">
                       <?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?>
                     </div>
                   </a>
                 </div>
-                <div class="col-md-3 p-0">
-                  <td><?= $customer['email'] ?>
+                <div class="col-md-3 ~~~" style="word-wrap:break-word;">
+                  <?= $customer['email'] ?>
                 </div>
-                <div class="col-md-5 p-0">
+                <div class="col-md-5 ~~~" style="word-wrap:break-word;">
                   <div class="mb-1">
                     <?= '〒' . substr_replace($customer['postal_code'], '-', 3, 0) . '<br>' ?>
                   </div>
                   <?= '&emsp;' . $customer['address'] . '<br>' . '&emsp;' . $customer['house_num'] ?>
                 </div>
-                <div class="col-md-2 p-0">
+                <div class="col-md-2">
                   <?= $customer['telephone_num'] ?>
                 </div>
               </div>
             </tbody>
           <?php } ?>
-          </tbody>
-          </table>
         </div>
+        <?php require_once '../view_common/paging.php'; ?>
       <?php } ?>
     </div>
   </div>
-  <?php require_once '../view_common/paging.php'; ?>
 </div>
 
 <!-- 退会・再入会処理用jsファイル -->

@@ -33,10 +33,11 @@ if (isset($_POST['delete'])) {
 
 // 退会ボタンが押下された時
 if (isset($_POST['is_customer_flag'])) {
+  $id = $_POST['id'];
   // Customerクラスを呼び出し
   $pdo = new CustomerModel();
   // is_customer_flagメソッドを呼び出し
-  $customer_status = $pdo->is_customer_flag();
+  $customer_status = $pdo->is_customer_flag($id);
 }
 
 
