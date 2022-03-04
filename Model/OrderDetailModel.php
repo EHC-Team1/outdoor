@@ -49,20 +49,19 @@ class OrderDetailModel
   }
 
   // 注文履歴詳細画面の表示
-  public function show()
+  public function show($order_id)
   {
-    // try {
-    //   // DBに接続
-    //   $pdo = $this->db_connect();
-    //   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    //   $order_detail = $pdo->prepare(
-    //     "SELECT order_details.*,
-    //     items.name, items.price, orders.postal_code, orders.address, orders.house_num, orders.orderer_name, orders.total_payment, orders.payment_way, orders.created_at FROM order_details LEFT JOIN items, orders ON order_details.item_id = items.id, order_details.order.id WHERE order_details.order_id = ? ORDER BY created_at"
-    //   );
-    //   $order_detail->execute();
-    // } catch (PDOException $Exception) {
-    //   exit("接続エラー：" . $Exception->getMessage());
-    // }
-    // return $order_detail;
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $order_detail = $pdo->prepare(
+        "SELECT order_details.*, items.name, items.price, orders.postal_code, orders.address, orders.house_num, orders.orderer_name, orders.postage, orders.total_payment, orders.payment_way, orders.created_at FROM order_details LEFT JOIN items ON order_details.item_id = items.id LEFT JOIN orders ON order_details.order_id = orders.id WHERE order_details.order_id = ? ORDER BY orders.created_at"
+      );
+      $order_detail->execute([$order_id]);
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $order_detail;
   }
 }
