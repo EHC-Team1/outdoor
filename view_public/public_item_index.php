@@ -14,7 +14,7 @@ if (isset($_GET['page'])) {
 }
 // スタートのページを計算
 if ($page > 1) {
-  $start = ($page * 15) - 15;
+  $start = ($page * 16) - 16;
 } else {
   $start = 0;
 }
@@ -24,7 +24,7 @@ $pdo = new ItemModel();
 $pages = $pdo->page_count_public_index();
 $page_num = $pages->fetchColumn();
 // ページネーションの数を取得
-$pagination = ceil($page_num / 15);
+$pagination = ceil($page_num / 16);
 
 // Itemクラスを呼び出し
 $pdo = new ItemModel();
@@ -57,16 +57,15 @@ $items = $items->fetchAll(PDO::FETCH_ASSOC);
           $target = $item["item_image"]; ?>
           <div class="col-lg-6">
             <div class="card text-white bg-dark mb-3">
-              <?php if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") { ?>
-                <img src="../view_common/item_image.php?target=<?= $target ?>" alt="item_image" class="card-img-top img-fluid">
-              <?php } ?>
-              <div class="card-body">
-                <h4 class="card-title"><?= $item['item_name'] ?></h4>
-                <div class="d-flex justify-content-between">
+              <a href="../view_public/item_show.php?item_id=<?= $item["id"] ?>" class="text-white" style="text-decoration:none">
+                <?php if ($item["extension"] == "jpeg" || $item["extension"] == "png" || $item["extension"] == "gif") { ?>
+                  <img src="../view_common/item_image.php?target=<?= $target ?>" alt="item_image" class="card-img-top img-fluid">
+                <?php } ?>
+                <div class="card-body">
+                  <h4 class="card-title"><?= $item['item_name'] ?></h4>
                   <h4 class="card-title">￥<?= $item['price'] ?></h4>
-                  <a href="../view_public/item_show.php?item_id=<?= $item['id'] ?>" class="btn btn-secondary">詳細を見る</a>
                 </div>
-              </div>
+              </a>
             </div>
           </div>
         <?php } ?>

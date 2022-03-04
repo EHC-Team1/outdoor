@@ -4,13 +4,7 @@ session_start();
 
 require_once('../Model/AdminModel.php');
 
-// ログアウト処理
-// Adminクラスを呼び出し
-$pdo = new AdminModel();
-// logoutメソッドを呼び出し
-$pdo = $pdo->logout();
-
-// 「ログイン」ボタンが押された場合
+// 「サインアップ」ボタンが押された場合
 if (isset($_POST['signup'])) {
   // AdminModelクラスを呼び出し
   $pdo = new AdminModel();
@@ -77,12 +71,17 @@ if (isset($_POST['signup'])) {
           <input type="password" name="password" class="form-control">
         </div>
       </div>
-      <div class="row d-flex justify-content-center mb-5">
+      <div class="row d-flex justify-content-center mb-3">
         <div class="col-sm-8  d-flex justify-content-evenly">
           <button type="submit" name="signup" class="btn btn-outline-primary btn-lg">サインアップ</button>
         </div>
       </div>
     </form>
+    <div class="row d-flex justify-content-center mb-5">
+      <div class="col-sm-8  d-flex justify-content-end">
+        <button class="btn btn-outline-info btn-lg" onclick="location.href='admin_login.php'">管理者ログインへ</button>
+      </div>
+    </div>
   </div>
 
   <?php require_once '../view_common/footer.php'; ?>

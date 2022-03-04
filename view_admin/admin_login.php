@@ -20,6 +20,13 @@ if (isset($_POST['login'])) {
     $name = $_SESSION['admin_login']['name'];
     $password = $_SESSION['admin_login']['password'];
   }
+
+  // ログアウト処理
+  // Adminクラスを呼び出し
+  $pdo = new AdminModel();
+  // logoutメソッドを呼び出し
+  $pdo = $pdo->logout();
+
   $message = "";
 }
 

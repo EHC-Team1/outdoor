@@ -15,9 +15,11 @@ require_once('../Model/ArticleModel.php');
 //  Articleクラスを呼び出し
 $pdo = new ArticleModel();
 // showメソッドを呼び出し
-$article = $pdo->show($article_id);
+$article_show = $pdo->show($article_id);
 // 取得データを配列に格納
-$article = $article->fetch(PDO::FETCH_ASSOC);
+$article_show = $article_show->fetch(PDO::FETCH_ASSOC);
+// var_dump($article_show);
+// exit();
 
 // article_itemメソッドを呼び出し
 $item = $pdo->article_item($article_id);
@@ -34,30 +36,30 @@ $item = $item->fetch(PDO::FETCH_ASSOC);
     </div>
     <div class="col-sm-8 ms-3">
       <div class="row">
-        <?php $target = $article["article_image"]; ?>
-        <?php if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") { ?>
+        <?php $target = $article_show["article_image"]; ?>
+        <?php if ($article_show["extension"] == "jpeg" || $article_show["extension"] == "png" || $article_show["extension"] == "gif") { ?>
           <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
         <?php } ?>
       </div>
       <div class="row text-end mt-3">
         <small class="text-muted">
-          <?= $article["updated_at"] ?>
+          <?= $article_show["updated_at"] ?>
         </small>
       </div>
       <div class="row">
-        <h3><?= $article["title"] ?></h3>
+        <h3><?= $article_show["title"] ?></h3>
       </div>
       <div class="row mt-3">
         <p>
-          <?= $article["body"] ?>
+          <?= $article_show["body"] ?>
         </p>
       </div>
       <!-- 関連商品あり、販売可能状態の場合に表示 -->
       <?php if ((!empty($item['item_article_id'])) && ($item['item_is_status'] == 1)) {
         $target = $item["item_image"]; ?>
-        <div class="row-cols-1 row-cols-md-1 g-3 mt-3">
-          <h3 class="">関連商品</h3>
-          <div class="card mb-2" style="max-width: auto;">
+        <div class="row-cols-1 row-cols-md-1 g-3">
+          <h3>関連商品</h3>
+          <div class="card" style="max-width: auto;">
             <a href="../view_public/item_show.php?item_id=<?= $item["item_id"] ?>" class="text-dark" style="text-decoration:none">
               <div class="row g-0">
                 <div class="col-lg-5 d-flex align-items-center">

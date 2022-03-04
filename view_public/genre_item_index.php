@@ -20,7 +20,7 @@ if (isset($_GET['page'])) {
 }
 // スタートのページを計算
 if ($page > 1) {
-  $start = ($page * 15) - 15;
+  $start = ($page * 16) - 16;
 } else {
   $start = 0;
 }
@@ -30,7 +30,7 @@ $pdo = new ItemModel();
 $pages = $pdo->page_count_genre_index($genre_id);
 $page_num = $pages->fetchColumn();
 // ページネーションの数を取得
-$pagination = ceil($page_num / 15);
+$pagination = ceil($page_num / 16);
 
 // Itemクラスを呼び出し
 $pdo = new ItemModel();

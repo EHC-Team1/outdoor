@@ -51,32 +51,32 @@ $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-sm-8 ms-3">
       <div class="row-cols-1 row-cols-md-1 g-3">
         <!-- 公開状態の記事のみ表示 -->
-        <?php foreach ($articles as $article) {
-          $target = $article["article_image"]; ?>
+        <?php foreach ($articles as $article_top) {
+          $target = $article_top["article_image"]; ?>
           <div class="card mb-2" style="max-width: auto;">
-            <a href="../view_public/article_show.php?article_id=<?= $article["id"] ?>" class="text-dark" style="text-decoration:none">
+            <a href="../view_public/article_show.php?article_id=<?= $article_top["id"] ?>" class="text-dark" style="text-decoration:none">
               <div class="row g-0">
                 <div class="col-lg-5 d-flex align-items-center">
                   <div class="card-body">
-                    <?php if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") { ?>
+                    <?php if ($article_top["extension"] == "jpeg" || $article_top["extension"] == "png" || $article_top["extension"] == "gif") { ?>
                       <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
                     <?php } ?>
                   </div>
                 </div>
                 <div class="col-lg-7 d-flex align-items-center">
                   <div class="card-body">
-                    <h5 class="card-title"><?= $article['title'] ?></h5>
+                    <h5 class="card-title"><?= $article_top['title'] ?></h5>
                     <p class="card-text">
                       <?php
-                      if (mb_strlen($article['body']) > 100) {
-                        $body_start = mb_substr($article['body'], 0, 100);
+                      if (mb_strlen($article_top['body']) > 100) {
+                        $body_start = mb_substr($article_top['body'], 0, 100);
                         echo ($body_start . "・・・・");
                       } else {
-                        echo ($article['body']);
+                        echo ($article_top['body']);
                       }
                       ?>
                     </p>
-                    <p class="card-text"><small class="text-muted"><?= $article['updated_at'] ?></small></p>
+                    <p class="card-text"><small class="text-muted"><?= $article_top['updated_at'] ?></small></p>
                   </div>
                 </div>
               </div>
