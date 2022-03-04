@@ -50,16 +50,17 @@ if (isset($_POST['is_customer_flag'])) {
     <h1 class="text-center mt-5 mb-5">お客様情報</h1>
     <div class="col-md-8">
       <?php $customer = $customers->fetch(PDO::FETCH_ASSOC); ?>
-      <div class="row">
-        <div class="col-md-1">
-          <form action="customer_edit.php" method="POST">
-            <input type="submit" class="btn btn-success btn-lg" value="編集">
+      <div class="btn-toolbar mb-2">
+        <div class="btn-group">
+          <form action="public_order_index.php" method="POST">
+            <input type="submit" class="btn btn-outline-primary btn-sm" value="注文履歴一覧">
           </form>
-        </div>
-        <div class="col ms-2">
+          <form action="customer_edit.php" method="POST">
+            <input type="submit" class="btn btn-outline-success btn-sm" value="編集">
+          </form>
           <form method="post">
-            <input type="hidden" name="id" value="<?php echo $customer['id'] ?>">
-            <button type="submit" name="is_customer_flag" class="btn btn-outline-secondary btn-lg" id="is_customer_flag_btn">退会</button>
+            <input type="hidden" name="id" value="<?= $customer['id'] ?>">
+            <button type="submit" name="is_customer_flag" class="btn btn-outline-danger btn-sm" id="is_customer_flag_btn">退会</button>
           </form>
         </div>
       </div>
@@ -109,7 +110,7 @@ if (isset($_POST['is_customer_flag'])) {
     <h1 class="text-center mt-5 mb-5">配送先一覧</h1>
     <div class="col-md-8">
       <form action="delivery_input.php" method="POST">
-        <input type="submit" name="" class="btn btn-primary btn-lg text-right" value="配送先追加">
+        <input type="submit" name="" class="btn btn-outline-primary btn-sm mb-2" value="配送先追加">
       </form>
       <!-- 配送先を繰り返しで表示 -->
       <div class="card mb-3">

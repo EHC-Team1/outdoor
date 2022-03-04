@@ -50,10 +50,11 @@ class OrderModel
       $order->bindParam(':total_payment', $total_payment, PDO::PARAM_INT);
       $order->bindParam(':payment_way', $payment_way, PDO::PARAM_INT);
       $order->execute();
+      $order_id = $pdo->lastInsertId();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
-    header('Location: public_order_check.php');
+    return $order_id;
   }
 
   // 注文情報確認画面の表示
@@ -69,11 +70,18 @@ class OrderModel
   // 注文履歴一覧画面の表示
   public function index()
   {
-  }
-
-  // 注文履歴詳細画面の表示
-  public function show()
-  {
+    $customer_id = $_SESSION['customer']['id'];
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $orders = $pdo->prepare(
+        "SELECT * FROM orders WHERE customer_id = $customer_id"
+      );
+      $orders->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $orders;
   }
 
 }
