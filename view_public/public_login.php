@@ -7,24 +7,22 @@ session_start();
 //   header("Location: ./top.php");
 // }
 
-$email = $password = "";
+unset($_SESSION['signup']);
+$_SESSION['login']['email'] = $_SESSION['login']['password'] = "";
 
-// 「ログイン」ボタンが押された場合
+// 「ログイン」ボタン押されていない状態
+if (isset($_SESSION['login'])) {
+  // エラーメッセージ無し
+  $message = "";
+}
+
+// ボタンが押された場合
 if (isset($_POST['login'])) {
   require_once('../Model/CustomerModel.php');
   $pdo = new CustomerModel();
-
-  // CustomerModelのcheckメソッドを呼び出す
+  // CustomerModelのloginメソッドを呼び出す
   $pdo = $pdo->login();
   $message = $pdo;
-
-  // ボタンが押されていない状態
-} else {
-  if (isset($_SESSION['login'])) {
-    $email = $_SESSION['login']['email'];
-    $password = $_SESSION['login']['password'];
-  }
-  $message = "";
 }
 
 // メッセージをサニタイズ
@@ -43,15 +41,16 @@ $message = htmlspecialchars($message);
       <form method="post" action="">
         <div style="text-align:center">
           <div class="row">
-            <div class="col-md-3"><label for="email">メールアドレス</label></div>
+            <strong class="col-md-3"><label for="email">メールアドレス</label></strong>
             <div class="col-md-9">
-              <input id="email" type="text" name="email" class="form-control" value="<?= $email ?>" autofocus><br>
+              <input id="email" type="text" name="email" class="form-control" placeholder="例) abc123@ddd.com" value="<?= $_SESSION['login']['email'] ?>" autofocus><br>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-3"><label for="password">パスワード</label></div>
+            <strong class="col-md-3"><label for="password">パスワード</label></strong>
             <div class="col-md-9">
-              <input id="password" type="password" name="password" class="form-control" placeholder="半角英数字8文字以上24文字以下" value="<?= $password ?>">
+              <input id="password" type="password" name="password" class="form-control" placeholder="例) AbC12345678" value="<?= $_SESSION['login']['password'] ?>">
+              <p class="mt-2 ms-1">※パスワードは半角英数字をそれぞれ1文字以上含んだ、8文字以上24字以内で入力してください。</p></br>
             </div>
           </div>
         </div>

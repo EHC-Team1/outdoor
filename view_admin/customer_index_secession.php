@@ -3,7 +3,7 @@
             <a class="nav-link h5" style="color:black" aria-current="page" href="customer_index.php">会員</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active bg-dark text-white h5" href="customer_index.php?secession_members" style="color:black">退会済み</a>
+            <a class="nav-link bg-dark text-white h5" href="customer_index.php?secession_members" style="color:black">退会済み</a>
           </li>
           <li class="nav-item">
             <a class="nav-link disabled">&emsp;名前をクリックすると、「再入会」処理を実行します</a>
@@ -14,15 +14,16 @@
             <div class="d-flex align-items-center">
               <div class="col-md-2">
                 &nbsp;名前
+                <small class="h6">(退会日)</small>
               </div>
               <div class="col-md-3">
-              &nbsp;メールアドレス
+                &nbsp;メールアドレス
               </div>
               <div class="col-md-5">
-              &nbsp;住所
+                &nbsp;住所
               </div>
               <div class="col-md-2">
-              &nbsp;電話番号
+                &nbsp;電話番号
               </div>
             </div>
           </div>
@@ -30,14 +31,22 @@
             <!-- <div class="table table-bordered table-striped table-hover">  ホバーで色変える、隔行で色変えたい-->
             <tbody>
               <div class="row d-flex align-items-center px-4 py-3 border-bottom">
-                <div class="col-md-2 h5">
+                <div class="col-md-2">
                   <!-- 出来たらアラートに苗字だけ表示したい -->
                   <!-- <a href="#?id=<?= $customer["id"], $customer["name_last"] ?>" name="secession" class="secession_btn" style="text-decoration:none"> -->
-                  <a href="customer_index.php?secession_member_id=<?= $customer["id"] ?>" class="rejoign_btn" style="text-decoration:none">
-                    <div class="text-dark">
-                      <?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?>
-                    </div>
+                  <div class="row mb-2 h5">
+                    <a href="customer_index.php?secession_member_id=<?= $customer["id"] ?>" class="rejoign_btn" style="text-decoration:none">
+                      <div class="text-dark">
+                        <?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?>
+                      </div>
+                  </div>
                   </a>
+
+                  <div class="row text-end me-1">
+                    <small class="text-muted">
+                      <?= date('Y-m-d', strtotime($customer['updated_at'])) ?>
+                    </small>
+                  </div>
                 </div>
                 <div class="col-md-3 ~~~" style="word-wrap:break-word;">
                   <?= $customer['email'] ?></p>
