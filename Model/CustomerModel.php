@@ -47,15 +47,15 @@ class CustomerModel
     // 各値が入力されている場合
     if ($_POST['name_last'] && $_POST['name_first'] && $_POST['email'] && $_POST['email'] && $_POST['postal_code'] && $_POST['address'] && $_POST['house_num'] && $_POST['telephone_num'] && $_POST['password']) {
 
-      // 名前(姓)のバリデーション 30文字以下
-      if (20 <= mb_strlen($name_last, 'UTF-8')) {
-        $message = '名前(姓)は、30文字以下で入力して下さい。';
+      // 名前(姓)のバリデーション 40文字以下
+      if (40 <= mb_strlen($name_last, 'UTF-8')) {
+        $message = '名前(姓)は、40文字以下で入力して下さい。';
         return $message;
       }
 
-      // 名前(名)のバリデーション 30文字以下
-      if (20 <= mb_strlen($name_first, 'UTF-8')) {
-        $message = '名前(名)は、30文字以下で入力して下さい。';
+      // 名前(名)のバリデーション 40文字以下
+      if (40 <= mb_strlen($name_first, 'UTF-8')) {
+        $message = '名前(名)は、40文字以下で入力して下さい。';
         return $message;
       }
 
@@ -65,15 +65,26 @@ class CustomerModel
         // DBに接続
         $db = new CustomerModel();
         $pdo = $db->db_connect();
-        $stmt = $pdo->prepare('SELECT id FROM customers WHERE email=:email');
+        $stmt = $pdo->prepare('SELECT id,is_customer_flag FROM customers WHERE email=:email');
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        // すでに使われている場合
-        if (isset($result['id'])) {
-          $message = "このメールアドレスはすでに利用されています。";
+        // すでに会員登録済みで使われている場合
+        if (isset($result['id']) && $result['is_customer_flag'] == 0) {
+          $message = "このメールアドレスはでに利用されています。";
           return $message;
+
+          // 退会済みユーザーのメールアドレスの場合
+        } elseif (isset($result['id']) && $result['is_customer_flag'] == 1) {
+          // セッションに情報を格納して、再登録ログイン画面へ遷移
+          $_SESSION['login'] = ['email' => $result['email'],];
+          header("Location: ./public_rejoin.php");
+          exit;
+
+          // $message = "このメールアドレスはでに利用されています。""<a href='./public_rejoin.php'>再登録画面へ</a>";
+          // return $message;
         }
+
         // RFC違反メールアドレスの場合
       } else {
         $message = "ご入力頂いたメールアドレスは、登録できない形式のものです。
@@ -166,7 +177,7 @@ class CustomerModel
       unset($_SESSION['signup']);
 
       // 登録完了画面へリダイレクト
-      header("Location: ./public_signup_complete.php");
+      header("Location: ./public_signup_complete.php?admission");
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
@@ -175,17 +186,20 @@ class CustomerModel
   // ユーザーログイン
   public function login()
   {
+    // 空白除去(文頭・文末)して、変数に代入
+    $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
+    $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
+
+    // 値をセッションに格納
+    $_SESSION['login'] = ['email' => $email, 'password' => $password];
+
     // 各値が入力されている場合
     if ($_POST['email'] && $_POST['password']) {
 
-      // 空白除去(文頭・文末)して、変数に代入
-      $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
-      $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
-
       // DB接続
       $pdo = $this->db_connect();
-      // SQL文 メールアドレスが一致するデータを抽出
-      $customer = $pdo->prepare('SELECT * FROM customers WHERE email = :email');
+      // メールアドレスが一致するデータを抽出
+      $customer = $pdo->prepare("SELECT * FROM customers WHERE email = :email");
       $customer->execute(array(':email' => $email));
       // 抽出データを配列に格納
       $result = $customer->fetch(PDO::FETCH_ASSOC);
@@ -194,7 +208,7 @@ class CustomerModel
       if (password_verify($password, $result['password']) && $result['is_customer_flag'] == 0) {
         // ログイン認証に成功した場合
         // loginセッションを削除
-        unset($_SESSION['login']['email'], $_SESSION['password']);
+        unset($_SESSION['login']);
         // セッションにユーザー情報を格納
         $_SESSION['customer'] = [
           'id' => $result['id'], 'name_last' => $result['name_last'], 'name_first' => $result['name_first'], 'email' => $result['email'], 'postal_code' => $result['postal_code'], 'address' => $result['address'], 'house_num' => $result['house_num'], 'telephone_num' => $result['telephone_num'], 'password' => $result['password']
@@ -202,8 +216,16 @@ class CustomerModel
         // TOP画面へリダイレクト
         header('Location: ./top.php');
         exit;
-      } else {
+
+        // パスワードも一致して、退会済みユーザーと判定したら、再登録画面へ遷移
+      } elseif (password_verify($password, $result['password']) && $result['is_customer_flag'] == 1) {
+        // } elseif ($result['is_customer_flag'] == 1) {
+        $_SESSION['login'] = ['email' => $result['email'],];
+        header("Location: ./public_rejoin.php");
+        exit;
+
         // ログイン認証に失敗した場合
+      } else {
         $message = "メールアドレスまたはパスワードが違います。";
         return $message;
       }
@@ -212,6 +234,69 @@ class CustomerModel
       return $message;
     }
   }
+
+
+  // ユーザー再登録
+  public function rejoin()
+  {
+    // 空白除去(文頭・文末)して、変数に代入
+    $name_last = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_last']);
+    $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_first']);
+    $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
+    $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
+    // セッションに値を格納
+    $_SESSION['login'] = ['name_last' => $name_last, 'name_first' => $name_first, 'email' => $email, 'password' => $password];
+
+    // 各値が入力されている場合
+    if ($_POST['name_last'] && $_POST['name_first'] && $_POST['email'] && $_POST['password']) {
+
+      $pdo = $this->db_connect();
+      // 退会済みユーザーの中からメールアドレスが一致するデータを抽出
+      $customer = $pdo->prepare("SELECT * FROM customers WHERE is_customer_flag = 1 AND email = :email ");
+      $customer->execute(array(':email' => $email));
+      // 抽出データを配列に格納
+      $result = $customer->fetch(PDO::FETCH_ASSOC);
+
+      // ハッシュ化したパスワードの認証 & 他入力値が全て一致した場合
+      if (password_verify($password, $result['password']) && $result['name_first'] == $name_first && $result['name_last'] == $name_last) {
+
+        // 再入会処理
+        $id = $result['id'];
+        $is_customer_flag = 0;
+        try {
+          // DBに接続
+          $pdo = $this->db_connect();
+          $switch_status = $pdo->prepare(
+            "UPDATE customers SET is_customer_flag = :is_customer_flag WHERE id = $id"
+          );
+          $switch_status->bindParam('is_customer_flag', $is_customer_flag, PDO::PARAM_INT);
+          $switch_status->execute();
+        } catch (PDOException $Exception) {
+          die('接続エラー：' . $Exception->getMessage());
+        }
+
+        // loginセッションを削除
+        unset($_SESSION['login']);
+        // セッションにユーザー情報を格納
+        $_SESSION['customer'] = [
+          'id' => $id, 'name_last' => $result['name_last'], 'name_first' => $result['name_first'], 'email' => $result['email'], 'postal_code' => $result['postal_code'], 'address' => $result['address'], 'house_num' => $result['house_num'], 'telephone_num' => $result['telephone_num'], 'password' => $result['password']
+        ];
+        // 登録完了画面へリダイレクト
+        header("Location: ./public_signup_complete.php?rejoin");
+        exit;
+
+        // ログイン認証に失敗した場合
+      } else {
+        $message = "登録情報が一致しません。";
+        return $message;
+      }
+    } else {
+      $message = "全て必須項目です。";
+      return $message;
+    }
+  }
+
+
 
   // ユーザー情報 登録内容表示
   public function show()
@@ -358,7 +443,7 @@ class CustomerModel
       // DBに接続
       $pdo = $this->db_connect();
       $customer_status = $pdo->prepare(
-        "UPDATE customers SET is_customer_flag = :is_customer_flag WHERE id = $id"
+        "UPDATE customers SET is_customer_flag = :is_customer_flag, updated_at = now() WHERE id = $id"
       );
       $customer_status->bindParam('is_customer_flag', $is_customer_flag, PDO::PARAM_INT);
       $customer_status->execute();
@@ -373,7 +458,7 @@ class CustomerModel
 
 
   // ユーザー退会(管理者側)
-  public function admin_customer_flag($id, $secession_member_id)
+  public function admin_switch_status($id, $secession_member_id)
   {
     $id = $id;
     $secession_member_id = $secession_member_id;
@@ -384,11 +469,11 @@ class CustomerModel
       try {
         // DBに接続
         $pdo = $this->db_connect();
-        $customer_status = $pdo->prepare(
+        $switch_status = $pdo->prepare(
           "UPDATE customers SET is_customer_flag = :is_customer_flag WHERE id = $secession_member_id"
         );
-        $customer_status->bindParam('is_customer_flag', $is_customer_flag, PDO::PARAM_INT);
-        $customer_status->execute();
+        $switch_status->bindParam('is_customer_flag', $is_customer_flag, PDO::PARAM_INT);
+        $switch_status->execute();
       } catch (PDOException $Exception) {
         die('接続エラー：' . $Exception->getMessage());
       }
@@ -401,11 +486,11 @@ class CustomerModel
       try {
         // DBに接続
         $pdo = $this->db_connect();
-        $customer_status = $pdo->prepare(
-          "UPDATE customers SET is_customer_flag = :is_customer_flag WHERE id = $id"
+        $switch_status = $pdo->prepare(
+          "UPDATE customers SET is_customer_flag = :is_customer_flag, updated_at = now() WHERE id = $id"
         );
-        $customer_status->bindParam('is_customer_flag', $is_customer_flag, PDO::PARAM_INT);
-        $customer_status->execute();
+        $switch_status->bindParam('is_customer_flag', $is_customer_flag, PDO::PARAM_INT);
+        $switch_status->execute();
       } catch (PDOException $Exception) {
         die('接続エラー：' . $Exception->getMessage());
       }

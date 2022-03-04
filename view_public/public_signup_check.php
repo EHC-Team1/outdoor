@@ -50,7 +50,7 @@ if (isset($_POST['input'])) {
         </div>
       </div>
       <div class="d-flex align-items-center justify-content-evenly my-5">
-        <button onclick="location.href='public_signup.php'" class="btn btn-outline-secondary btn-lg">戻る</button>
+        <button onclick="location.href='public_signup.php?back'" class="btn btn-outline-secondary btn-lg">戻る</button>
         <form method="post">
           <button type="submit" name="input" class="btn btn-outline-primary btn-lg">登録する</button>
         </form>
