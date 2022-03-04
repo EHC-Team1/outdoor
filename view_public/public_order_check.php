@@ -99,8 +99,6 @@ if ($_POST['delivery'] == 0) {
                   </td>
                   <td class="align-middle"><?= number_format($cart_item['price']); ?></td>
                   <input type="hidden" name="price" value="<?= $cart_item['price'] ?>">
-                  <?php
-                  ?>
                   <td class="align-middle"><?= number_format($cart_item['quantity']); ?></td>
                   <input type="hidden" name="quantity" value="<?= $cart_item['quantity'] ?>">
                   <td class="align-middle"><?= number_format($subtotal); ?></td>
