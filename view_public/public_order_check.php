@@ -14,22 +14,24 @@ $pdo = new CartItemModel();
 // indexメソッド呼び出し
 $cart_items = $pdo->index();
 
-// 注文を確定するボタンが押された場合⓵
+// 注文を確定するボタンが押された場合
 if (isset($_POST['fixed_order'])) {
   // Orderクラスを呼び出し
   $pdo = new OrderModel();
   // inputメソッドを呼び出してordersテーブルへ格納
   $order = $pdo->input();
-  header('Location: public_order_complete.php');
-}
-// 注文を確定するボタンが押された場合⓶
-if (isset($_POST['fixed_order'])) {
+  $order_id = $order;
   // OrderDetailModelファイル読み込み
   require_once('../Model/OrderDetailModel.php');
   // OrderDetailクラス呼び出し
   $pdo = new OrderDetailModel();
+  $cart_items = $cart_items->fetchAll(PDO::FETCH_ASSOC);
   // inputメソッドを呼び出してorder_detailsテーブルへ格納
-  $order_details = $pdo->input();
+  $order_details = $pdo->input($order_id, $cart_items);
+  // CartItemクラスを呼び出し
+  $pdo = new CartItemModel();
+  // all_deleteメソッドを呼び出し
+  $cart_item = $pdo->all_delete();
   header('Location: public_order_complete.php');
 }
 
@@ -85,7 +87,8 @@ if ($_POST['delivery'] == 0) {
             <tbody>
               <tr>
                 <form method="post" id="cart_item_index">
-                  <input type="hidden" name="id" value="<?php echo $cart_item['id'] ?>">
+                  <input type="hidden" name="id" value="<?= $cart_item['id'] ?>">
+                  <input type="hidden" name="item_id" value="<?= $cart_item['item_id'] ?>">
                   <td>
                     <?php
                     if ($cart_item["extension"] == "jpeg" || $cart_item["extension"] == "png" || $cart_item["extension"] == "gif") {
@@ -95,12 +98,16 @@ if ($_POST['delivery'] == 0) {
                     <?= $cart_item['name'] ?>
                   </td>
                   <td class="align-middle"><?= number_format($cart_item['price']); ?></td>
+                  <input type="hidden" name="price" value="<?= $cart_item['price'] ?>">
+                  <?php
+                  ?>
                   <td class="align-middle"><?= number_format($cart_item['quantity']); ?></td>
+                  <input type="hidden" name="quantity" value="<?= $cart_item['quantity'] ?>">
                   <td class="align-middle"><?= number_format($subtotal); ?></td>
                 </form>
-              <?php } ?>
               </tr>
             </tbody>
+          <?php } ?>
         </table>
         <div class="row">
           <div class="col-md-4">
@@ -134,7 +141,6 @@ if ($_POST['delivery'] == 0) {
                   <?= $_POST['payment-way']; ?>
                   <input type="hidden" name="payment_way" value=1>
                 <?php } ?>
-                <!-- <input type="hidden" name="payment-way" value=0> -->
               </li>
             </ul>
             <h5><label class="row">お届け先</label></h5>

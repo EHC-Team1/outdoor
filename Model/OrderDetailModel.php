@@ -25,32 +25,44 @@ class OrderDetailModel
   }
 
   // 注文詳細の保存
-  public function input()
+  public function input($order_id, $cart_items)
   {
-    $order_id = $_POST['order_id'];
-    $item_id = $_POST['item_id'];
-    $price = $_POST['price'];
-    $quantity = $_POST['quantity'];
-    try {
-      // DBに接続
-      $pdo = $this->db_connect();
-      $order_detail = $pdo->prepare(
-        "INSERT INTO order_details (order_id, item_id, price, quantity) VALUES(:order_id, :item_id, :price, :quantity)"
-      );
-      $order_detail->bindParam(':order_id', $order_id, PDO::PARAM_INT);
-      $order_detail->bindParam(':item_id', $item_id, PDO::PARAM_INT);
-      $order_detail->bindParam(':price', $price, PDO::PARAM_INT);
-      $order_detail->bindParam(':quantity', $quantity, PDO::PARAM_INT);
-      $order_detail->execute();
-    } catch (PDOException $Exception) {
-      die('接続エラー：' . $Exception->getMessage());
+    $order_id = $order_id;
+    $cart_items = $cart_items;
+    foreach ($cart_items as $cart_item) {
+      try {
+        // DBに接続
+        $pdo = $this->db_connect();
+        $order_detail = $pdo->prepare(
+          "INSERT INTO order_details (order_id, item_id, price, quantity) VALUES(:order_id, :item_id, :price, :quantity)"
+        );
+        $order_detail->bindParam(':order_id', $order_id, PDO::PARAM_INT);
+        $order_detail->bindParam(':item_id', $cart_item['item_id'], PDO::PARAM_INT);
+        $order_detail->bindParam(':price', $cart_item['price'], PDO::PARAM_INT);
+        $order_detail->bindParam(':quantity', $cart_item['quantity'], PDO::PARAM_INT);
+        $order_detail->execute();
+      } catch (PDOException $Exception) {
+        die('接続エラー：' . $Exception->getMessage());
+      }
     }
-    header('Location: public_order_check.php');
+    header('Location: public_order_complete.php');
   }
 
   // 注文履歴詳細画面の表示
   public function show()
   {
+    // try {
+    //   // DBに接続
+    //   $pdo = $this->db_connect();
+    //   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //   $order_detail = $pdo->prepare(
+    //     "SELECT order_details.*,
+    //     items.name, items.price, orders.postal_code, orders.address, orders.house_num, orders.orderer_name, orders.total_payment, orders.payment_way, orders.created_at FROM order_details LEFT JOIN items, orders ON order_details.item_id = items.id, order_details.order.id WHERE order_details.order_id = ? ORDER BY created_at"
+    //   );
+    //   $order_detail->execute();
+    // } catch (PDOException $Exception) {
+    //   exit("接続エラー：" . $Exception->getMessage());
+    // }
+    // return $order_detail;
   }
-
 }
