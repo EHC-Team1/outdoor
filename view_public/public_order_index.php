@@ -15,7 +15,7 @@ $orders = $pdo->index();
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
-    <h1 class="text-center mt-5 mb-5">注文履歴一覧</h1>
+    <h1 class="text-center my-5">注文履歴一覧</h1>
     <div class="col-md-9">
       <form action="public_order_show.php" method="POST">
         <input type="hidden" name="customer_id" value="<?= $_SESSION['customer']['id'] ?>">
