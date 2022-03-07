@@ -12,17 +12,17 @@
         <div class="card-body pt-0 px-0">
           <div class="row h5 py-4 mx-0 bg-dark text-white">
             <div class="d-flex align-items-center">
-              <div class="col-md-2">
+              <div class="col-sm-2">
                 &nbsp;名前
                 <small class="h6">(退会日)</small>
               </div>
-              <div class="col-md-3">
+              <div class="col-sm-3">
                 &nbsp;メールアドレス
               </div>
-              <div class="col-md-5">
+              <div class="col-sm-5">
                 &nbsp;住所
               </div>
-              <div class="col-md-2">
+              <div class="col-sm-2">
                 &nbsp;電話番号
               </div>
             </div>
@@ -31,7 +31,7 @@
             <!-- <div class="table table-bordered table-striped table-hover">  ホバーで色変える、隔行で色変えたい-->
             <tbody>
               <div class="row d-flex align-items-center px-4 py-3 border-bottom">
-                <div class="col-md-2">
+                <div class="col-sm-2">
                   <!-- 出来たらアラートに苗字だけ表示したい -->
                   <!-- <a href="#?id=<?= $customer["id"], $customer["name_last"] ?>" name="secession" class="secession_btn" style="text-decoration:none"> -->
                   <div class="row mb-2 h5">
@@ -48,16 +48,16 @@
                     </small>
                   </div>
                 </div>
-                <div class="col-md-3 ~~~" style="word-wrap:break-word;">
+                <div class="col-sm-3 ~~~" style="word-wrap:break-word;">
                   <?= $customer['email'] ?></p>
                 </div>
-                <div class="col-md-5 ~~~" style="word-wrap:break-word;">
+                <div class="col-sm-5 ~~~" style="word-wrap:break-word;">
                   <div class="mb-1">
                     <?= '〒' . substr_replace($customer['postal_code'], '-', 3, 0) . '<br>' ?>
                   </div>
                   <?= '&emsp;' . $customer['address'] . '<br>' . '&emsp;' . $customer['house_num'] ?>
                 </div>
-                <div class="col-md-2">
+                <div class="col-sm-2">
                   <?= $customer['telephone_num'] ?>
                 </div>
               </div>

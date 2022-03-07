@@ -112,6 +112,7 @@ if (isset($_GET['secession_member_id'])) {
             <a class="nav-link disabled">&emsp;名前をクリックすると、「退会」処理を実行します</a>
           </li>
         </ul>
+
         <div class="card-body pt-0 px-0">
           <div class="row h5 py-4 mx-0 bg-secondary text-white">
             <div class="d-flex align-items-center">
@@ -131,12 +132,9 @@ if (isset($_GET['secession_member_id'])) {
             </div>
           </div>
           <?php foreach ($customers as $customer) { ?>
-            <!-- <div class="table table-bordered table-striped table-hover">  ホバーで色変える、隔行で色変えたい-->
             <tbody>
               <div class="row d-flex align-items-center px-4 py-3 border-bottom">
                 <div class="col-md-2">
-                  <!-- 出来たらアラートに苗字だけ表示したい -->
-                  <!-- <a href="customer_index.php?id=<?= $customer["id"] ?> & <?= $customer["name_last"] ?>" name="secession" class="secession_btn" style="text-decoration:none"> -->
                   <div class="row mb-1 h5">
                     <a href="customer_index.php?id=<?= $customer["id"] ?>" name="secession" class="secession_btn" style="text-decoration:none">
                       <div class="text-dark">
@@ -145,9 +143,9 @@ if (isset($_GET['secession_member_id'])) {
                     </a>
                   </div>
                   <div class="row text-end me-1">
-                      <small class="text-muted">
-                        <?= date('Y-m-d', strtotime($customer['created_at'])) ?>
-                      </small>
+                    <small class="text-muted">
+                      <?= date('Y-m-d', strtotime($customer['created_at'])) ?>
+                    </small>
                   </div>
                 </div>
                 <div class="col-md-3 ~~~" style="word-wrap:break-word;">
@@ -171,6 +169,10 @@ if (isset($_GET['secession_member_id'])) {
     </div>
   </div>
 </div>
+
+
+
+
 
 <!-- 退会・再入会処理用jsファイル -->
 <script src="../js/customer_index.js"></script>

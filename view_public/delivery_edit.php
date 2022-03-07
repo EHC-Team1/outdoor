@@ -27,8 +27,8 @@ if (isset($_POST['update_delivery'])) {
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
-    <h1 class="text-center mt-5 mb-5">配送先編集</h1>
-    <div class="col-md-8">
+    <h1 class="text-center my-5">配送先編集</h1>
+    <div class="col-sm-8">
       <form method="POST">
         <div class="form-group">
           <input type="hidden" name="id" value="<?= $delivery['id'] ?>">
@@ -40,9 +40,9 @@ if (isset($_POST['update_delivery'])) {
               </div>
             </div>
             <div class="row mb-3">
-              <div class="col-md-6">
-              <strong><label class="mb-1">郵便番号</label></strong>
-                <input type="text" name="postal_code" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" class="form-control" id="delivery_postal_code" placeholder="例) 1700014" value="<?= $delivery['postal_code'] ?>">
+              <div class="col-sm-6">
+                <strong><label class="mb-1">郵便番号</label></strong>
+                <input type="number" name="postal_code" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" class="form-control" id="delivery_postal_code" placeholder="例) 1700014" value="<?= $delivery['postal_code'] ?>">
               </div>
               <div class="col mt-auto">
                 郵便番号入力後、市区町村が自動的に表示されます。<br>
@@ -50,29 +50,28 @@ if (isset($_POST['update_delivery'])) {
               </div>
             </div>
             <div class="row mb-3">
-            <strong><label class="mb-1">市区町村</label></strong>
+              <strong><label class="mb-1">市区町村</label></strong>
               <div class="col">
                 <input type="text" name="address" class="form-control" id="delivery_address" placeholder="例) 東京都豊島区池袋" value="<?= $delivery['address'] ?>">
               </div>
             </div>
             <div class="row mb-3">
-            <strong><label class="mb-1">番地・建物名</label></strong>
+              <strong><label class="mb-1">番地・建物名</label></strong>
               <div class="col">
                 <input type="text" name="house_num" class="form-control" id="delivery_house_num" placeholder="例) 〇丁目△番地 □□マンション 101号室" value="<?= $delivery['house_num'] ?>">
               </div>
             </div>
         </div>
-        <div class="d-flex align-items-center justify-content-evenly mt-5 md-5">
+        <div class="d-flex align-items-center justify-content-evenly my-5">
           <button type="submit" name="back" formaction="./mypage.php" class="btn btn-outline-secondary btn-lg">マイページへ戻る</button>
           <button type="submit" name="update_delivery" class="btn btn-outline-success btn-lg" id="delivery_edit_btn">更新</button>
         </div>
-
       </form>
     </div>
   </div>
 </div>
 
-<script src="../js/delivery_edit.js"></script>
+<?php require_once '../view_common/footer.php'; ?>
 <!-- 住所自動入力用jsファイル -->
 <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
-<?php require_once '../view_common/footer.php'; ?>
+<script src="../js/delivery_edit.js"></script>

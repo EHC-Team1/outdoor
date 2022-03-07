@@ -37,8 +37,10 @@ $message = htmlspecialchars($message);
     <h1 style="text-align:center" class="mt-5">会員ログイン</h1>
     <h6 class="text-center mb-5">商品のご購入には、ログインが必要です。</h6>
     <div class="col-sm-8">
-      <?= $message; ?>
-      <form method="post" action="">
+      <?php if (!empty($message)) { ?>
+        <div class="alert alert-danger" role="alert"><?= $message; ?></div>
+      <?php } ?>
+      <form method="post">
         <div style="text-align:center">
           <div class="row">
             <strong class="col-md-3"><label for="email">メールアドレス</label></strong>

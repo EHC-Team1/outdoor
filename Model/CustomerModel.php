@@ -190,23 +190,22 @@ class CustomerModel
     $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
     $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
 
-    // 値をセッションに格納
+    // 値をloginセッションに格納
     $_SESSION['login'] = ['email' => $email, 'password' => $password];
 
     // 各値が入力されている場合
     if ($_POST['email'] && $_POST['password']) {
-
       // DB接続
       $pdo = $this->db_connect();
       // メールアドレスが一致するデータを抽出
-      $customer = $pdo->prepare("SELECT * FROM customers WHERE email = :email");
-      $customer->execute(array(':email' => $email));
+      $customer = $pdo->prepare("SELECT * FROM customers WHERE email=:email");
+      $customer->bindParam(':email', $email, PDO::PARAM_STR);
+      $customer->execute();
       // 抽出データを配列に格納
       $result = $customer->fetch(PDO::FETCH_ASSOC);
 
-      // ハッシュ化したパスワードの認証 & 退会済みユーザーではないことを確認
-      if (password_verify($password, $result['password']) && $result['is_customer_flag'] == 0) {
-        // ログイン認証に成功した場合
+      // 入力値が全て一致、会員であればログイン処理
+      if ($result == true && password_verify($password, $result['password']) && $result['is_customer_flag'] == 0) {
         // loginセッションを削除
         unset($_SESSION['login']);
         // セッションにユーザー情報を格納
@@ -217,10 +216,10 @@ class CustomerModel
         header('Location: ./top.php');
         exit;
 
-        // パスワードも一致して、退会済みユーザーと判定したら、再登録画面へ遷移
-      } elseif (password_verify($password, $result['password']) && $result['is_customer_flag'] == 1) {
-        // } elseif ($result['is_customer_flag'] == 1) {
-        $_SESSION['login'] = ['email' => $result['email'],];
+        // 入力値が全て一致、退会済みユーザーと判定したら、再登録画面へ遷移
+      } elseif ($result == true && password_verify($password, $result['password']) && $result['is_customer_flag'] == 1) {
+        // loginセッションの値をパスワードのみクリア
+        $_SESSION['login']['password'] = '';
         header("Location: ./public_rejoin.php");
         exit;
 
@@ -244,7 +243,7 @@ class CustomerModel
     $name_first = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['name_first']);
     $email = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['email']);
     $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
-    // セッションに値を格納
+    // loginセッションに値を格納
     $_SESSION['login'] = ['name_last' => $name_last, 'name_first' => $name_first, 'email' => $email, 'password' => $password];
 
     // 各値が入力されている場合
@@ -253,18 +252,18 @@ class CustomerModel
       $pdo = $this->db_connect();
       // 退会済みユーザーの中からメールアドレスが一致するデータを抽出
       $customer = $pdo->prepare("SELECT * FROM customers WHERE is_customer_flag = 1 AND email = :email ");
-      $customer->execute(array(':email' => $email));
+      $customer->bindParam(':email', $email, PDO::PARAM_STR);
+      $customer->execute();
       // 抽出データを配列に格納
       $result = $customer->fetch(PDO::FETCH_ASSOC);
 
-      // ハッシュ化したパスワードの認証 & 他入力値が全て一致した場合
-      if (password_verify($password, $result['password']) && $result['name_first'] == $name_first && $result['name_last'] == $name_last) {
+      // 入力値が全て一致した場合
+      if ($result == true && password_verify($password, $result['password']) && $result['name_first'] == $name_first && $result['name_last'] == $name_last) {
 
         // 再入会処理
         $id = $result['id'];
         $is_customer_flag = 0;
         try {
-          // DBに接続
           $pdo = $this->db_connect();
           $switch_status = $pdo->prepare(
             "UPDATE customers SET is_customer_flag = :is_customer_flag WHERE id = $id"
@@ -277,7 +276,7 @@ class CustomerModel
 
         // loginセッションを削除
         unset($_SESSION['login']);
-        // セッションにユーザー情報を格納
+        // customerセッションにユーザー情報を格納
         $_SESSION['customer'] = [
           'id' => $id, 'name_last' => $result['name_last'], 'name_first' => $result['name_first'], 'email' => $result['email'], 'postal_code' => $result['postal_code'], 'address' => $result['address'], 'house_num' => $result['house_num'], 'telephone_num' => $result['telephone_num'], 'password' => $result['password']
         ];
@@ -285,7 +284,7 @@ class CustomerModel
         header("Location: ./public_signup_complete.php?rejoin");
         exit;
 
-        // ログイン認証に失敗した場合
+        // 再入会認証に失敗した場合
       } else {
         $message = "登録情報が一致しません。";
         return $message;
@@ -295,7 +294,6 @@ class CustomerModel
       return $message;
     }
   }
-
 
 
   // ユーザー情報 登録内容表示

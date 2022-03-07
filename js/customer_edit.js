@@ -42,3 +42,12 @@ $('#customer_update_btn').click(function() {
 	}
 
 });
+
+// 退会ボタン押下時のアラート
+$('#public_switch_status_btn').click(function () {
+  if (window.confirm("本当に退会しますか？")) {
+    alert("退会しました。\nご利用ありがとうございました。");
+  } else {
+    return false;
+  }
+});

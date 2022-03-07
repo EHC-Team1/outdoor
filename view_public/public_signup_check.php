@@ -20,33 +20,33 @@ if (isset($_POST['input'])) {
     <h6 class="text-center mb-5">下記の内容でよろしければ、「登録する」ボタンを押して下さい。</h6>
     <div class="col-sm-8">
       <div style="text-align:center">
-        <div class="row p-2 border-bottom">
-          <div class="col-md-6">ユーザー名</div>
-          <div class="col-md-6"><?= $_SESSION['signup']['name_last'] ?>&nbsp;<?= $_SESSION['signup']['name_first']; ?></div>
+        <div class="row pt-4 border-bottom">
+          <div class="col-sm-6 h6">ユーザー名</div>
+          <div class="col-sm-6"><?= $_SESSION['signup']['name_last'] ?>&nbsp;<?= $_SESSION['signup']['name_first']; ?></div>
         </div>
-        <div class="row p-2 border-bottom">
-          <div class="col-md-6">メールアドレス</div>
-          <div class="col-md-6"><?= $_SESSION['signup']['email'] ?></div>
+        <div class="row pt-4 border-bottom">
+          <div class="col-sm-6 h6">メールアドレス</div>
+          <div class="col-sm-6"><?= $_SESSION['signup']['email'] ?></div>
         </div>
-        <div class="row p-2 border-bottom">
-          <div class="col-md-6">郵便番号</div>
-          <div class="col-md-6">〒 <?= substr_replace($_SESSION['signup']['postal_code'], '-', 3, 0) ?></div>
+        <div class="row pt-4 border-bottom">
+          <div class="col-sm-6 h6">郵便番号</div>
+          <div class="col-sm-6">〒<?= substr_replace($_SESSION['signup']['postal_code'], '-', 3, 0) ?></div>
         </div>
-        <div class="row p-2 border-bottom">
-          <div class="col-md-6">市区町村</div>
-          <div class="col-md-6"><?= $_SESSION['signup']['address'] ?></div>
+        <div class="row pt-4 border-bottom">
+          <div class="col-sm-6 h6">市区町村</div>
+          <div class="col-sm-6"><?= $_SESSION['signup']['address'] ?></div>
         </div>
-        <div class="row p-2 border-bottom">
-          <div class="col-md-6">番地・建物名</div>
-          <div class="col-md-6"><?= $_SESSION['signup']['house_num'] ?></div>
+        <div class="row pt-4 border-bottom">
+          <div class="col-sm-6 h6">番地・建物名</div>
+          <div class="col-sm-6"><?= $_SESSION['signup']['house_num'] ?></div>
         </div>
-        <div class="row p-2 border-bottom">
-          <div class="col-md-6">電話番号</div>
-          <div class="col-md-6"><?= $_SESSION['signup']['telephone_num'] ?></div>
+        <div class="row pt-4 border-bottom">
+          <div class="col-sm-6 h6">電話番号</div>
+          <div class="col-sm-6"><?= $_SESSION['signup']['telephone_num'] ?></div>
         </div>
-        <div class="row p-2 border-bottom">
-          <div class="col-md-6">パスワード</div>
-          <div class="col-md-6"><?= $_SESSION['signup']['password'] ?></div>
+        <div class="row pt-4 border-bottom">
+          <div class="col-sm-6 h6">パスワード</div>
+          <div class="col-sm-6"><?= $_SESSION['signup']['password'] ?></div>
         </div>
       </div>
       <div class="d-flex align-items-center justify-content-evenly my-5">
@@ -57,7 +57,6 @@ if (isset($_POST['input'])) {
       </div>
     </div>
   </div>
-</div>
 </div>
 
 <?php require_once('../view_common/footer.php'); ?>

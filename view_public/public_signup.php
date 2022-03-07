@@ -12,6 +12,11 @@ if (isset($_SESSION['signup']) || (isset($_GET['back']))) {
   // ボタンが押されてない場合、セッションの値を初期化
 } else {
   $_SESSION['signup']['name_last'] = $_SESSION['signup']['name_first'] = $_SESSION['signup']['email'] = $_SESSION['signup']['postal_code'] = $_SESSION['signup']['address'] = $_SESSION['signup']['house_num'] = $_SESSION['signup']['telephone_num'] = $_SESSION['signup']['password'] = "";
+  // ログイン画面でメールアドレス入力後、「新規登録」ボタンが押された場合
+  // if(isset($_POST['signup'])){
+  //   $_SESSION['signup']['name_last'] = $_SESSION['signup']['name_first'] = $_SESSION['signup']['email'] = $_SESSION['signup']['postal_code'] = $_SESSION['signup']['address'] = $_SESSION['signup']['house_num'] = $_SESSION['signup']['telephone_num'] = $_SESSION['signup']['password'] = "";
+  //   $_SESSION['signup']= ['email' => $_POST['email']];
+  // }
 }
 // エラーメッセージ無し
 $message = "";
@@ -38,32 +43,29 @@ $message = htmlspecialchars($message);
     <div class="col-sm-8">
       <form method="post">
         <div class="form-group">
-          <?= $message; ?>
-          <div class="row">
-            <div class="col-md-6">
+          <?php if (!empty($message)) { ?>
+            <div class="alert alert-danger" role="alert"><?= $message; ?></div>
+          <?php } ?>
+          <div class="row mb-3">
+            <div class="col-sm-6">
               <strong><label class="mb-1">姓</label></strong>
-              <!-- <input type="text" name="name_last" class="form-control" placeholder="例) 藤浪" value="<?= $name_last ?>" autofocus> -->
               <input type="text" name="name_last" class="form-control" placeholder="例) 藤浪" value="<?= $_SESSION['signup']['name_last'] ?>" autofocus>
             </div>
-            <div class="col-md-6">
+            <div class="col-sm-6">
               <strong><label class="mb-1">名</label></strong>
-              <!-- <input type="text" name="name_first" class="form-control" placeholder="例) 翔平" value="<?= $name_first ?>"> -->
               <input type="text" name="name_first" class="form-control" placeholder="例) 翔平" value="<?= $_SESSION['signup']['name_first'] ?>">
             </div>
           </div>
-          <!-- <p class="mt-1 ms-3">※氏名は20字以内で設定してください。</p> -->
           <div class="row mb-3">
             <div class="col">
               <strong><label class="mb-1">メールアドレス</label></strong>
-              <!-- <input type="email" name="email" class="form-control" placeholder="例) abc123@ddd.com" value="<?= $email ?>"> -->
               <input type="email" name="email" class="form-control" placeholder="例) abc123@ddd.com" value="<?= $_SESSION['signup']['email']  ?>">
             </div>
           </div>
           <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-sm-6">
               <strong><label class="mb-1">郵便番号</label></strong>
-              <input type="text" name="postal_code" class="form-control" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" placeholder="例) 1700014" value="<?= $_SESSION['signup']['postal_code'] ?>">
-              <!-- <input type="text" name="postal_code" class="form-control" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" placeholder="例) 1700014" value="<?= $postal_code ?>"> -->
+              <input type="number" name="postal_code" id="postal_code" class="form-control" maxlength="7" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" placeholder="例) 1700014" value="<?= $_SESSION['signup']['postal_code'] ?>">
             </div>
             <div class="col mt-auto">
               郵便番号入力後、市区町村が自動的に表示されます。<br>
@@ -73,28 +75,24 @@ $message = htmlspecialchars($message);
           <div class="row mb-3">
             <strong><label class="mb-1">市区町村</label></strong>
             <div class="col">
-              <!-- <input type="text" name="address" class="form-control" placeholder="例) 東京都豊島区池袋" value="<?= $address ?>"> -->
               <input type="text" name="address" class="form-control" placeholder="例) 東京都豊島区池袋" value="<?= $_SESSION['signup']['address'] ?>">
             </div>
           </div>
           <div class="row mb-3">
             <strong><label class="mb-1">番地・建物名</label></strong>
             <div class="col">
-              <!-- <input type="text" name="house_num" class="form-control" placeholder="例) 〇丁目△番地 □□マンション 101号室" value="<?= $house_num ?>"> -->
               <input type="text" name="house_num" class="form-control" placeholder="例) 〇丁目△番地 □□マンション 101号室" value="<?= $_SESSION['signup']['house_num'] ?>">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col">
               <strong><label class="mb-1">電話番号</label></strong>
-              <!-- <input type="text" name="telephone_num" class="form-control" placeholder="例) 12345678912" value="<?= $telephone_num ?>"> -->
-              <input type="text" name="telephone_num" class="form-control" placeholder="例) 12345678912" value="<?= $_SESSION['signup']['telephone_num'] ?>">
+              <input type="number" name="telephone_num" class="form-control" placeholder="例) 12345678912" value="<?= $_SESSION['signup']['telephone_num'] ?>">
             </div>
           </div>
           <div class="row">
             <div class="col">
               <strong><label class="mb-1">パスワード</label></strong>
-              <!-- <input type="password" name="password" class="form-control" placeholder="例) AbC12345678" value="<?= $password ?>"> -->
               <input type="password" name="password" class="form-control" placeholder="例) AbC12345678" value="<?= $_SESSION['signup']['password'] ?>">
             </div>
           </div>
@@ -112,4 +110,5 @@ $message = htmlspecialchars($message);
 
 <!-- 住所自動入力用jsファイル -->
 <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+<script src="../js/public_signup.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
