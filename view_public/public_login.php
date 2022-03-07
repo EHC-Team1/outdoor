@@ -3,9 +3,9 @@
 session_start();
 
 // ログイン状態であればトップにリダイレクト
-// if ($_SESSION['customer']) {
-//   header("Location: ./top.php");
-// }
+if (isset($_SESSION['customer'])) {
+  header("Location: ./top.php");
+}
 
 unset($_SESSION['signup']);
 $_SESSION['login']['email'] = $_SESSION['login']['password'] = "";
@@ -27,7 +27,6 @@ if (isset($_POST['login'])) {
 
 // メッセージをサニタイズ
 $message = htmlspecialchars($message);
-
 ?>
 
 <?php require_once('../view_common/header.php'); ?>
@@ -37,8 +36,10 @@ $message = htmlspecialchars($message);
     <h1 style="text-align:center" class="mt-5">会員ログイン</h1>
     <h6 class="text-center mb-5">商品のご購入には、ログインが必要です。</h6>
     <div class="col-sm-8">
-      <?php if (!empty($message)) { ?>
-        <div class="alert alert-danger" role="alert"><?= $message; ?></div>
+      <?php if ($message) { ?>
+        <div class="alert alert-danger text-center" role="alert">
+          <?= $message; ?>
+        </div>
       <?php } ?>
       <form method="post">
         <div style="text-align:center">
@@ -64,6 +65,5 @@ $message = htmlspecialchars($message);
     </div>
   </div>
 </div>
-
 
 <?php require_once('../view_common/footer.php'); ?>

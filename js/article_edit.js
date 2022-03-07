@@ -9,10 +9,19 @@ $('#article_update_btn').click(function () {
   }
 
   // 更新に成功した場合
-  value = $('#article_update_is_status').prop("checked");
+  value = $('#success-outlined').prop("checked");
   if (value == true) {
     alert("公開設定で、記事を更新しました。");
   } else {
     alert("非公開設定で、記事を更新しました。");
+  }
+});
+
+// 記事の削除ボタン押下時のアラート
+$('#delete_btn').click(function () {
+  if (window.confirm("記事を削除しますか？")) {
+    alert("記事を削除しました。");
+  } else {
+    return false;
   }
 });

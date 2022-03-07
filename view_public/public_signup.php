@@ -2,21 +2,11 @@
 // セッションの宣言
 session_start();
 
-// ログイン状態であればトップにリダイレクト
-// if ($_SESSION['customer']) {
-//   header("Location: ./top.php");
-// }
-
 // 入力確認画面で「戻る」ボタンが押されて、リダイレクトしてきた場合
 if (isset($_SESSION['signup']) || (isset($_GET['back']))) {
   // ボタンが押されてない場合、セッションの値を初期化
 } else {
   $_SESSION['signup']['name_last'] = $_SESSION['signup']['name_first'] = $_SESSION['signup']['email'] = $_SESSION['signup']['postal_code'] = $_SESSION['signup']['address'] = $_SESSION['signup']['house_num'] = $_SESSION['signup']['telephone_num'] = $_SESSION['signup']['password'] = "";
-  // ログイン画面でメールアドレス入力後、「新規登録」ボタンが押された場合
-  // if(isset($_POST['signup'])){
-  //   $_SESSION['signup']['name_last'] = $_SESSION['signup']['name_first'] = $_SESSION['signup']['email'] = $_SESSION['signup']['postal_code'] = $_SESSION['signup']['address'] = $_SESSION['signup']['house_num'] = $_SESSION['signup']['telephone_num'] = $_SESSION['signup']['password'] = "";
-  //   $_SESSION['signup']= ['email' => $_POST['email']];
-  // }
 }
 // エラーメッセージ無し
 $message = "";
@@ -29,11 +19,8 @@ if (isset($_POST['check'])) {
   $pdo = $pdo->check();
   $message = $pdo;
 }
-
-// メッセージをサニタイズ
 $message = htmlspecialchars($message);
 ?>
-
 
 <?php require_once '../view_common/header.php'; ?>
 
@@ -43,8 +30,10 @@ $message = htmlspecialchars($message);
     <div class="col-sm-8">
       <form method="post">
         <div class="form-group">
-          <?php if (!empty($message)) { ?>
-            <div class="alert alert-danger" role="alert"><?= $message; ?></div>
+          <?php if ($message) { ?>
+            <div class="alert alert-danger text-center" role="alert">
+              <?= $message; ?>
+            </div>
           <?php } ?>
           <div class="row mb-3">
             <div class="col-sm-6">

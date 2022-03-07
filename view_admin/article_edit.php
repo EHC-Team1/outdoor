@@ -41,7 +41,7 @@ if (isset($_POST['article_update'])) {
   // deleteメソッドを呼び出し
   $item = $pdo->delete();
   // 管理者トップに遷移
-  header('Location: ../view_admin/admin_item_index.php');
+  header('Location: ../view_admin/article_index.php');
 }
 
 ?>
@@ -129,8 +129,21 @@ if (isset($_POST['article_update'])) {
             </div>
           <?php } ?>
         </div>
+
+        <div class="row my-3 d-flex justify-content-evenly">
+          <div class="col-sm-3 text-center">
+            <input type="radio" class="btn-check" name="posting_date" id="btn-success-outlined" value="updated_at_keep" autocomplete="off" checked>
+            <label class="btn btn-outline-success" for="btn-success-outlined">更新日( <?= $article["updated_at"] ?> )<br>変更しない</label>
+          </div>
+          <div class="col-sm-3 text-center">
+            <input type="radio" class="btn-check" name="posting_date" id="btn-danger-outlined" autocomplete="off">
+            <label class="btn btn-outline-danger" for="btn-danger-outlined">更新日を現在の日時に<br>変更する</label>
+          </div>
+        </div>
+
         <div class="d-flex align-items-center justify-content-center">
           <input type="hidden" name="id" value="<?= $article['id'] ?>">
+          <input type="hidden" name="updated_at_keep" value="<?= $article['updated_at'] ?>">
           <button type="submit" name="article_update" class="btn btn-outline-success btn-lg" id="article_update_btn">記事を更新する</button>
         </div>
       </form>

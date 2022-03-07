@@ -216,17 +216,15 @@ class ArticleModel
   public function admin_index()
   {
     try {
-      // DBに接続
       $pdo = $this->db_connect();
-      //SQL文 投稿日時の降順で取得
+      // 更新日時の降順で取得
       $articles = $pdo->prepare(
-        "SELECT * FROM articles ORDER BY created_at DESC"
+        "SELECT * FROM articles ORDER BY updated_at DESC"
       );
       $articles->execute();
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
     }
-    // $articlesを返す
     return $articles;
   }
 
@@ -292,6 +290,7 @@ class ArticleModel
     $title = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8')));
     $body = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', (htmlspecialchars($_POST['body'], ENT_QUOTES, 'UTF-8')));
     $article_image = $_FILES['article_image'];
+
     // 公開ステータスの判定 「公開」の場合
     if ($_POST['is_status']  == "disclosure") {
       $is_status = 1;
@@ -302,6 +301,11 @@ class ArticleModel
     // 画像削除ボタンの判定
     if (isset($_POST['delete_image'])) {
       $delete_image = 1;
+    }
+
+    // 投稿日時ボタンの判定
+    if ($_POST['posting_date'] == "updated_at_keep") {
+      $updated_at_keep = $_POST['updated_at_keep'];;
     }
 
     // 画像ファイルがある場合
@@ -321,17 +325,24 @@ class ArticleModel
         echo ("<button onclick=location.href='../view_admin/article_index.php' class=btn btn-outline-secondary btn-lg>戻る</button>");
       }
       try {
-        // DB接続
         $pdo = $this->db_connect();
-        $date = getdate();
         // DBに格納するファイル名を設定
+        $date = getdate();
         $article_image = $article_image['tmp_name'] . $date["year"] . $date["mon"] . $date["mday"] . $date["hours"] . $date["minutes"] . $date["seconds"];
         $article_image = hash("sha256", $article_image);
-        // SQL文　idが一致するデータへ更新処理
-        $articles = $pdo->prepare(
-          "UPDATE articles SET title =:title, body =:body, article_image = :article_image, extension = :extension, raw_data=:raw_data, is_status = :is_status, updated_at = now() WHERE id =$id"
-        );
-        // 値をセット
+
+        // 投稿日の判定「変更なし」の場合
+        if ($updated_at_keep) {
+          $articles = $pdo->prepare(
+            "UPDATE articles SET title =:title, body =:body, article_image = :article_image, extension = :extension, raw_data=:raw_data, is_status = :is_status, updated_at = :updated_at WHERE id =$id"
+          );
+          $articles->bindParam(':updated_at', $updated_at_keep, PDO::PARAM_INT);
+          // 投稿日の判定「変更あり」の場合
+        } else {
+          $articles = $pdo->prepare(
+            "UPDATE articles SET title =:title, body =:body, article_image = :article_image, extension = :extension, raw_data=:raw_data, is_status = :is_status, updated_at = now() WHERE id =$id"
+          );
+        }
         $articles->bindParam(':title', $title, PDO::PARAM_STR);
         $articles->bindParam(':body', $body, PDO::PARAM_STR);
         $articles->bindValue(':article_image', $article_image, PDO::PARAM_STR);
@@ -346,13 +357,19 @@ class ArticleModel
       // 「画像削除」ボタンが押された場合
     } elseif ($delete_image) {
       try {
-        // DB接続
         $pdo = $this->db_connect();
-        // SQL文　idが一致するデータへ更新処理
-        $articles = $pdo->prepare(
-          "UPDATE articles SET title =:title, body =:body, article_image = :article_image, extension = :extension, raw_data=:raw_data, is_status = :is_status, updated_at = now() WHERE id =$id"
-        );
-        // 値をセット
+        // 投稿日の判定「変更なし」の場合
+        if ($updated_at_keep) {
+          $articles = $pdo->prepare(
+            "UPDATE articles SET title =:title, body =:body, article_image = :article_image, extension = :extension, raw_data=:raw_data, is_status = :is_status, updated_at = :updated_at WHERE id =$id"
+          );
+          $articles->bindParam(':updated_at', $updated_at_keep, PDO::PARAM_INT);
+          // 投稿日の判定「変更あり」の場合
+        } else {
+          $articles = $pdo->prepare(
+            "UPDATE articles SET title =:title, body =:body, article_image = :article_image, extension = :extension, raw_data=:raw_data, is_status = :is_status, updated_at = now() WHERE id =$id"
+          );
+        }
         $articles->bindParam(':title', $title, PDO::PARAM_STR);
         $articles->bindParam(':body', $body, PDO::PARAM_STR);
         $articles->bindValue(':article_image', "", PDO::PARAM_STR);
@@ -367,13 +384,19 @@ class ArticleModel
       // 新規画像が選択されてない＆「画像削除」ボタンが押されていない場合
     } else {
       try {
-        // DB接続
         $pdo = $this->db_connect();
-        // SQL文 idが一致するデータへ更新処理
-        $articles = $pdo->prepare(
-          "UPDATE articles SET title =:title, body =:body, is_status = :is_status, updated_at = now() WHERE id =$id"
-        );
-        // 値をセット
+        // 投稿日の判定「変更なし」の場合
+        if ($updated_at_keep) {
+          $articles = $pdo->prepare(
+            "UPDATE articles SET title =:title, body =:body, is_status = :is_status, updated_at = :updated_at WHERE id =$id"
+          );
+          $articles->bindParam(':updated_at', $updated_at_keep, PDO::PARAM_INT);
+          // 投稿日の判定「変更あり」の場合
+        } else {
+          $articles = $pdo->prepare(
+            "UPDATE articles SET title =:title, body =:body, is_status = :is_status, updated_at = now() WHERE id =$id"
+          );
+        }
         $articles->bindParam(':title', $title, PDO::PARAM_STR);
         $articles->bindParam(':body', $body, PDO::PARAM_STR);
         $articles->bindParam(':is_status', $is_status, PDO::PARAM_INT);
@@ -404,7 +427,7 @@ class ArticleModel
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
-    $message = "記事が削除されました。";
+    $message = "記事を削除しました。";
     return $message;
   }
 }

@@ -76,13 +76,8 @@ class CustomerModel
 
           // 退会済みユーザーのメールアドレスの場合
         } elseif (isset($result['id']) && $result['is_customer_flag'] == 1) {
-          // セッションに情報を格納して、再登録ログイン画面へ遷移
-          $_SESSION['login'] = ['email' => $result['email'],];
           header("Location: ./public_rejoin.php");
           exit;
-
-          // $message = "このメールアドレスはでに利用されています。""<a href='./public_rejoin.php'>再登録画面へ</a>";
-          // return $message;
         }
 
         // RFC違反メールアドレスの場合
@@ -218,8 +213,6 @@ class CustomerModel
 
         // 入力値が全て一致、退会済みユーザーと判定したら、再登録画面へ遷移
       } elseif ($result == true && password_verify($password, $result['password']) && $result['is_customer_flag'] == 1) {
-        // loginセッションの値をパスワードのみクリア
-        $_SESSION['login']['password'] = '';
         header("Location: ./public_rejoin.php");
         exit;
 
@@ -259,7 +252,6 @@ class CustomerModel
 
       // 入力値が全て一致した場合
       if ($result == true && password_verify($password, $result['password']) && $result['name_first'] == $name_first && $result['name_last'] == $name_last) {
-
         // 再入会処理
         $id = $result['id'];
         $is_customer_flag = 0;
@@ -274,8 +266,9 @@ class CustomerModel
           die('接続エラー：' . $Exception->getMessage());
         }
 
-        // loginセッションを削除
+        // 各セッションを削除
         unset($_SESSION['login']);
+        unset($_SESSION['signup']);
         // customerセッションにユーザー情報を格納
         $_SESSION['customer'] = [
           'id' => $id, 'name_last' => $result['name_last'], 'name_first' => $result['name_first'], 'email' => $result['email'], 'postal_code' => $result['postal_code'], 'address' => $result['address'], 'house_num' => $result['house_num'], 'telephone_num' => $result['telephone_num'], 'password' => $result['password']
