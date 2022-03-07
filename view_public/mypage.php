@@ -263,4 +263,4 @@ if (isset($_POST['delete'])) {
 
 <!-- バリデーション用jsファイル -->
 <script src="../js/mypage.js"></script>
-<?php require_once '../view_common/footer.php'; ?>
+<?php require_once '../view_common/footer.php' ?>

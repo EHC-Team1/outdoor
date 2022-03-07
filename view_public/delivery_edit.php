@@ -61,6 +61,7 @@ if (isset($_POST['update_delivery'])) {
                 <input type="text" name="house_num" class="form-control" id="delivery_house_num" placeholder="例) 〇丁目△番地 □□マンション 101号室" value="<?= $delivery['house_num'] ?>">
               </div>
             </div>
+          </table>
         </div>
         <div class="d-flex align-items-center justify-content-evenly my-5">
           <button type="submit" name="back" formaction="./mypage.php" class="btn btn-outline-secondary btn-lg">マイページへ戻る</button>
@@ -71,7 +72,9 @@ if (isset($_POST['update_delivery'])) {
   </div>
 </div>
 
-<?php require_once '../view_common/footer.php'; ?>
 <!-- 住所自動入力用jsファイル -->
 <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
 <script src="../js/delivery_edit.js"></script>
+
+
+<?php require_once '../view_common/footer.php'; ?>

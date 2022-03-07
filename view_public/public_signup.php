@@ -99,7 +99,7 @@ $message = htmlspecialchars($message);
           <p class="mt-1 ms-3">※パスワードは半角英数字をそれぞれ1文字以上含んだ、8文字以上24字以内で設定してください。</p></br>
         </div>
         <div class="d-flex align-items-center justify-content-evenly my-5">
-          <button type="submit" name="back" formaction="./public_login.php" class="btn btn-outline-secondary btn-lg">ログイン画面へ戻る</button>
+          <button type="submit" name="back" formaction="./public_login.php" class="btn btn-outline-secondary btn-lg">ログイン画面へ</button>
           <button type="submit" formaction="public_signup.php" name="check" class="btn btn-outline-primary btn-lg">確認する</button>
         </div>
     </div>

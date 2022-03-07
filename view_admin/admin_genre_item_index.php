@@ -76,12 +76,15 @@ $message = htmlspecialchars($message);
 <?php require_once '../view_common/header.php'; ?>
 
 <div class="container">
-  <div class="row d-flex justify-content-center">
+  <div class="row d-flex justify-content-center mt-5">
     <div class="col-sm-10 d-flex flex-row-reverse">
-      <button onclick="location.href='customer_index.php'" class="btn btn-outline-secondary btn-lg mt-5">ユーザー一覧</button>
+      <button onclick="location.href='admin_order_index.php'" class="btn btn-outline-secondary btn-lg ms-5">注文履歴一覧</button>
+      <button onclick="location.href='customer_index.php'" class="btn btn-outline-secondary btn-lg">ユーザー一覧</button>
     </div>
   </div>
-  <h1 style="text-align:center" class="mt-2 mb-5">管理者トップ</h1>
+  <a href="../view_admin/admin_item_index.php" style="text-decoration:none">
+    <h1 style="color:black" class="text-center mt-3 mb-5">管理者トップ</h1>
+  </a>
   <div class="row d-flex justify-content-center">
     <div class="col-md-11 d-flex justify-content-around">
       <button onclick="location.href='item_input.php'" class="btn btn-outline-primary btn-lg">商品追加</button>
@@ -89,7 +92,7 @@ $message = htmlspecialchars($message);
       <button onclick="location.href='genre_index.php'" class="btn btn-outline-info btn-lg">ジャンル一覧</button>
     </div>
   </div>
-  <h1 class="text-center my-5">商品一覧 / <?= $selected_genre['name'] ?></h1>
+  <h2 class="text-center my-5">商品一覧 / <?= $selected_genre['name'] ?></h2>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-10">
       <?= $message; ?>
