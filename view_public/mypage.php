@@ -96,7 +96,7 @@ if (isset($_POST['delete'])) {
       <div class="row d-flex justify-content-evenly mt-3">
         <div class="col-sm-3 text-center">
           <form action="public_order_index.php" method="POST">
-            <input type="submit" class="btn btn-outline-primary btn-lg" value="注文履歴一覧">
+            <input type="submit" class="btn btn-outline-secondary btn-lg" value="注文履歴一覧">
           </form>
         </div>
         <div class="col-sm-3 text-center">

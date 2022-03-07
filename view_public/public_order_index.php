@@ -37,7 +37,7 @@ $orders = $orders->fetchAll(PDO::FETCH_ASSOC);
                 <td class="align-middle"><?= $order['created_at'] ?></td>
                 <td class="align-middle"><?= '〒' . substr_replace($order['postal_code'], '-', 3, 0) . '<br>' . $order['address'] . '&nbsp' . $order['house_num'] . '<br>' . $order['orderer_name'] ?></td>
                 <td class="align-middle"><?= number_format($order['total_payment']) . '円' ?></td>
-                <td class="align-middle"><input type="submit" class="btn btn-primary" value="注文詳細へ"></td>
+                <td class="align-middle"><input type="submit" class="btn btn-secondary" value="注文詳細へ"></td>
                 <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
               </tr>
             </tbody>
