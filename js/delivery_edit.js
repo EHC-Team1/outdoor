@@ -58,13 +58,5 @@ $('#delivery_edit_btn').click(function () {
 		alert("番地・建物名を入力してください。");
 		return false;
 	}
-
-
-
-
-
-
-
-
-
 });
+

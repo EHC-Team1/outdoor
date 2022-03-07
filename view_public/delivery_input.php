@@ -21,8 +21,8 @@ if (isset($_POST['input_delivery'])) {
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
-    <h1 class="text-center mt-5 mb-5">配送先新規登録</h1>
-    <div class="col-md-8">
+    <h1 class="text-center my-5">配送先新規登録</h1>
+    <div class="col-sm-8">
       <form method="POST">
         <div class="form-group">
           <input type="hidden" name="customer_id" value="<?= $_SESSION['customer']['id'] ?>">
@@ -34,9 +34,9 @@ if (isset($_POST['input_delivery'])) {
             </div>
           </div>
           <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-sm-6">
             <strong><label class="mb-1">郵便番号</label></strong>
-              <input type="text" name="postal_code" class="form-control" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" id="delivery_postal_code" placeholder="例) 1700014">
+              <input type="number" name="postal_code" class="form-control" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" id="delivery_postal_code" placeholder="例) 1700014">
             </div>
             <div class="col mt-auto">
               郵便番号入力後、市区町村が自動的に表示されます。<br>
@@ -56,7 +56,7 @@ if (isset($_POST['input_delivery'])) {
             </div>
           </div>
         </div>
-        <div class="d-flex align-items-center justify-content-evenly mt-5 md-5">
+        <div class="d-flex align-items-center justify-content-evenly my-5">
           <button type="submit" name="back" formaction="./mypage.php" class="btn btn-outline-secondary btn-lg">マイページへ戻る</button>
           <button type="submit" name="input_delivery" class="btn btn-outline-primary btn-lg" id="delivery_input_btn">新規登録</button>
         </div>

@@ -14,8 +14,7 @@ $('.secession_btn').click(function () {
 
 
 // 再入会処理「名前」クリック時のアラート
-$('.rejoign_btn').click(function () {
-
+$('.rejoin_btn').click(function () {
     if (window.confirm("このユーザーを再入会させますか？")) {
     alert("情報を会員ユーザー一覧へ移動しました。");
   } else {

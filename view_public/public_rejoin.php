@@ -53,7 +53,9 @@ $message = htmlspecialchars($message);
       </div>
     </h6>
     <div class="col-sm-8">
-      <?= $message; ?>
+      <?php if (!empty($message)) { ?>
+        <div class="alert alert-danger" role="alert"><?= $message; ?></div>
+      <?php } ?>
       <form method="post" action="">
         <div style="text-align:center">
           <!-- <div class="row"> 姓　名　横並びver
@@ -67,24 +69,24 @@ $message = htmlspecialchars($message);
             </div>
           </div> -->
           <div class="row">
-            <strong class="col-md-3"><label>姓</label></strong>
+            <strong class="col-sm-3"><label>姓</label></strong>
             <div class="col-md-9">
               <input type="text" name="name_last" class="form-control" placeholder="例) 藤浪" value="<?= $_SESSION['login']['name_last'] ?>" autofocus><br>
             </div>
-            <strong class="col-md-3"><label>名</label></strong>
-            <div class="col-md-9">
+            <strong class="col-sm-3"><label>名</label></strong>
+            <div class="col-sm-9">
               <input type="text" name="name_first" class="form-control" placeholder="例) 翔平" value="<?= $_SESSION['login']['name_first'] ?>"><br>
             </div>
           </div>
           <div class="row">
-            <strong class="col-md-3"><label for="email">メールアドレス</label></strong>
-            <div class="col-md-9">
-              <input id="email" type="text" name="email" class="form-control" placeholder="例) abc123@ddd.com" value="<?= $_SESSION['login']['email'] ?>"><br>
+            <strong class="col-sm-3"><label for="email">メールアドレス</label></strong>
+            <div class="col-sm-9">
+              <input id="email" type="email" name="email" class="form-control" placeholder="例) abc123@ddd.com" value="<?= $_SESSION['login']['email'] ?>"><br>
             </div>
           </div>
           <div class="row">
-            <strong class="col-md-3"><label for="password">パスワード</label></strong>
-            <div class="col-md-9">
+            <strong class="col-sm-3"><label for="password">パスワード</label></strong>
+            <div class="col-sm-9">
               <input id="password" type="password" name="password" class="form-control" placeholder="例) AbC12345678" value="<?= $_SESSION['login']['password'] ?>">
               <p class="mt-2 ms-1">※パスワードは半角英数字をそれぞれ1文字以上含んだ、8文字以上24字以内で入力してください。</p></br>
             </div>
