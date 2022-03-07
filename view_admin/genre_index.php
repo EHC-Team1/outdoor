@@ -60,29 +60,28 @@ $message = htmlspecialchars($message);
   </form>
   <h1 class="text-center my-5">ジャンル一覧</h1>
   <div class="row d-flex align-items-center justify-content-center">
-    <div class="col-md-10">
+    <div class="col-sm-10">
       <?= $message; ?>
       <table class="table">
         <tbody>
           <?php
           foreach ($genres as $genre) { ?>
             <tr>
-              <td>
-                <?php
-                echo "<h4>";
-                echo ($genre['name']);
-                echo "</h4>";
-                ?>
+              <td class="text-center">
+                <a href="../view_admin/admin_genre_item_index.php?genre_id=<?= $genre['id'] ?>" style="text-decoration:none">
+                  <h4 style="color:black"><?= $genre['name'] ?></h4>
+                </a>
               </td>
-              <td>
+              <td class="align-middle col-sm-1">
                 <form action="genre_edit.php" method="post" class="d-flex align-items-center justify-content-center">
-                  <input type="hidden" name="id" value="<?php echo $genre['id'] ?>">
+                  <input type="hidden" name="id" value="<?= $genre['id'] ?>">
                   <button type="submit" name="edit" class="btn btn-outline-success">編集</button>
                 </form>
               </td>
-              <td>
+              <td class="align-middle col-sm-1">
                 <form method="post" class="d-flex align-items-center justify-content-center">
-                  <input type="hidden" name="id" value="<?php echo $genre['id'] ?>">
+                  <input type="hidden" name="id" value="<?= $genre['id'] ?>">
+                  <input type="hidden" class="name" value="<?= $genre['name'] ?>">
                   <button type="submit" name="delete" class="btn btn-outline-danger">削除</button>
                 </form>
               </td>
@@ -92,12 +91,13 @@ $message = htmlspecialchars($message);
       </table>
     </div>
   </div>
-  <div class="row d-flex justify-content-center">
-    <div class="col-md-10 d-flex flex-row-reverse">
+  <div class="row d-flex justify-content-center mb-5">
+    <div class="col-sm-10 d-flex flex-row-reverse">
       <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg mt-3">戻る</button>
     </div>
   </div>
 </div>
 
-
+<!-- バリデーション用jsファイル -->
+<script src="../js/genre_edit.js"></script>
 <?php require_once '../view_common/footer.php'; ?>

@@ -91,7 +91,7 @@ $genres = $genres->fetchAll(PDO::FETCH_ASSOC);
       <?php foreach ($genres as $genre) { ?>
         <tr>
           <td class="text-center">
-            <a href="../view_public/genre_item_index.php?genre_id=<?= $genre['id'] ?>" style="text-decoration:none">
+            <a href="../view_public/public_genre_item_index.php?genre_id=<?= $genre['id'] ?>" style="text-decoration:none">
               <h5 style="color:black"><?= $genre['name'] ?></h5>
             </a>
           </td>
