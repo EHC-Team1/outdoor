@@ -176,7 +176,7 @@ $message = htmlspecialchars($message);
                       <?= $article['body'] ?>
                     </p>
                   <?php } ?>
-                  <p class="text-end align-bottom" style="color:black">更新日：<?= date('Y/m/d H:i:s', strtotime($article['updated_at'])); ?></p>
+                  <p class="text-end" style="color:black">更新日：<?= date('Y/m/d H:i:s', strtotime($article['updated_at'])); ?></p>
                 </a>
               </td>
             </tr>
