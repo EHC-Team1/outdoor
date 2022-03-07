@@ -148,6 +148,39 @@
       return $items;
     }
 
+    // admin_genre_indexページング用データ数取得
+    public function page_count_admin_genre_index($genre_id)
+    {
+      try {
+        $pdo = $this->db_connect();
+        $pages = $pdo->prepare(
+          "SELECT COUNT(*) id FROM items WHERE genre_id = $genre_id"
+        );
+        $pages->execute();
+      } catch (PDOException $Exception) {
+        exit("接続エラー：" . $Exception->getMessage());
+      }
+      return $pages;
+    }
+
+    // 管理側該当ジャンル商品一覧
+    public function admin_genre_index($genre_id, $start)
+    {
+      $genre_id = $genre_id;
+      $start = $start;
+      try {
+        // db_connectメソッドを呼び出す
+        $pdo = $this->db_connect();
+        $items = $pdo->prepare(
+          "SELECT * FROM items WHERE items.genre_id = $genre_id ORDER BY items.updated_at DESC LIMIT {$start}, 16"
+        );
+        $items->execute();
+      } catch (PDOException $Exception) {
+        exit("接続エラー：" . $Exception->getMessage());
+      }
+      return $items;
+    }
+
     // 商品の編集
     public function edit($item_id)
     {
@@ -347,7 +380,7 @@
     }
 
     // genre_indexページング用データ数取得
-    public function page_count_genre_index($genre_id)
+    public function page_count_public_genre_index($genre_id)
     {
       $genre_id = $genre_id;
       try {
@@ -362,8 +395,8 @@
       return $pages;
     }
 
-    // 該当ジャンル商品の一覧表示
-    public function genre_index($genre_id, $start)
+    // 顧客側該当ジャンル商品の一覧表示
+    public function public_genre_index($genre_id, $start)
     {
       $genre_id = $genre_id;
       $start = $start;
@@ -371,7 +404,7 @@
         // db_connectメソッドを呼び出す
         $pdo = $this->db_connect();
         $items = $pdo->prepare(
-          "SELECT items.id AS id, items.name AS item_name, items.price AS price, items.item_image AS item_image, items.extension AS extension, genres.name AS genre_name FROM items, genres WHERE genres.id = items.genre_id AND items.genre_id = $genre_id AND items.is_status = 1 ORDER BY items.updated_at DESC LIMIT {$start}, 16"
+          "SELECT * FROM items WHERE items.genre_id = $genre_id AND items.is_status = 1 ORDER BY items.updated_at DESC LIMIT {$start}, 16"
         );
         $items->execute();
       } catch (PDOException $Exception) {

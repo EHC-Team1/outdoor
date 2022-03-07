@@ -27,7 +27,7 @@ if ($page > 1) {
 
 // itemsテーブルから該当ジャンルのデータ件数を取得
 $pdo = new ItemModel();
-$pages = $pdo->page_count_genre_index($genre_id);
+$pages = $pdo->page_count_public_genre_index($genre_id);
 $page_num = $pages->fetchColumn();
 // ページネーションの数を取得
 $pagination = ceil($page_num / 16);
@@ -35,7 +35,7 @@ $pagination = ceil($page_num / 16);
 // Itemクラスを呼び出し
 $pdo = new ItemModel();
 // genre_indexメソッドを呼び出し
-$items = $pdo->genre_index($genre_id, $start);
+$items = $pdo->public_genre_index($genre_id, $start);
 // returnしてきた$itemsを$itemsに格納
 $items = $items->fetchAll(PDO::FETCH_ASSOC);
 
@@ -69,7 +69,7 @@ $selected_genre = $selected_genre->fetch(PDO::FETCH_ASSOC);
                   <img src="../view_common/item_image.php?target=<?= $target ?>" alt="item_image" class="card-img-top img-fluid">
                 <?php } ?>
                 <div class="card-body">
-                  <h4 class="card-title"><?= $item['item_name'] ?></h4>
+                  <h4 class="card-title"><?= $item['name'] ?></h4>
                   <h4 class="card-title">￥<?= $item['price'] ?></h4>
                 </div>
               </a>

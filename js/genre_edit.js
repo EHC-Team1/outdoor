@@ -9,7 +9,7 @@ $('#genre_edit_btn').click(function () {
 
 // ジャンル「削除」ボタン押下時のアラート
 $('.btn-outline-danger').click(function () {
-  if (window.confirm("ジャンルを削除しますか？")) {
+  if (window.confirm('すべての商品が同時に削除されます。\nジャンルを削除しますか？')) {
   } else {
     return false;
   }

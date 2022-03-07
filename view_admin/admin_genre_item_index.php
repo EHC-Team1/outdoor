@@ -1,5 +1,5 @@
 <?php
-// セッションを宣言
+// セッションの宣言
 session_start();
 
 // 管理者としてログインしているかチェック
@@ -9,6 +9,13 @@ if (isset($_SESSION['admin'])) {
   die();
 }
 
+if (isset($_GET["genre_id"]) && $_GET["genre_id"] !== "") {
+  $genre_id = $_GET["genre_id"];
+} else {
+  return false;
+}
+
+// 該当ジャンル商品一覧表示
 // ItemModelファイルを読み込み
 require_once('../Model/ItemModel.php');
 
@@ -34,24 +41,34 @@ if (isset($_GET['page'])) {
 }
 // スタートのページを計算
 if ($page > 1) {
-  $start = ($page * 15) - 15;
+  $start = ($page * 16) - 16;
 } else {
   $start = 0;
 }
 
-// itemsテーブルから全データ件数を取得
+// itemsテーブルから該当ジャンルのデータ件数を取得
 $pdo = new ItemModel();
-$pages = $pdo->page_count_admin_index();
+$pages = $pdo->page_count_admin_genre_index($genre_id);
 $page_num = $pages->fetchColumn();
 // ページネーションの数を取得
-$pagination = ceil($page_num / 15);
+$pagination = ceil($page_num / 16);
 
 // Itemクラスを呼び出し
 $pdo = new ItemModel();
-// admin_indexメソッドを呼び出し
-$items = $pdo->admin_index($start);
-// モデルからreturnしてきた情報をitemsに格納
+// genre_indexメソッドを呼び出し
+$items = $pdo->admin_genre_index($genre_id, $start);
+// returnしてきた$itemsを$itemsに格納
 $items = $items->fetchAll(PDO::FETCH_ASSOC);
+
+// ジャンル名の参照
+// GenreModelファイルを読み込み
+require_once('../Model/GenreModel.php');
+// Genreクラスを呼び出し
+$pdo = new GenreModel();
+// showメソッドを呼び出し
+$selected_genre = $pdo->show($genre_id);
+// モデルからreturnしてきた情報をselected_genreに格納
+$selected_genre = $selected_genre->fetch(PDO::FETCH_ASSOC);
 
 $message = htmlspecialchars($message);
 ?>
@@ -67,13 +84,12 @@ $message = htmlspecialchars($message);
   <h1 style="text-align:center" class="mt-2 mb-5">管理者トップ</h1>
   <div class="row d-flex justify-content-center">
     <div class="col-md-11 d-flex justify-content-around">
-      <button onclick="location.href='admin_order_index.php'" class="btn btn-outline-primary btn-lg">注文履歴一覧</button>
       <button onclick="location.href='item_input.php'" class="btn btn-outline-primary btn-lg">商品追加</button>
       <button onclick="location.href='article_index.php'" class="btn btn-outline-info btn-lg">記事一覧</button>
       <button onclick="location.href='genre_index.php'" class="btn btn-outline-info btn-lg">ジャンル一覧</button>
     </div>
   </div>
-  <h1 class="text-center my-5">商品一覧</h1>
+  <h1 class="text-center my-5">商品一覧 / <?= $selected_genre['name'] ?></h1>
   <div class="row d-flex justify-content-center">
     <div class="col-sm-10">
       <?= $message; ?>
@@ -106,7 +122,7 @@ $message = htmlspecialchars($message);
               </td>
               <td class="col-sm-6 align-middle">
                 <a href=" ../view_admin/item_edit.php?item_id=<?= $item['id'] ?>" style="text-decoration:none">
-                  <h4 style="color:black"><?= $item['item_name'] ?> / <?= $item['genre_name'] ?></h4>
+                  <h4 style="color:black"><?= $item['name'] ?></h4>
                 </a>
               </td>
             </tr>
@@ -125,6 +141,4 @@ $message = htmlspecialchars($message);
   <?php require_once '../view_common/paging.php'; ?>
 </div>
 
-<!-- バリデーション・アラート用jsファイル -->
-<script src="../js/admin_item_index.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
