@@ -2,13 +2,21 @@
 // セッションを宣言
 session_start();
 
-// OrderDetailModelファイルを読み込み
+// OrderModelファイルを読み込み
+require_once('../Model/OrderModel.php');
+// Orderクラスを呼び出し
+$pdo = new OrderModel();
+// showメソッドを呼び出し
+$order_id = $_POST['order_id'];
+$order = $pdo->show($order_id);
+$order = $order->fetch(PDO::FETCH_ASSOC);
+
+// OrderDetailファイルを読み込み
 require_once('../Model/OrderDetailModel.php');
 // OrderDetailクラスを呼び出し
 $pdo = new OrderDetailModel();
 // showメソッドを呼び出し
-$order_id = $_POST['order_id'];
-$order_detail = $pdo->show($order_id);
+$order_details = $pdo->show($order_id);
 
 ?>
 
@@ -16,50 +24,80 @@ $order_detail = $pdo->show($order_id);
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
-    <h1 class="text-center mt-5 mb-5">注文履歴詳細</h1>
-    <?php $order_detail = $order_detail->fetch(PDO::FETCH_ASSOC); ?>
-
+    <h1 class="text-center my-5">注文履歴詳細</h1>
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-8">
+          <h5>注文情報</h5>
+          <table class="table table-bordered border-dark">
+            <tbody>
+              <tr>
+                <th scope="col" class="table-active">注文日</th>
+                <td><?= $order['created_at'] ?></td>
+              </tr>
+              <tr>
+                <th scope="col" class="table-active">配送先</th>
+                <td class="align-middle"><?= '〒' . substr_replace($order['postal_code'], '-', 3, 0) . '<br>' . $order['address'] . '&nbsp' . $order['house_num'] . '<br>' . $order['orderer_name'] ?></td>
+              </tr>
+              <tr>
+                <th scope="col" class="table-active">支払方法</th>
+                <?php if ($order['payment_way'] === 0) : ?>
+                  <td>銀行振込</td>
+                <?php else : ?>
+                  <td>クレジットカード</td>
+                <?php endif ?>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
     <div class="col-md-9">
       <form method="POST">
         <div class="row">
-          <div class="col-md-6">
-            <h5>注文情報</h5>
+          <div class="col-md-8">
+            <h5>注文内容</h5>
             <table class="table table-bordered border-dark">
-              <tbody>
+              <thead>
                 <tr>
-                  <th scope="col" class="table-active">注文日</th>
-                  <td><?= $order_detail['created_at'] ?></td>
+                  <th scope="col" class="col-6 table-active">商品</th>
+                  <th scope="col" class="col-2 table-active">単価（税込）</th>
+                  <th scope="col" class="col-1 table-active">個数</th>
+                  <th scope="col" class="col-1 table-active">小計</th>
                 </tr>
-                <tr>
-                  <th scope="col" class="table-active">配送先</th>
-                  <td class="align-middle"><?= '〒' . substr_replace($order_detail['postal_code'], '-', 3, 0) . '<br>' . $order_detail['address'] . '&nbsp' . $order_detail['house_num'] . '<br>' . $order_detail['orderer_name'] ?></td>
-                </tr>
-                <tr>
-                  <th scope="col" class="table-active">支払方法</th>
-                  <?php if ($order_detail['payment_way'] === 0) : ?>
-                    <td>銀行振込</td>
-                  <?php else : ?>
-                    <td>クレジットカード</td>
-                  <?php endif ?>
-                </tr>
-              </tbody>
+              </thead>
+              <?php $total = 0;
+              foreach ($order_details as $order_detail) { ?>
+                <tbody>
+                  <tr>
+                    <td class="align-middle"><?= $order_detail['name'] ?></td>
+                    <td class="align-middle"><?= number_format($order_detail['price']) ?></td>
+                    <td class="align-middle"><?= number_format($order_detail['quantity']) ?></td>
+                    <td class="align-middle"><?= number_format((int)$order_detail['price'] * (int)$order_detail['quantity']) ?></td>
+                    <?php
+                    $subtotal = (int)$order_detail['price'] * (int)$order_detail['quantity'];
+                    $total += $subtotal;
+                    ?>
+                  </tr>
+                </tbody>
+              <?php } ?>
             </table>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <h5>請求情報</h5>
             <table class="table table-bordered border-dark">
               <tbody>
                 <tr>
                   <th scope="col" class="table-active">商品合計</th>
-                  <td><?#= $order_detail['created_at'] ?></td>
+                  <td><?= number_format($total) ?></td>
                 </tr>
                 <tr>
                   <th scope="col" class="table-active">配送料</th>
-                  <td class="align-middle"><?= $order_detail['postage'] ?></td>
+                  <td class="align-middle"><?= $order['postage'] ?></td>
                 </tr>
                 <tr>
                   <th scope="col" class="table-active">ご請求額</th>
-                  <td></td>
+                  <td><?= number_format($total + (int)$order['postage']) ?></td>
                 </tr>
               </tbody>
             </table>
@@ -67,36 +105,6 @@ $order_detail = $pdo->show($order_id);
         </div>
       </form>
     </div>
-    <div class="col-md-9">
-      <div class="row">
-        <div class="col-md-8">
-          <h5>注文内容</h5>
-          <table class="table table-bordered border-dark">
-            <thead>
-              <tr>
-                <th scope="col" class="table-active">商品</th>
-                <th scope="col" class="table-active">単価（税込）</th>
-                <th scope="col" class="table-active">個数</th>
-                <th scope="col" class="table-active">小計</th>
-              </tr>
-            </thead>
-            <?php $order_detail = $order_detail->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($order_detail as $order_detail) { ?>
-            <tbody>
-              <tr>
-                <td class="align-middle"></td>
-                <td class="align-middle"></td>
-                <td class="align-middle"></td>
-                <td class="align-middle"></td>
-              </tr>
-            </tbody>
-            <?php } ?>
-            
-          </table>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 

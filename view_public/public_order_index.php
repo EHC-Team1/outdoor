@@ -8,6 +8,7 @@ require_once('../Model/OrderModel.php');
 $pdo = new OrderModel();
 // indexメソッドを呼び出し
 $orders = $pdo->index();
+$orders = $orders->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -17,20 +18,20 @@ $orders = $pdo->index();
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center my-5">注文履歴一覧</h1>
     <div class="col-md-9">
-      <form action="public_order_show.php" method="POST">
-        <input type="hidden" name="customer_id" value="<?= $_SESSION['customer']['id'] ?>">
-        <table class="table table-bordered border-dark">
-          <thead class="table-active">
-            <tr>
-              <th scope="col" class="col-2">注文日</th>
-              <th scope="col" class="col-4">配送先</th>
-              <th scope="col" class="col-1">支払金額</th>
-              <th scope="col" class="col-1">注文詳細</th>
-            </tr>
-          </thead>
-          <!-- 注文履歴の表示 -->
-          <?php $orders = $orders->fetchAll(PDO::FETCH_ASSOC);
-          foreach ($orders as $order) { ?>
+      <input type="hidden" name="customer_id" value="<?= $_SESSION['customer']['id'] ?>">
+      <table class="table table-bordered border-dark">
+        <thead class="table-active">
+          <tr>
+            <th scope="col" class="col-2">注文日</th>
+            <th scope="col" class="col-4">配送先</th>
+            <th scope="col" class="col-1">支払金額</th>
+            <th scope="col" class="col-1">注文詳細</th>
+          </tr>
+        </thead>
+        <!-- 注文履歴の表示 -->
+        <?php
+        foreach ($orders as $order) { ?>
+          <form action="public_order_show.php" method="POST">
             <tbody>
               <tr>
                 <td class="align-middle"><?= $order['created_at'] ?></td>
@@ -40,9 +41,10 @@ $orders = $pdo->index();
                 <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
               </tr>
             </tbody>
-          <?php } ?>
-        </table>
-      </form>
+          </form>
+        <?php } ?>
+      </table>
+
     </div>
   </div>
 </div>
