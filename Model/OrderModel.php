@@ -84,4 +84,56 @@ class OrderModel
     return $orders;
   }
 
+  // 注文履歴一覧画面の表示
+  public function admin_index()
+  {
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $orders = $pdo->prepare(
+        "SELECT orders.*, customers.name_first, customers.name_last FROM orders LEFT JOIN customers ON orders.customer_id = customers.id"
+      );
+      $orders->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $orders;
+  }
+
+  // 注文履歴詳細画面の表示
+  public function show($order_id)
+  {
+    $order_id = $order_id;
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $order = $pdo->prepare(
+        "SELECT * FROM orders WHERE id = $order_id"
+      );
+      $order->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $order;
+  }
+
+  // 注文履歴詳細画面の表示
+  public function admin_show($customer_id, $order_id)
+  {
+    $customer_id = $customer_id;
+    $order_id = $order_id;
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $orders = $pdo->prepare(
+        "SELECT orders.*, customers.name_first, customers.name_last FROM orders LEFT JOIN customers ON orders.customer_id = customers.id WHERE orders.customer_id = $customer_id"
+      );
+      $orders->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $orders;
+  }
 }
