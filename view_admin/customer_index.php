@@ -15,7 +15,6 @@ require_once('../Model/CustomerModel.php');
 // 現在のページ数を取得
 if (isset($_GET['page'])) {
   $page = (int)$_GET['page'];
-  var_dump($page);
 } else {
   $page = 1;
 }
@@ -114,7 +113,7 @@ if (isset($_GET['secession_member_id'])) {
             <thead>
               <tr class="row h5 py-3 mx-0 mb-0 bg-secondary text-white">
                 <th class="col-sm-2">&emsp;氏名
-                  <small class="h6"> (登録日)</small>
+                  <small class="h6"> (入会日)</small>
                 </th>
                 <th class="col-sm-3">&emsp;メールアドレス</th>
                 <th class="col-sm-5">&emsp;住所</th>
@@ -139,7 +138,7 @@ if (isset($_GET['secession_member_id'])) {
               <tr class="row d-flex align-items-center py-3 m-0 border-bottom table table-hover">
                 <td class="col-md-2">
                   <div class="row h5 mb-1">
-                    <a href="customer_index.php?id=<?= $customer["id"] & $customer['name_last']  ?>" name="secession" class="secession_btn p-0" style="text-decoration:none">
+                    <a href="customer_index.php?id=<?= $customer["id"] ?>" name="secession" class="secession_btn p-0" style="text-decoration:none">
                       <div class="text-dark ps-3">
                         <?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?>
                       </div>
@@ -176,31 +175,3 @@ if (isset($_GET['secession_member_id'])) {
 <!-- 退会・再入会処理用jsファイル -->
 <script src="../js/customer_index.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
-
-
-
-
-<!-- 避難中 -->
-<!-- <div class="row d-flex align-items-center justify-content-center">
-          <div class="col-md-10">
-            <ul class="nav nav-tabs">
-              <li class="nav-item">
-                <a class="nav-link" href="#" style="color:black">登録中</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">退会済み</a>
-              </li> -->
-<!-- <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">退会済み</a>
-    <ul class="dropdown-menu">
-      <li>
-        <a class="dropdown-item" href="#">2022年</a>
-      </li>
-      <li>
-        <a class="dropdown-item" href="#">2021年</a>
-      </li>
-      <li>
-        <a class="dropdown-item" href="#">2020年</a>
-      </li>
-    </ul>
-  </li> -->
