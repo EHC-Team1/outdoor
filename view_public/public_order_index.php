@@ -4,10 +4,31 @@ session_start();
 
 // OrderModelファイルを読み込み
 require_once('../Model/OrderModel.php');
+
+// 現在のページ数を取得
+if (isset($_GET['page'])) {
+  $page = (int)$_GET['page'];
+} else {
+  $page = 1;
+}
+// スタートのページを計算
+if ($page > 1) {
+  $start = ($page * 10) - 10;
+} else {
+  $start = 0;
+}
+
+// ordersテーブルから該当ジャンルのデータ件数を取得
+$pdo = new OrderModel();
+$pages = $pdo->page_count_public_index();
+$page_num = $pages->fetchColumn();
+// ページネーションの数を取得
+$pagination = ceil($page_num / 10);
+
 // Orderクラスを呼び出し
 $pdo = new OrderModel();
 // indexメソッドを呼び出し
-$orders = $pdo->index();
+$orders = $pdo->index($start);
 $orders = $orders->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
@@ -16,8 +37,13 @@ $orders = $orders->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
-    <h1 class="text-center my-5">注文履歴一覧</h1>
+    <h1 class="text-center mt-5 mb-3">注文履歴一覧</h1>
     <div class="col-md-9">
+      <form method="POST">
+        <div class="d-flex justify-content-end">
+          <button type="submit" name="back" formaction="./mypage.php" class="btn btn-outline-secondary mb-3">マイページへ戻る</button>
+        </div>
+      </form>
       <input type="hidden" name="customer_id" value="<?= $_SESSION['customer']['id'] ?>">
       <table class="table table-bordered border-dark">
         <thead class="table-active">
@@ -44,9 +70,9 @@ $orders = $orders->fetchAll(PDO::FETCH_ASSOC);
           </form>
         <?php } ?>
       </table>
-
     </div>
   </div>
+  <?php require_once '../view_common/paging.php'; ?>
 </div>
 
 <?php require_once '../view_common/footer.php'; ?>
