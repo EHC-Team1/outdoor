@@ -82,6 +82,22 @@ class CartItemModel
     }
   }
 
+  // カート内商品件数取得
+  public function count_cart_items()
+  {
+    $id = $_SESSION['customer']['id'];
+    try {
+      $pdo = $this->db_connect();
+      $count_cart_items = $pdo->prepare(
+        "SELECT COUNT(*) id FROM cart_items WHERE customer_id = $id"
+      );
+      $count_cart_items->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $count_cart_items;
+  }
+
   // カート内商品の表示
   public function index()
   {
@@ -90,12 +106,12 @@ class CartItemModel
       $pdo = $this->db_connect();
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $cart_items = $pdo->prepare(
-        "SELECT cart_items.*,
-        items.name, items.price, items.item_image, items.extension FROM cart_items LEFT JOIN items ON cart_items.item_id = items.id WHERE cart_items.customer_id = ? ORDER BY created_at"
+        "SELECT cart_items.*, items.name, items.price, items.item_image, items.extension FROM cart_items LEFT JOIN items ON cart_items.item_id = items.id WHERE cart_items.customer_id = ? ORDER BY created_at"
       );
-      $cart_items->execute(array(
-        $_SESSION['customer']['id']
-      )
+      $cart_items->execute(
+        array(
+          $_SESSION['customer']['id']
+        )
       );
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
@@ -106,18 +122,15 @@ class CartItemModel
   // カート内商品の更新
   public function update()
   {
-    $id = $_POST['id'];
+    $id = $_POST['cart_item_id'];
     $quantity = $_POST['quantity'];
     try {
       // DBに接続
       $pdo = $this->db_connect();
       $cart_item = $pdo->prepare(
-        "UPDATE cart_items SET quantity = ? WHERE id = ?"
+        "UPDATE cart_items SET quantity = $quantity WHERE id = $id"
       );
-      $cart_item->execute(array(
-        $_POST['quantity'],
-        $_POST['id'],
-      ));
+      $cart_item->execute();
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }

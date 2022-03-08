@@ -2,6 +2,13 @@
 // セッションを宣言
 session_start();
 
+// ログインしているかチェック
+if (isset($_SESSION['customer'])) {
+} else {
+  // ログインしていなければトップ画面に遷移
+  header("Location: ../view_public/top.php");
+}
+
 // CustomerModelファイルを読み込み
 require_once('../Model/CustomerModel.php');
 // Customerクラスを呼び出し
@@ -108,7 +115,7 @@ if (isset($_POST['delete'])) {
   <!-- <div class="row d-flex align-items-center justify-content-evenly mt-3">
         <div class="col-sm-3">
           <form action="public_order_index.php" method="POST">
-            <input type="submit" class="btn btn-outline-primary btn-lg" value="注文履歴一覧">
+            <input type="submit" class="btn btn-outline-secondary btn-lg" value="注文履歴一覧">
           </form>
         </div>
         <div class="col-sm-3">
@@ -280,4 +287,4 @@ if (isset($_POST['delete'])) {
 
 <!-- バリデーション用jsファイル -->
 <script src="../js/mypage.js"></script>
-<?php require_once '../view_common/footer.php'; ?>
+<?php require_once '../view_common/footer.php' ?>
