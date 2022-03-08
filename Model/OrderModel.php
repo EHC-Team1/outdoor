@@ -67,15 +67,17 @@ class OrderModel
   {
   }
 
+  // public側
   // 注文履歴一覧画面の表示
-  public function index()
+  public function index($start)
   {
     $customer_id = $_SESSION['customer']['id'];
+    $start = $start;
     try {
       // DBに接続
       $pdo = $this->db_connect();
       $orders = $pdo->prepare(
-        "SELECT * FROM orders WHERE customer_id = $customer_id"
+        "SELECT * FROM orders WHERE customer_id = $customer_id ORDER BY orders.updated_at DESC LIMIT {$start}, 10"
       );
       $orders->execute();
     } catch (PDOException $Exception) {
@@ -84,20 +86,54 @@ class OrderModel
     return $orders;
   }
 
-  // 注文履歴一覧画面の表示
-  public function admin_index()
+  // public_order_indexページング用データ数取得
+  public function page_count_public_index()
   {
+    $customer_id = $_SESSION['customer']['id'];
+    try {
+      $pdo = $this->db_connect();
+      $pages = $pdo->prepare(
+        "SELECT COUNT(*) id FROM orders WHERE customer_id = $customer_id"
+      );
+      $pages->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $pages;
+  }
+
+  // admin側
+  // 注文履歴一覧画面の表示
+  public function admin_index($start)
+  {
+    $start = $start;
     try {
       // DBに接続
       $pdo = $this->db_connect();
       $orders = $pdo->prepare(
-        "SELECT orders.*, customers.name_first, customers.name_last FROM orders LEFT JOIN customers ON orders.customer_id = customers.id"
+        "SELECT orders.*, customers.name_first, customers.name_last FROM orders LEFT JOIN customers ON orders.customer_id = customers.id ORDER BY orders.updated_at DESC LIMIT {$start}, 10"
       );
       $orders->execute();
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
     }
     return $orders;
+  }
+
+  // ページング用データ数取得
+  public function page_count_admin_index()
+  {
+    try {
+      // DBに接続
+      $pdo = $this->db_connect();
+      $pages = $pdo->prepare(
+        "SELECT COUNT(*) id FROM orders"
+      );
+      $pages->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
+    }
+    return $pages;
   }
 
   // 注文履歴詳細画面の表示

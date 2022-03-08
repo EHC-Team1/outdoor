@@ -32,24 +32,57 @@ $order_details = $pdo->show($order_id);
 
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
-    <h1 class="text-center my-5">注文履歴詳細</h1>
-    <div class="col-md-9">
-      <div class="row">
-        <div class="col-md-8">
+    <h1 class="text-center mt-5 mb-3">注文履歴詳細</h1>
+    <div class="col-md-8">
+      <form method="POST">
+        <div class="d-flex justify-content-end">
+          <button type="submit" name="back" formaction="./admin_order_index.php" class="btn btn-outline-secondary mb-3">注文履歴一覧へ戻る</button>
+        </div>
+        <div class="row">
+          <h5>注文内容</h5>
+          <table class="table table-bordered border-dark">
+            <thead>
+              <tr>
+                <th scope="col" class="col-6 table-active">商品</th>
+                <th scope="col" class="col-2 table-active">単価（税込）</th>
+                <th scope="col" class="col-1 table-active">個数</th>
+                <th scope="col" class="col-1 table-active">小計</th>
+              </tr>
+            </thead>
+            <?php $total = 0;
+            foreach ($order_details as $order_detail) { ?>
+              <tbody>
+                <tr>
+                  <td class="align-middle"><?= $order_detail['name'] ?></td>
+                  <td class="align-middle"><?= number_format($order_detail['price']) ?></td>
+                  <td class="align-middle"><?= number_format($order_detail['quantity']) ?></td>
+                  <td class="align-middle"><?= number_format((int)$order_detail['price'] * (int)$order_detail['quantity']) ?></td>
+                  <?php
+                  $subtotal = (int)$order_detail['price'] * (int)$order_detail['quantity'];
+                  $total += $subtotal;
+                  ?>
+                </tr>
+              </tbody>
+            <?php } ?>
+          </table>
           <h5>注文情報</h5>
           <table class="table table-bordered border-dark">
             <tbody>
               <tr>
                 <th scope="col" class="table-active">購入者</th>
-                <td><?= $orders['name_last'] . $orders['name_first'] ?></td>
+                <td colspan="3"><?= $orders['name_last'] . $orders['name_first'] ?></td>
               </tr>
               <tr>
                 <th scope="col" class="table-active">注文日</th>
                 <td><?= $orders['created_at'] ?></td>
+                <th scope="col" class="table-active">商品合計</th>
+                <td><?= number_format($total) ?></td>
               </tr>
               <tr>
-                <th scope="col" class="table-active">配送先</th>
+                <th scope="col" class="table-active align-middle">配送先</th>
                 <td class="align-middle"><?= '〒' . substr_replace($orders['postal_code'], '-', 3, 0) . '<br>' . $orders['address'] . '&nbsp' . $orders['house_num'] . '<br>' . $orders['orderer_name'] ?></td>
+                <th scope="col" class="table-active align-middle">配送料</th>
+                <td class="align-middle"><?= $orders['postage'] ?></td>
               </tr>
               <tr>
                 <th scope="col" class="table-active">支払方法</th>
@@ -58,62 +91,11 @@ $order_details = $pdo->show($order_id);
                 <?php else : ?>
                   <td>クレジットカード</td>
                 <?php endif ?>
+                <th scope="col" class="table-active">請求額</th>
+                <td><?= number_format($total + (int)$orders['postage']) ?></td>
               </tr>
             </tbody>
           </table>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-9">
-      <form method="POST">
-        <div class="row">
-          <div class="col-md-8">
-            <h5>注文内容</h5>
-            <table class="table table-bordered border-dark">
-              <thead>
-                <tr>
-                  <th scope="col" class="col-6 table-active">商品</th>
-                  <th scope="col" class="col-2 table-active">単価（税込）</th>
-                  <th scope="col" class="col-1 table-active">個数</th>
-                  <th scope="col" class="col-1 table-active">小計</th>
-                </tr>
-              </thead>
-              <?php $total = 0;
-              foreach ($order_details as $order_detail) { ?>
-                <tbody>
-                  <tr>
-                    <td class="align-middle"><?= $order_detail['name'] ?></td>
-                    <td class="align-middle"><?= number_format($order_detail['price']) ?></td>
-                    <td class="align-middle"><?= number_format($order_detail['quantity']) ?></td>
-                    <td class="align-middle"><?= number_format((int)$order_detail['price'] * (int)$order_detail['quantity']) ?></td>
-                    <?php
-                    $subtotal = (int)$order_detail['price'] * (int)$order_detail['quantity'];
-                    $total += $subtotal;
-                    ?>
-                  </tr>
-                </tbody>
-              <?php } ?>
-            </table>
-          </div>
-          <div class="col-md-3">
-            <h5>請求情報</h5>
-            <table class="table table-bordered border-dark">
-              <tbody>
-                <tr>
-                  <th scope="col" class="table-active">商品合計</th>
-                  <td><?= number_format($total) ?></td>
-                </tr>
-                <tr>
-                  <th scope="col" class="table-active">配送料</th>
-                  <td class="align-middle"><?= $orders['postage'] ?></td>
-                </tr>
-                <tr>
-                  <th scope="col" class="table-active">請求額</th>
-                  <td><?= number_format($total + (int)$orders['postage']) ?></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
       </form>
     </div>
