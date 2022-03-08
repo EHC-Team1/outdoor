@@ -49,7 +49,6 @@ if (isset($_GET['id'])) {
   $customer_status = $pdo->admin_switch_status($id, $secession_member_id);
 }
 
-
 // 「退会済み」タグ クリックでユーザー一覧切り替え
 if (isset($_GET['secession_members'])) {
   // Customerクラスを呼び出し
@@ -101,6 +100,9 @@ if (isset($_GET['secession_member_id'])) {
 
         <!-- 会員タブ選択時 -->
       <?php } else { ?>
+        <div class="mb-2">
+          氏名をクリックすると、「退会」処理を実行します
+        </div>
         <ul class="nav nav-tabs">
           <li class="nav-item">
             <a class="nav-link bg-secondary text-white h5" href="#">会員</a>
@@ -108,85 +110,72 @@ if (isset($_GET['secession_member_id'])) {
           <li class="nav-item">
             <a class="nav-link h5" href="customer_index.php?secession_members" style="color:black">退会済み</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">&emsp;名前をクリックすると、「退会」処理を実行します</a>
-          </li>
         </ul>
+        <table class="table table-borderless m-0">
+          <thead>
+            <tr class="row h5 py-3 mx-0 mb-0 bg-secondary text-white">
+              <th class="col-sm-2">&emsp;氏名
+                <small class="h6"> (登録日)</small>
+              </th>
+              <th class="col-sm-3">&emsp;メールアドレス</th>
+              <th class="col-sm-5">&emsp;住所</th>
+              <th class="col-sm-2">&emsp;電話番号</th>
+            </tr>
+          </thead>
+        </table>
 
-        <div class="card-body pt-0 px-0">
-          <div class="row h5 py-4 mx-0 bg-secondary text-white">
-            <div class="d-flex align-items-center">
-              <div class="col-md-2">
-                &nbsp;名前
-                <small class="h6">(登録日)</small>
-              </div>
-              <div class="col-md-3">
-                &nbsp;メールアドレス
-              </div>
-              <div class="col-md-5">
-                &nbsp;住所
-              </div>
-              <div class="col-md-2">
-                &nbsp;電話番号
-              </div>
-            </div>
-          </div>
-          <?php foreach ($customers as $customer) { ?>
+        <table class="table table-borderless">
+          <?php $i = 0;
+          foreach ($customers as $customer) {
+            $i++ ?>
             <tbody>
-              <div class="row d-flex align-items-center px-4 py-3 border-bottom">
-                <div class="col-md-2">
-                  <div class="row mb-1 h5">
-                    <a href="customer_index.php?id=<?= $customer["id"] ?>" name="secession" class="secession_btn" style="text-decoration:none">
-                      <div class="text-dark">
+              <tr>
+                <td rowspan="2" class="border-bottom align-middle ps-0 pe-1">
+                  <h5 class="text-muted">
+                    <?= $i ?>
+                  </h5>
+                </td>
+              </tr>
+              <tr class="row d-flex align-items-center py-3 m-0 border-bottom table table-hover">
+                <td class="col-md-2">
+                  <div class="row h5 mb-1">
+                    <a href="customer_index.php?id=<?= $customer["id"] ?>" name="secession" class="secession_btn p-0" style="text-decoration:none">
+                      <div class="text-dark ps-3">
                         <?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?>
                       </div>
-                    </a>
                   </div>
-                  <div class="row text-end me-1">
+                  <div class="row text-end me-3">
                     <small class="text-muted">
                       <?= date('Y-m-d', strtotime($customer['created_at'])) ?>
                     </small>
+                    </a>
                   </div>
-                </div>
-                <div class="col-md-3 ~~~" style="word-wrap:break-word;">
+                </td>
+                <td class="col-md-3 ps-3 ~~~" style="word-wrap:break-word;">
                   <?= $customer['email'] ?>
-                </div>
-                <div class="col-md-5 ~~~" style="word-wrap:break-word;">
+                </td>
+                <td class="col-md-5 ps-3 ~~~" style="word-wrap:break-word;">
                   <div class="mb-1">
                     <?= '〒' . substr_replace($customer['postal_code'], '-', 3, 0) . '<br>' ?>
                   </div>
-                  <?= '&emsp;' . $customer['address'] . '<br>' . '&emsp;' . $customer['house_num'] ?>
-                </div>
-                <div class="col-md-2">
+                  <?= $customer['address'] . '<br>' . $customer['house_num'] ?>
+                </td>
+                <td class="col-md-2 ps-3">
                   <?= $customer['telephone_num'] ?>
-                </div>
-              </div>
+                </td>
+              </tr>
             </tbody>
           <?php } ?>
-        </div>
+        </table>
         <?php require_once '../view_common/paging.php'; ?>
       <?php } ?>
     </div>
   </div>
 </div>
 
-
-
-
-
 <!-- 退会・再入会処理用jsファイル -->
 <script src="../js/customer_index.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
-
-
-
-
-
-
-
-
-
-
 
 
 

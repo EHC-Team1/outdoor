@@ -2,30 +2,16 @@
 // セッションの宣言
 session_start();
 
-// ログイン状態であればトップにリダイレクト
-// if ($_SESSION['customer']) {
-//   header("Location: ./top.php");
-// }
+// ログイン画面から遷移してきた場合、メースアドレス以外のloginセッションの値をクリア
+$_SESSION['login']['name_last'] = $_SESSION['login']['name_first'] = $_SESSION['login']['password'] = "";
 
-// 「再登録」ボタン押されていない状態
-// ログイン画面から遷移してきた場合
-if (isset($_SESSION['login'])) {
-  // メースアドレス以外のセッションの値をクリア
-  $_SESSION['login']['name_last'] = $_SESSION['login']['name_first'] = $_SESSION['login']['password'] = "";
-
-  // ------------------------------------------- 機能してない 修正要---------------------------------------------------
-  // サインアップ画面から遷移してきた場合
-} elseif (isset($_SESSION['signup'])) {
-  $_SESSION['signup']['name_last'] = $_SESSION['signup']['name_first'] = $_SESSION['signup']['password'] = "";
+// サインアップ画面から遷移してきた場合
+if (isset($_SESSION['signup'])) {
   // メースアドレス以外のセッションの値をクリア
   $_SESSION['login']['email'] = $_SESSION['signup']['email'];
 }
-// rejoinメソッドに、 unsset($_SESSION['signup']) いるかも？
-// --------------------------------------------------- 20220304 ------------------------------------------------------
-
 // エラーメッセージ無し
 $message = "";
-
 
 // ボタンが押された場合
 if (isset($_POST['rejoin'])) {
@@ -36,7 +22,6 @@ if (isset($_POST['rejoin'])) {
   $message = $pdo;
 }
 
-// メッセージをサニタイズ
 $message = htmlspecialchars($message);
 
 ?>
@@ -53,21 +38,11 @@ $message = htmlspecialchars($message);
       </div>
     </h6>
     <div class="col-sm-8">
-      <?php if (!empty($message)) { ?>
-        <div class="alert alert-danger" role="alert"><?= $message; ?></div>
+      <?php if ($message) { ?>
+        <div class="alert alert-danger text-center" role="alert"><?= $message; ?></div>
       <?php } ?>
       <form method="post" action="">
         <div style="text-align:center">
-          <!-- <div class="row"> 姓　名　横並びver
-            <strong class="col-md-1"><label>姓</label></strong>
-            <div class="col-md-5">
-              <input type="text" name="name_last" class="form-control" placeholder="例) 藤浪" autofocus>
-            </div>
-            <strong class="col-md-1"><label>名</label></strong>
-            <div class="col-md-5">
-              <input type="text" name="name_first" class="form-control" placeholder="例) 翔平"><br>
-            </div>
-          </div> -->
           <div class="row">
             <strong class="col-sm-3"><label>姓</label></strong>
             <div class="col-md-9">

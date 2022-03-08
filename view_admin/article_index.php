@@ -80,7 +80,11 @@ $message = htmlspecialchars($message);
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center my-5">記事作成フォーム</h1>
     <div class="col-sm-10">
-      <?= $message; ?>
+      <?php if ($message) { ?>
+        <div class="alert alert-danger text-center" role="alert">
+          <?= $message; ?>
+        </div>
+      <?php } ?>
       <form method="post" enctype="multipart/form-data">
         <div class="row mb-2">
           <label class="col-sm-2 col-form-label text-center">タイトル</label>
@@ -142,7 +146,7 @@ $message = htmlspecialchars($message);
                 </form>
                 <form method="post" class="d-flex align-items-center justify-content-center">
                   <input type="hidden" name="id" value="<?= $article['id'] ?>">
-                  <button type="submit" name="delete" class="btn btn-outline-danger" id="article_delete_btn">削除</button>
+                  <button type="submit" name="delete" class="btn btn-outline-danger">削除</button>
                 </form>
               </td>
               <td class="col-sm-4 text-center" rowspan="2">
@@ -172,7 +176,7 @@ $message = htmlspecialchars($message);
                       <?= $article['body'] ?>
                     </p>
                   <?php } ?>
-                  <p class="text-end" style="color:black"><?= date('Y/m/d H:i:s', strtotime($article['updated_at'])); ?></p>
+                  <p class="text-end" style="color:black">更新日：<?= date('Y/m/d H:i:s', strtotime($article['updated_at'])); ?></p>
                 </a>
               </td>
             </tr>
