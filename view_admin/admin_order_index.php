@@ -77,7 +77,7 @@ $orders = $orders->fetchAll(PDO::FETCH_ASSOC);
                 <?php else : ?>
                   <td class="align-middle">クレジットカード</td>
                 <?php endif ?>
-                <td class="align-middle"><input type="submit" class="btn btn-primary" value="注文詳細へ"></td>
+                <td class="align-middle"><input type="submit" class="btn btn-secondary" value="注文詳細へ"></td>
                 <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
               </tr>
             </tbody>
