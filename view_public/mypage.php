@@ -2,6 +2,13 @@
 // セッションを宣言
 session_start();
 
+// ログインしているかチェック
+if (isset($_SESSION['customer'])) {
+} else {
+  // ログインしていなければトップ画面に遷移
+  header("Location: ../view_public/top.php");
+}
+
 // CustomerModelファイルを読み込み
 require_once('../Model/CustomerModel.php');
 // Customerクラスを呼び出し

@@ -67,7 +67,7 @@ $message = htmlspecialchars($message);
   </div>
   <h1 style="text-align:center" class="mt-3 mb-5">管理者トップ</h1>
   <div class="row d-flex justify-content-center">
-    <div class="col-md-11 d-flex justify-content-around">
+    <div class="col-sm-10 d-flex justify-content-around">
       <button onclick="location.href='item_input.php'" class="btn btn-outline-primary btn-lg">商品追加</button>
       <button onclick="location.href='article_index.php'" class="btn btn-outline-info btn-lg">記事一覧</button>
       <button onclick="location.href='genre_index.php'" class="btn btn-outline-info btn-lg">ジャンル一覧</button>
