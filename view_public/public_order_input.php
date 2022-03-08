@@ -54,45 +54,21 @@ $deliveries = $deliveries->fetchAll(PDO::FETCH_ASSOC);
                 <?= '〒' . '&nbsp' . substr_replace($customer['postal_code'], '-', 3, 0) . '&nbsp' . $customer['address'] . $customer['house_num'] . '&nbsp' . $customer['name_last'] . $customer['name_first'] ?>
               </div>
             </li>
-            <li class="list-unstyled">
-              <input type="radio" id="registration-address" name="delivery" value=1>
-              <label for="registration-address">登録先住所から選択</label><br>
-              <select class="form-select mt-2 mb-2" name="delivery_id" id="address-select">
-                <?php
-                foreach ($deliveries as $delivery) { ?>
-                  <option value="<?= $delivery['id'] ?>">
-                    <?= '〒' . '&nbsp' . substr_replace($delivery['postal_code'], '-', 3, 0) . '&nbsp' . $delivery['address'] . $customer['house_num'] . '&nbsp' . $delivery['name'] ?>
-                  </option>
-                <?php } ?>
-              </select>
-            </li>
-            <!-- <li class="list-unstyled">
-              <input type="radio" id="new-delivery" name="delivery-target">
-              <label for="new-delivery">新しいお届け先</label>
-              <table class="table table-borderless">
-                <thead>
-                  <tr>
-                    <th class="col-2"></th>
-                    <th class="col-4"></th>
-                    <th class="col-4"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><label for="new_postal_code">郵便番号(ハイフンなし)</label></td>
-                    <td><input type="text" class="form-control" id="new_postal_code" placeholder="0001111"></td>
-                  </tr>
-                  <tr>
-                    <td><label for="new_address">住所</label></td>
-                    <td><input type="text" class="form-control" id="new_address" placeholder="東京都豊島区池袋0-0-0"></td>
-                  </tr>
-                  <tr>
-                    <td><label for="new_name">宛名</label></td>
-                    <td><input type="text" class="form-control" id="new_name" placeholder="藤浪翔平"></td>
-                  </tr>
-                </tbody>
-              </table>
-            </li> -->
+          <!-- 配送先が登録されていたら表示、されていなかったら未表示 -->
+            <?php if ($deliveries) : ?>
+              <li class="list-unstyled">
+                <input type="radio" id="registration-address" name="delivery" value=1>
+                <label for="registration-address">登録先住所から選択</label><br>
+                <select class="form-select mt-2 mb-2" name="delivery_id" id="address-select">
+                  <?php
+                  foreach ($deliveries as $delivery) { ?>
+                    <option value="<?= $delivery['id'] ?>">
+                      <?= '〒' . '&nbsp' . substr_replace($delivery['postal_code'], '-', 3, 0) . '&nbsp' . $delivery['address'] . $customer['house_num'] . '&nbsp' . $delivery['name'] ?>
+                    </option>
+                  <?php } ?>
+                </select>
+              </li>
+            <?php endif ?>
           </ul>
         </div>
         <div class="d-flex align-items-center justify-content-center">
