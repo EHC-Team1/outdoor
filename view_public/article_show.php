@@ -2,8 +2,6 @@
 // セッションの宣言
 session_start();
 
-// 詳細ページへ飛ぶ何らかのアクションがあった時、記事idを変数へ代入
-// TOP.php , public_search_index.phpにaタグ設置
 if (isset($_GET["article_id"]) && $_GET["article_id"] !== "") {
   $article_id = $_GET["article_id"];
 } else {
@@ -18,8 +16,6 @@ $pdo = new ArticleModel();
 $article_show = $pdo->show($article_id);
 // 取得データを配列に格納
 $article_show = $article_show->fetch(PDO::FETCH_ASSOC);
-// var_dump($article_show);
-// exit();
 
 // article_itemメソッドを呼び出し
 $item = $pdo->article_item($article_id);
@@ -51,7 +47,7 @@ $item = $item->fetch(PDO::FETCH_ASSOC);
       </div>
       <div class="row mt-3">
         <p>
-          <?= $article_show["body"] ?>
+          <?= nl2br($article_show["body"]) ?>
         </p>
       </div>
       <!-- 関連商品あり、販売可能状態の場合に表示 -->

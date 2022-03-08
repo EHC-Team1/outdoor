@@ -18,11 +18,11 @@ $pdo = $pdo->logout();
 <?php require_once '../view_common/header.php'; ?>
 
 <div class="container">
-  <h1 style="text-align:center" class="mt-5 mb-5">
+  <h1 style="text-align:center" class="my-5">
     ログアウトしました。
   </h1>
-  <div class="row d-flex justify-content-around">
-    <button onclick="location.href='top.php'" class="btn btn-outline-info btn-lg">トップへ</button>
+  <div class="d-flex align-items-center justify-content-evenly my-5">
+    <button onclick="location.href='top.php'" class="btn btn-outline-info btn-lg">TOP画面へ</button>
   </div>
 </div>
 

@@ -67,12 +67,12 @@ $message = htmlspecialchars($message);
             </div>
           </div>
         </div>
+        <div class="d-flex align-items-center justify-content-evenly my-5">
+          <button type="submit" formaction="public_signup.php" name="signup" class="btn btn-outline-success btn-lg">別のメールアドレスで新規登録する</button>
+          <button type="submit" name="rejoin" class="btn btn-outline-primary btn-lg">再登録</button>
+        </div>
+      </form>
     </div>
-    <div class="d-flex align-items-center justify-content-evenly my-5">
-      <button type="submit" formaction="public_signup.php" name="signup" class="btn btn-outline-success btn-lg">別のメールアドレスで新規登録する</button>
-      <button type="submit" name="rejoin" class="btn btn-outline-primary btn-lg">再登録</button>
-    </div>
-    </form>
   </div>
 </div>
 
