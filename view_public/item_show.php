@@ -54,8 +54,8 @@ if (isset($_POST['buy'])) {
 
     // ログインしていない場合
   } else {
-    // 新規登録画面に遷移
-    header("Location: ../view_public/public_signup.php");
+    // ログイン画面に遷移
+    header("Location: ../view_public/public_login.php");
     die();
   }
 

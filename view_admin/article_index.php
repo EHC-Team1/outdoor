@@ -136,7 +136,7 @@ $message = htmlspecialchars($message);
           foreach ($articles as $article) {
             $target = $article["article_image"]; ?>
             <tr>
-              <td rowspan="2" class="align-middle col-sm-2">
+              <td rowspan="2" class="align-middle col-sm-2 h-100">
                 <form class="d-flex align-items-center justify-content-center mb-4">
                   <?php if ($article['is_status'] == 1) { ?>
                     <button type='button' class='btn btn-success' disabled>公開中</button>
@@ -152,8 +152,9 @@ $message = htmlspecialchars($message);
               <td class="col-sm-4 text-center" rowspan="2">
                 <a href=" ../view_admin/article_edit.php?article_id=<?= $article['id'] ?>" style="text-decoration:none">
                   <?php if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") { ?>
-                    <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid">
-                  <?php } ?>
+                    <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid" >
+                    <!-- <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="ime-responsive" > -->
+                    <?php } ?>
                 </a>
               </td>
               <td class="co-sm-6 align-middle">

@@ -25,7 +25,8 @@ $message = htmlspecialchars($message);
 <?php require_once '../view_common/header.php'; ?>
 
 <div class="container">
-  <h1 style="text-align:center" class="my-5">ユーザー登録</h1>
+<h1 style="text-align:center" class="mt-5">アカウント新規作成</h1>
+    <h6 class="text-center mb-5">全ての項目を入力して頂き、「確認する」ボタンを押してください</h6>
   <div class="row d-flex align-items-center justify-content-center">
     <div class="col-sm-8">
       <form method="post">
@@ -54,7 +55,7 @@ $message = htmlspecialchars($message);
           <div class="row mb-3">
             <div class="col-sm-6">
               <strong><label class="mb-1">郵便番号</label></strong>
-              <input type="number" name="postal_code" id="postal_code" class="form-control" maxlength="7" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" placeholder="例) 1700014" value="<?= $_SESSION['signup']['postal_code'] ?>">
+              <input type="number" name="postal_code" id="postal_code" class="form-control" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" placeholder="例) 1700014" value="<?= $_SESSION['signup']['postal_code'] ?>">
             </div>
             <div class="col mt-auto">
               郵便番号入力後、市区町村が自動的に表示されます。<br>
@@ -99,5 +100,4 @@ $message = htmlspecialchars($message);
 
 <!-- 住所自動入力用jsファイル -->
 <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
-<script src="../js/public_signup.js"></script>
 <?php require_once '../view_common/footer.php'; ?>

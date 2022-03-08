@@ -100,36 +100,36 @@ if (isset($_GET['secession_member_id'])) {
 
         <!-- 会員タブ選択時 -->
       <?php } else { ?>
-        <div class="mb-2">
-          氏名をクリックすると、「退会」処理を実行します
+        <div class="sticky-top bg-white">
+          <p>氏名をクリックすると、「退会」処理を実行します</p>
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link bg-secondary text-white h5" href="#">会員</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link h5" href="customer_index.php?secession_members" style="color:black">退会済み</a>
+            </li>
+          </ul>
+          <table class="table table-borderless m-0">
+            <thead>
+              <tr class="row h5 py-3 mx-0 mb-0 bg-secondary text-white">
+                <th class="col-sm-2">&emsp;氏名
+                  <small class="h6"> (登録日)</small>
+                </th>
+                <th class="col-sm-3">&emsp;メールアドレス</th>
+                <th class="col-sm-5">&emsp;住所</th>
+                <th class="col-sm-2">&emsp;電話番号</th>
+              </tr>
+            </thead>
+          </table>
         </div>
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link bg-secondary text-white h5" href="#">会員</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link h5" href="customer_index.php?secession_members" style="color:black">退会済み</a>
-          </li>
-        </ul>
-        <table class="table table-borderless m-0">
-          <thead>
-            <tr class="row h5 py-3 mx-0 mb-0 bg-secondary text-white">
-              <th class="col-sm-2">&emsp;氏名
-                <small class="h6"> (登録日)</small>
-              </th>
-              <th class="col-sm-3">&emsp;メールアドレス</th>
-              <th class="col-sm-5">&emsp;住所</th>
-              <th class="col-sm-2">&emsp;電話番号</th>
-            </tr>
-          </thead>
-        </table>
 
         <table class="table table-borderless">
           <?php $i = 0;
           foreach ($customers as $customer) {
             $i++ ?>
             <tbody>
-              <tr>
+              <tr scope="col">
                 <td rowspan="2" class="border-bottom align-middle ps-0 pe-1">
                   <h5 class="text-muted">
                     <?= $i ?>
@@ -139,7 +139,7 @@ if (isset($_GET['secession_member_id'])) {
               <tr class="row d-flex align-items-center py-3 m-0 border-bottom table table-hover">
                 <td class="col-md-2">
                   <div class="row h5 mb-1">
-                    <a href="customer_index.php?id=<?= $customer["id"] ?>" name="secession" class="secession_btn p-0" style="text-decoration:none">
+                    <a href="customer_index.php?id=<?= $customer["id"] & $customer['name_last']  ?>" name="secession" class="secession_btn p-0" style="text-decoration:none">
                       <div class="text-dark ps-3">
                         <?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?>
                       </div>
