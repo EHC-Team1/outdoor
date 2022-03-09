@@ -99,7 +99,7 @@ $message = htmlspecialchars($message);
           </div>
           <label class="col-sm-2 col-form-label text-end">税込価格</label>
           <div class="col-sm-3">
-            <input type="number" name="price" class="form-control" value="<?= ($_SESSION['item']['price']) ?>">
+            <input type="number" min="0" name="price" class="form-control" value="<?= ($_SESSION['item']['price']) ?>">
           </div>
           <label class="col-sm-1 col-form-label">円</label>
         </div>
