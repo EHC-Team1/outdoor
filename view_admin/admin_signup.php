@@ -65,7 +65,7 @@ if (isset($_POST['signup'])) {
           <h4 class="text-center">管理者名</h4>
         </div>
         <div class="col-sm-4">
-          <input type="text" name="admin_name" class="form-control">
+          <input type="text" name="admin_name" class="form-control" id="admin_name">
         </div>
       </div>
       <div class="row d-flex justify-content-center g-3 mb-5">
@@ -73,12 +73,12 @@ if (isset($_POST['signup'])) {
           <h4 class="text-center">パスワード</h4>
         </div>
         <div class="col-sm-4">
-          <input type="password" name="password" class="form-control">
+          <input type="password" name="password" class="form-control" id="password">
         </div>
       </div>
       <div class="row d-flex justify-content-center mb-3">
         <div class="col-sm-8  d-flex justify-content-evenly">
-          <button type="submit" name="signup" class="btn btn-outline-primary btn-lg">サインアップ</button>
+          <button type="submit" name="signup" class="btn btn-outline-primary btn-lg" id="admin_signup_btn">サインアップ</button>
         </div>
       </div>
     </form>
@@ -89,4 +89,6 @@ if (isset($_POST['signup'])) {
     </div>
   </div>
 
+  <!-- アラート用jsファイル -->
+  <script src="../js/admin_signup.js"></script>
   <?php require_once '../view_common/footer.php'; ?>

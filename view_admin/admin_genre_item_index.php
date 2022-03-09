@@ -144,4 +144,6 @@ $message = htmlspecialchars($message);
   <?php require_once '../view_common/paging.php'; ?>
 </div>
 
+<!-- バリデーション・アラート用jsファイル -->
+<script src="../js/admin_item_index.js"></script>
 <?php require_once '../view_common/footer.php'; ?>
