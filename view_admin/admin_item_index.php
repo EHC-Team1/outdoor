@@ -113,7 +113,7 @@ $message = htmlspecialchars($message);
             <tr>
               <td class="col-sm-6 align-middle">
                 <a href=" ../view_admin/item_edit.php?item_id=<?= $item['id'] ?>" style="text-decoration:none">
-                  <h4 style="color:black">￥<?= $item['price'] ?>円</h4>
+                  <h4 style="color:black">￥<?= $item['price'] ?></h4>
                 </a>
               </td>
             </tr>

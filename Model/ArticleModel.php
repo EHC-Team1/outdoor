@@ -153,7 +153,7 @@ class ArticleModel
       $pdo = $this->db_connect();
       //SQL文 投稿日時の降順で取得
       $articles = $pdo->prepare(
-        "SELECT * FROM articles WHERE is_status = 1 ORDER BY created_at DESC;"
+        "SELECT * FROM articles WHERE is_status = 1 ORDER BY updated_at DESC;"
       );
       $articles->execute();
     } catch (PDOException $Exception) {
@@ -187,7 +187,7 @@ class ArticleModel
       $pdo = $this->db_connect();
       //SQL文 投稿日時の降順で取得
       $articles = $pdo->prepare(
-        "SELECT * FROM articles WHERE is_status = 1 ORDER BY created_at DESC LIMIT {$start}, 15"
+        "SELECT * FROM articles WHERE is_status = 1 ORDER BY updated_at DESC LIMIT {$start}, 15"
       );
       $articles->execute();
     } catch (PDOException $Exception) {
@@ -303,9 +303,9 @@ class ArticleModel
       $delete_image = 1;
     }
 
-    // 投稿日時ボタンの判定
+    // 更新日時ボタンの判定
     if ($_POST['posting_date'] == "updated_at_keep") {
-      $updated_at_keep = $_POST['updated_at_keep'];;
+      $updated_at_keep = $_POST['updated_at_keep'];
     }
 
     // 画像ファイルがある場合
