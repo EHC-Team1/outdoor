@@ -163,7 +163,7 @@ $articles = $pdo->admin_index();
         <input type="hidden" name="id" value="<?= $item['item_id'] ?>">
         <button type="submit" name="delete_item" class="btn btn-outline-danger btn-lg" id="delete_btn">削除する</button>
       </form>
-      <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg">戻る</button>
+      <button onclick=history.back() class="btn btn-outline-secondary btn-lg">戻る</button>
     </div>
   </div>
 </div>
