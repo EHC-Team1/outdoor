@@ -91,15 +91,15 @@ class CustomerModel
         return $message;
       }
 
-      // 住所のバリデーション 300文字以下
-      if (300 <= mb_strlen($address, 'UTF-8')) {
-        $message = 'ご住所は、300文字以下で入力して下さい。';
+      // 市区町村のバリデーション 80文字以下
+      if (80 <= mb_strlen($address, 'UTF-8')) {
+        $message = '市区町村は、80文字以下で入力して下さい。';
         return $message;
       }
 
-      // 番地・建物名のバリデーション 300文字以下
-      if (300 <= mb_strlen($house_num, 'UTF-8')) {
-        $message = '番地・建物名は、300文字以下で入力して下さい。';
+      // 番地・建物名のバリデーション 80文字以下
+      if (80 <= mb_strlen($house_num, 'UTF-8')) {
+        $message = '番地・建物名は、80文字以下で入力して下さい。';
         return $message;
       }
 
