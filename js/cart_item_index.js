@@ -12,6 +12,6 @@ $('select').change(function() {
     }).fail(function(){
       alert('数量が変更できません。')
     }).done(function(){
-      alert('数量が変更されました。/nブラウザを更新すると反映されます。')
+      alert('数量が変更されました。ブラウザを更新すると反映されます。')
     });
 });

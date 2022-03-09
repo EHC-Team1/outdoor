@@ -11,6 +11,8 @@ if (isset($_POST['signup'])) {
   // loginメソッドを呼び出し
   $pdo = $pdo->signup();
   $message = $pdo;
+} else {
+  $message = "";
 }
 
 ?>
@@ -54,6 +56,9 @@ if (isset($_POST['signup'])) {
 
   <div class="container">
     <h1 class="my-5 text-center">管理者アカウント作成</h1>
+    <div class="row d-flex justify-content-center mb-3">
+      <?= $message ?>
+    </div>
     <form method="post">
       <div class="row d-flex justify-content-center g-3 mb-3">
         <div class="col-sm-4">
