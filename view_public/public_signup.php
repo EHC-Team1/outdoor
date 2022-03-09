@@ -49,13 +49,13 @@ $message = htmlspecialchars($message);
           <div class="row mb-3">
             <div class="col">
               <strong><label class="mb-1">メールアドレス</label></strong>
-              <input type="email" name="email" class="form-control" placeholder="例) abc123@ddd.com" value="<?= $_SESSION['signup']['email']  ?>">
+              <input type="text" name="email" class="form-control" placeholder="例) abc123@ddd.com" value="<?= $_SESSION['signup']['email']  ?>">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-sm-6">
               <strong><label class="mb-1">郵便番号</label></strong>
-              <input type="number" name="postal_code" id="postal_code" class="form-control" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" placeholder="例) 1700014" value="<?= $_SESSION['signup']['postal_code'] ?>">
+              <input type="number" min="0" name="postal_code" id="postal_code" class="form-control" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" placeholder="例) 1700014" value="<?= $_SESSION['signup']['postal_code'] ?>">
             </div>
             <div class="col mt-auto">
               郵便番号入力後、市区町村が自動的に表示されます。<br>
@@ -77,7 +77,7 @@ $message = htmlspecialchars($message);
           <div class="row mb-3">
             <div class="col">
               <strong><label class="mb-1">電話番号</label></strong>
-              <input type="number" name="telephone_num" class="form-control" placeholder="例) 12345678912" value="<?= $_SESSION['signup']['telephone_num'] ?>">
+              <input type="text" name="telephone_num" class="form-control" placeholder="例) 12345678912" value="<?= $_SESSION['signup']['telephone_num'] ?>">
             </div>
           </div>
           <div class="row">

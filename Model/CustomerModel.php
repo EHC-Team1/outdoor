@@ -38,8 +38,6 @@ class CustomerModel
     $house_num = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['house_num']);
     $telephone_num = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['telephone_num']);
     $password = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password']);
-    // パスワード(確認)時間あれば
-    // $password2 = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '',  $_POST['password2']);
 
     // 変数をセッションに格納
     $_SESSION['signup'] = ['name_last' => $name_last, 'name_first' => $name_first, 'email' => $email, 'postal_code' => $postal_code, 'address' => $address, 'house_num' => $house_num, 'telephone_num' => $telephone_num, 'password' => $password];
@@ -107,7 +105,7 @@ class CustomerModel
 
       // 電話番号のバリデーション 数字30桁以内ハイフン無し
       if (!preg_match("/^[0-9]{3,30}+$/", $telephone_num)) {
-        $message = '電話番号は、半角数字ハイフン無しで入力して下さい。';
+        $message = '電話番号は、半角数字30文字以内ハイフン無しで入力して下さい。';
         return $message;
       }
 
@@ -116,12 +114,6 @@ class CustomerModel
         $message = 'パスワードは、半角英数字8文字以上 24文字以下で入力して下さい。';
         return $message;
 
-        // パスワード(確認)と一致しているか判定 時間あれば
-        // } else {
-        //   if ($password != $password2) {
-        //     $message = 'パスワード(確認)が、一致しません。';
-        //     return $message;
-        //   }
       }
       // バリデーションがすべてOKなら確認画面へ
       header("Location: ./public_signup_check.php");
@@ -171,11 +163,11 @@ class CustomerModel
       ];
       unset($_SESSION['signup']);
 
-      // 登録完了画面へリダイレクト
-      header("Location: ./public_signup_complete.php?admission");
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
+    // 登録完了画面へリダイレクト
+    header("Location: ./public_signup_complete.php?admission");
   }
 
   // ユーザーログイン
@@ -252,6 +244,7 @@ class CustomerModel
 
       // 入力値が全て一致した場合
       if ($result == true && password_verify($password, $result['password']) && $result['name_first'] == $name_first && $result['name_last'] == $name_last) {
+
         // 再入会処理
         $id = $result['id'];
         $is_customer_flag = 0;
