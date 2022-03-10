@@ -25,8 +25,8 @@ $message = htmlspecialchars($message);
 <?php require_once '../view_common/header.php'; ?>
 
 <div class="container">
-<h1 style="text-align:center" class="mt-5">アカウント新規作成</h1>
-    <h6 class="text-center mb-5">全ての項目を入力して頂き、「確認する」ボタンを押してください</h6>
+  <h1 style="text-align:center" class="mt-5">アカウント新規作成</h1>
+  <h6 class="text-center mb-5">全ての項目を入力して頂き、「確認する」ボタンを押してください</h6>
   <div class="row d-flex align-items-center justify-content-center">
     <div class="col-sm-8">
       <form method="post">
@@ -89,8 +89,8 @@ $message = htmlspecialchars($message);
           <p class="mt-1 ms-3">※パスワードは半角英数字をそれぞれ1文字以上含んだ、8文字以上24字以内で設定してください。</p></br>
         </div>
         <div class="d-flex align-items-center justify-content-evenly my-5">
-          <button type="submit" name="back" formaction="./public_login.php" class="btn btn-outline-secondary btn-lg">ログイン画面へ</button>
           <button type="submit" formaction="public_signup.php" name="check" class="btn btn-outline-primary btn-lg">確認する</button>
+          <button type="submit" name="back" formaction="./public_login.php" class="btn btn-outline-secondary btn-lg">ログイン画面へ</button>
         </div>
     </div>
     </form>
