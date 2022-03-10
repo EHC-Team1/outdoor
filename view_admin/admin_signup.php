@@ -84,7 +84,7 @@ if (isset($_POST['signup'])) {
     </form>
     <div class="row d-flex justify-content-center mb-5">
       <div class="col-sm-8  d-flex justify-content-end">
-        <button class="btn btn-outline-info btn-lg" onclick="location.href='admin_login.php'">管理者ログインへ</button>
+        <button class="btn btn-outline-secondary btn-lg" onclick="location.href='admin_login.php'">管理者ログインへ</button>
       </div>
     </div>
   </div>
