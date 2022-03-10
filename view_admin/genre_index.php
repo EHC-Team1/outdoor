@@ -81,7 +81,6 @@ $message = htmlspecialchars($message);
               <td class="align-middle col-sm-1">
                 <form method="post" class="d-flex align-items-center justify-content-center">
                   <input type="hidden" name="id" value="<?= $genre['id'] ?>">
-                  <input type="hidden" class="name" value="<?= $genre['name'] ?>">
                   <button type="submit" name="delete" class="btn btn-outline-danger">削除</button>
                 </form>
               </td>
