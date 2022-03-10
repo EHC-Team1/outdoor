@@ -61,9 +61,12 @@ if ($_POST['delivery'] == 0) {
 <?php require_once '../view_common/header.php'; ?>
 <div class="container">
   <div class="row d-flex align-items-center justify-content-center">
-    <h1 class="text-center mt-5 mb-5">注文情報の確認</h1>
+    <h1 class="text-center mt-5 mb-3">注文情報の確認</h1>
     <div class="col-md-9">
       <form method="POST">
+        <div class="d-flex justify-content-end">
+          <button type="submit" name="back" formaction="./public_order_input.php" class="btn btn-outline-secondary mb-3">注文情報入力へ戻る</button>
+        </div>
         <input type="hidden" name="customer_id" value="<?= $_SESSION['customer']['id'] ?>">
         <table class="table table-bordered border-dark">
           <thead class="table-active">
