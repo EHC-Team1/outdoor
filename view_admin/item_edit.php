@@ -24,13 +24,23 @@ $pdo = new ItemModel();
 $item = $pdo->edit($item_id);
 // returnしてきた$itemを$itemに格納
 $item = $item->fetch(PDO::FETCH_ASSOC);
+// エラーメッセージは空
+$message = "";
+
+// 使用可能画像ファイルの選択を制限
+$accept = ".jpg,.jpeg,.JPG,.JPEG,.png,.PNG,.gif,.GIF";
 
 // 「更新」ボタンが押された場合
 if (isset($_POST['update_item'])) {
   // Itemクラスを呼び出し
   $pdo = new ItemModel();
   // updateメソッドを呼び出し
-  $item = $pdo->update($item);
+  // $item = $pdo->update($item);
+
+    // updateメソッドを呼び出し
+  $items = $pdo->update($item);
+  // エラーメッセージを$messageに格納
+  $message = $items;
 
   // 「削除」ボタンが押された場合
 } elseif (isset($_POST['delete_item'])) {
@@ -56,6 +66,8 @@ $pdo = new ArticleModel();
 // indexメソッドを呼び出し
 $articles = $pdo->admin_index();
 
+$message = htmlspecialchars($message);
+
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -64,6 +76,7 @@ $articles = $pdo->admin_index();
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center mt-5">商品編集フォーム</h1>
     <div class="col-sm-10">
+      <?= $message; ?>
       <form method="post" enctype="multipart/form-data">
         <div class="row mb-3">
           <label class="col-sm-2 col-form-label text-center">商品名</label>
@@ -117,7 +130,8 @@ $articles = $pdo->admin_index();
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <input class="form-control" type="file" id="formFile" name="item_image">
+            <!-- <input class="form-control" type="file" id="formFile" name="item_image"> -->
+            <input class="form-control" type="file" accept="<?= $accept ?>" id="formFile" name="item_image">
           </div>
           <label class="col-sm-2 col-form-label text-end">税込価格</label>
           <div class="col-sm-3">
