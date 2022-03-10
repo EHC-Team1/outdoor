@@ -58,8 +58,8 @@ $message = htmlspecialchars($message);
           </div>
         </div>
         <div class="d-flex align-items-center justify-content-evenly my-5">
-          <button type="submit" formaction="public_signup.php" name="signup" class="btn btn-outline-success btn-lg">新規登録</button>
           <button type="submit" name="login" class="btn btn-outline-primary btn-lg">ログイン</button>
+          <button type="submit" formaction="public_signup.php" name="signup" class="btn btn-outline-secondary btn-lg">サインアップ</button>
         </div>
       </form>
     </div>

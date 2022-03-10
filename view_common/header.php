@@ -78,7 +78,7 @@ if (isset($_POST['customer_logout'])) {
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             </ul>
             <button class="btn btn-outline-primary ms-5 me-5" onclick="location.href='public_login.php'">ログイン</button>
-            <button class="btn btn-outline-info me-5" onclick="location.href='public_login.php'">カートを見る</button>
+            <button class="btn btn-outline-info me-5" onclick="location.href='public_signup.php'">サインアップ</button>
           </div>
         </div>
       </nav>

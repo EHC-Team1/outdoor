@@ -203,8 +203,6 @@
     {
       $item = $item;
       $item_id = $item['item_id'];
-      // var_dump($item_id);
-      // exit();
       $genre_id = $_POST['genre_id'];
       $article_id = $_POST['article_id'];
       $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
