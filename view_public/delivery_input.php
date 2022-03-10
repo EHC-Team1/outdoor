@@ -29,13 +29,13 @@ if (isset($_POST['input_delivery'])) {
 
           <div class="row mb-3">
             <div class="col">
-            <strong><label class="mb-1">宛名</label></strong>
+              <strong><label class="mb-1">宛名</label></strong>
               <input type="text" name="name" class="form-control" id="delivery_name" placeholder="例) 藤浪翔平">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-sm-6">
-            <strong><label class="mb-1">郵便番号</label></strong>
+              <strong><label class="mb-1">郵便番号</label></strong>
               <input type="number" name="postal_code" class="form-control" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" id="delivery_postal_code" placeholder="例) 1700014">
             </div>
             <div class="col mt-auto">
@@ -44,21 +44,21 @@ if (isset($_POST['input_delivery'])) {
             </div>
           </div>
           <div class="row mb-3">
-          <strong><label class="mb-1">市区町村</label></strong>
+            <strong><label class="mb-1">市区町村</label></strong>
             <div class="col">
               <input type="text" name="address" class="form-control" id="delivery_address" class="col-md-8 p-0" placeholder="例) 東京都豊島区池袋">
             </div>
           </div>
           <div class="row mb-3">
-          <strong><label class="mb-1">番地・建物名</label></strong>
+            <strong><label class="mb-1">番地・建物名</label></strong>
             <div class="col">
               <input type="text" name="house_num" class="form-control" id="delivery_house_num" class="col-md-8 p-0" placeholder="例) 〇丁目△番地 □□マンション 101号室">
             </div>
           </div>
         </div>
-        <div class="d-flex align-items-center justify-content-evenly my-5">
-          <button type="submit" name="back" formaction="./mypage.php" class="btn btn-outline-secondary btn-lg">マイページへ戻る</button>
+        <div class="d-flex align-items-center flex-row-reverse justify-content-evenly my-5">
           <button type="submit" name="input_delivery" class="btn btn-outline-primary btn-lg" id="delivery_input_btn">新規登録</button>
+          <button type="submit" name="back" formaction="./mypage.php" class="btn btn-outline-secondary btn-lg">マイページへ戻る</button>
         </div>
       </form>
     </div>

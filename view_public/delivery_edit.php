@@ -63,9 +63,9 @@ if (isset($_POST['update_delivery'])) {
             </div>
           </table>
         </div>
-        <div class="d-flex align-items-center justify-content-evenly my-5">
-          <button type="submit" name="back" formaction="./mypage.php" class="btn btn-outline-secondary btn-lg">マイページへ戻る</button>
+        <div class="d-flex align-items-center flex-row-reverse justify-content-evenly my-5">
           <button type="submit" name="update_delivery" class="btn btn-outline-success btn-lg" id="delivery_edit_btn">更新</button>
+          <button type="submit" name="back" formaction="./mypage.php" class="btn btn-outline-secondary btn-lg">マイページへ戻る</button>
         </div>
       </form>
     </div>

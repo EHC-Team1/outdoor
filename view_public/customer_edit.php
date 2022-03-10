@@ -84,9 +84,9 @@ if (isset($_POST['public_switch_status'])) {
               <input type="number" name="telephone_num" class="form-control" id="customer_telephone_num" placeholder="例) 12345678912" value="<?= $customer['telephone_num'] ?>"></td>
             </div>
           </div>
-          <div class="d-flex align-items-center justify-content-evenly mt-5 mb-3">
-            <button type="submit" name="back" formaction="./mypage.php" class="btn btn-outline-secondary btn-lg">マイページへ戻る</button>
+          <div class="d-flex align-items-center flex-row-reverse justify-content-evenly mt-5 mb-3">
             <button type="submit" name="update_customer" class="btn btn-outline-primary btn-lg" id="customer_update_btn">編集内容を保存</button>
+            <button type="submit" name="back" formaction="./mypage.php" class="btn btn-outline-secondary btn-lg">マイページへ戻る</button>
           </div>
           <div class="d-flex align-items-center justify-content-end mb-5">
             <button type="submit" name="public_switch_status" class="btn btn-outline-danger" id="public_switch_status_btn">退会</button>
