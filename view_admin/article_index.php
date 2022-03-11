@@ -71,6 +71,9 @@ $articles = $pdo->admin_index($start);
 // モデルからreturnしてきた情報をarticlesに格納
 $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
 
+// 使用可能画像ファイルの選択を制限
+$accept = ".jpg,.jpeg,.JPG,.JPEG,.png,.PNG,.gif,.GIF";
+
 $message = htmlspecialchars($message);
 ?>
 
@@ -102,7 +105,7 @@ $message = htmlspecialchars($message);
         </div>
         <div class="row mb-3">
           <div class="col-sm-6">
-            <input type="file" name="article_image" class="form-control" id="formFile" value="<?= ($_SESSION['article']['article_image']) ?>">
+            <input type="file" name="article_image" accept="<?= $accept?>" class="form-control" id="formFile" value="<?= ($_SESSION['article']['article_image']) ?>">
           </div>
           <label class="col-sm-6 col-form-label">※容量の大きい画像はエラーになることがあります。</label>
         </div>
@@ -153,7 +156,6 @@ $message = htmlspecialchars($message);
                 <a href=" ../view_admin/article_edit.php?article_id=<?= $article['id'] ?>" style="text-decoration:none">
                   <?php if ($article["extension"] == "jpeg" || $article["extension"] == "png" || $article["extension"] == "gif") { ?>
                     <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="img-fluid" >
-                    <!-- <img src="../view_common/article_image.php?target=<?= $target ?>" alt="article_image" class="ime-responsive" > -->
                     <?php } ?>
                 </a>
               </td>

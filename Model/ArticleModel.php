@@ -55,8 +55,8 @@ class ArticleModel
         } elseif ($extension === "gif" || $extension === "GIF") {
           $extension = "gif";
         } else {
-          echo '非対応のファイルです';
-          echo ("<button onclick=location.href='../view_admin/article_index.php' class=btn btn-outline-secondary btn-lg>戻る</button>");
+          $message = "セキュリティの都合上、このファイル形式は許可できません。別の画像ファイルを使用してください。";
+          return $message;
         }
         try {
           // DB接続
@@ -213,13 +213,14 @@ class ArticleModel
   }
 
   // 記事の一覧表示(管理者側)
-  public function admin_index()
+  public function admin_index($start)
   {
+    $start = $start;
     try {
       $pdo = $this->db_connect();
       // 更新日時の降順で取得
       $articles = $pdo->prepare(
-        "SELECT * FROM articles ORDER BY updated_at DESC"
+        "SELECT * FROM articles ORDER BY updated_at DESC LIMIT {$start}, 15"
       );
       $articles->execute();
     } catch (PDOException $Exception) {
@@ -321,8 +322,8 @@ class ArticleModel
       } elseif ($extension === "gif" || $extension === "GIF") {
         $extension = "gif";
       } else {
-        echo '非対応のファイルです';
-        echo ("<button onclick=location.href='../view_admin/article_index.php' class=btn btn-outline-secondary btn-lg>戻る</button>");
+        $message = "セキュリティの都合上、このファイル形式は許可できません。別の画像ファイルを使用してください。";
+        return $message;
       }
       try {
         $pdo = $this->db_connect();

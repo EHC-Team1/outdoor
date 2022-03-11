@@ -46,6 +46,9 @@ $pdo = new ArticleModel();
 // indexメソッドを呼び出し
 $articles = $pdo->admin_index();
 
+// 使用可能画像ファイルの選択を制限
+$accept = ".jpg,.jpeg,.JPG,.JPEG,.png,.PNG,.gif,.GIF";
+
 $message = htmlspecialchars($message);
 ?>
 
@@ -95,7 +98,8 @@ $message = htmlspecialchars($message);
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <input class="form-control" type="file" id="formFile" name="item_image" value="<?= ($_SESSION['item']['item_image']) ?>">
+            <!-- <input class="form-control" type="file" id="formFile" name="item_image" value="<?= ($_SESSION['item']['item_image']) ?>"> -->
+            <input class="form-control" type="file" id="formFile" name="item_image" accept="<?= $accept?>" value="<?= ($_SESSION['item']['item_image']) ?>">
           </div>
           <label class="col-sm-2 col-form-label text-end">税込価格</label>
           <div class="col-sm-3">
