@@ -57,8 +57,10 @@
           } elseif ($extension === "gif" || $extension === "GIF") {
             $extension = "gif";
           } else {
-            echo "非対応のファイルです";
-            echo ("<button onclick=location.href='../view_admin/admin_item_index.php' class=btn btn-outline-secondary btn-lg>戻る</button>");
+            // echo "非対応のファイルです";
+            // echo ("<button onclick=location.href='../view_admin/admin_item_index.php' class=btn btn-outline-secondary btn-lg>戻る</button>");
+            $message = "セキュリティの都合上、このファイル形式は許可できません。別の画像ファイルを使用してください。";
+            return $message;
           }
           try {
             // db_connectメソッドを呼び出す
@@ -216,7 +218,8 @@
         $is_status = 0;
       }
       // 画像削除ボタンの判定
-      if ($_POST['delete_image']) {
+      // if ($_POST['delete_image']) {
+      if (isset($_POST['delete_image'])) {
         $delete_image = 1;
       }
 
@@ -235,8 +238,10 @@
         } elseif ($extension === "gif" || $extension === "GIF") {
           $extension = "gif";
         } else {
-          echo "非対応のファイルです";
-          echo ("<button onclick=location.href='../view_admin/admin_item_index.php' class=btn btn-outline-secondary btn-lg>戻る</button>");
+          // echo "非対応のファイルです";
+          // echo ("<button onclick=location.href='../view_admin/admin_item_index.php' class=btn btn-outline-secondary btn-lg>戻る</button>");
+          $message = "セキュリティの都合上、このファイル形式は許可できません。別の画像ファイルを使用してください。";
+          return $message;
         }
         try {
           // db_connectメソッドを呼び出す

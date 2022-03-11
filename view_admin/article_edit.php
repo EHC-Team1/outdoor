@@ -24,6 +24,11 @@ $pdo = new ArticleModel();
 $article = $pdo->edit($article_id);
 // 取得データを配列に格納
 $article = $article->fetch(PDO::FETCH_ASSOC);
+// エラーメッセージは空
+$message = '';
+
+// 使用可能画像ファイルの選択を制限
+$accept = ".jpg,.jpeg,.JPG,.JPEG,.png,.PNG,.gif,.GIF";
 
 // 「記事を更新する」ボタンが押された場合
 if (isset($_POST['article_update'])) {
@@ -44,6 +49,8 @@ if (isset($_POST['article_update'])) {
   header('Location: ../view_admin/article_index.php');
 }
 
+$message = htmlspecialchars($message);
+
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -52,6 +59,11 @@ if (isset($_POST['article_update'])) {
   <div class="row d-flex align-items-center justify-content-center">
     <h1 class="text-center my-5">記事編集フォーム</h1>
     <div class="col-sm-10">
+      <?php if ($message) { ?>
+        <div class="alert alert-danger text-center" role="alert">
+          <?= $message; ?>
+        </div>
+      <?php } ?>
       <form method="post" enctype="multipart/form-data">
         <div class="row mb-2">
           <label class="col-sm-2 col-form-label text-center">タイトル</label>
@@ -86,7 +98,7 @@ if (isset($_POST['article_update'])) {
           </div>
           <div class="row mb-3">
             <div class="col-sm-6 d-flex align-items-center">
-              <input type="file" name="article_image" class="form-control" value="<?= $article['article_image'] ?>">
+              <input type="file" name="article_image" accept="<?= $accept ?>" class="form-control" value="<?= $article['article_image'] ?>">
             </div>
             <label class="col-sm-6 col-form-label">
               ※画像を更新する場合は、ファイルを選択してください。<br>&emsp;容量の大きい画像はエラーになることがあります。
@@ -97,7 +109,7 @@ if (isset($_POST['article_update'])) {
         <?php } else { ?>
           <div class="row mb-3">
             <div class="col-sm-6 d-flex align-items-center">
-              <input type="file" name="article_image" class="form-control">
+              <input type="file" name="article_image" accept="<?= $accept ?>" class="form-control">
             </div>
             <label class="col-sm-6 col-form-label">
               ※画像を追加する場合は、ファイルを選択してください。<br>&emsp;容量の大きい画像はエラーになることがあります。
