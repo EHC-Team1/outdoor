@@ -10,52 +10,52 @@ $('#delivery_input_btn').click(function () {
 	}
 
 	if (Number(name) == "" && Number(postal_code) == "" && Number(address) == "") {
-		alert("宛名・郵便番号・市区町村を入力してください。");
+		alert("宛名、郵便番号、市区町村を入力してください。");
 		return false;
 	}
 
 	if (Number(name) == ""  && Number(postal_code) == "" && Number(house_num) == "") {
-		alert("宛名・郵便番号・番地・建物名を入力してください。");
+		alert("宛名、郵便番号、番地・建物名を入力してください。");
 		return false;
 	}
 
 	if (Number(name) == "" && Number(address) == "" && Number(house_num) == "") {
-		alert("宛名・市区町村・番地・建物名を入力してください。");
+		alert("宛名、市区町村、番地・建物名を入力してください。");
 		return false;
 	}
 
 	if (Number(postal_code) == "" && Number(address) == "" && Number(house_num) == "") {
-		alert("郵便・市区町村・番地・建物名を入力してください。");
+		alert("郵便番号、市区町村、番地・建物名を入力してください。");
 		return false;
 	}
 
 	if (Number(name) == "" && Number(postal_code) == "") {
-		alert("宛名と郵便番号を入力してください。");
+		alert("宛名、郵便番号を入力してください。");
 		return false;
 	}
 
 	if (Number(name) == "" && Number(address) == "") {
-		alert("宛名と市区町村を入力してください。");
+		alert("宛名、市区町村を入力してください。");
 		return false;
 	}
 
 	if (Number(name) == "" && Number(house_num) == "") {
-		alert("宛名と番地・建物名を入力してください。");
+		alert("宛名、番地・建物名を入力してください。");
 		return false;
 	}
 
 	if (Number(postal_code) == "" && Number(address) == "") {
-		alert("郵便番号と市区町村を入力してください。");
+		alert("郵便番号、市区町村を入力してください。");
 		return false;
 	}
 
 	if (Number(postal_code) == "" && Number(house_num) == "") {
-		alert("郵便番号と番地・建物名を入力してください。");
+		alert("郵便番号、番地・建物名を入力してください。");
 		return false;
 	}
 
 	if (Number(address) == "" && Number(house_num) == "") {
-		alert("市区町村と番地・建物名を入力してください。");
+		alert("市区町村、番地・建物名を入力してください。");
 		return false;
 	}
 
