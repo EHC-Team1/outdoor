@@ -111,7 +111,6 @@ class ArticleModel
     }
   }
 
-
   // 記事の詳細表示
   public function show($article_id)
   {
