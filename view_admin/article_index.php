@@ -67,7 +67,7 @@ $pagination = ceil($page_num / 15);
 //  Articleクラスを呼び出し
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
-$articles = $pdo->admin_index($start);
+$articles = $pdo->admin_index_limit($start);
 // モデルからreturnしてきた情報をarticlesに格納
 $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
 

@@ -212,15 +212,14 @@ class ArticleModel
     return $pages;
   }
 
-  // 記事の一覧表示(管理者側)
-  public function admin_index($start)
+  // 商品関連記事一覧表示(管理者側)
+  public function admin_index()
   {
-    $start = $start;
     try {
       $pdo = $this->db_connect();
       // 更新日時の降順で取得
       $articles = $pdo->prepare(
-        "SELECT * FROM articles ORDER BY updated_at DESC LIMIT {$start}, 15"
+        "SELECT * FROM articles ORDER BY updated_at DESC"
       );
       $articles->execute();
     } catch (PDOException $Exception) {
@@ -228,6 +227,23 @@ class ArticleModel
     }
     return $articles;
   }
+
+    // 記事の一覧表示(管理者側)
+    public function admin_index_limit($start)
+    {
+      $start = $start;
+      try {
+        $pdo = $this->db_connect();
+        // 更新日時の降順で取得
+        $articles = $pdo->prepare(
+          "SELECT * FROM articles ORDER BY updated_at DESC LIMIT {$start}, 15"
+        );
+        $articles->execute();
+      } catch (PDOException $Exception) {
+        exit("接続エラー：" . $Exception->getMessage());
+      }
+      return $articles;
+    }
 
 
   // 関連記事の呼び出し
