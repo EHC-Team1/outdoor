@@ -13,7 +13,7 @@ if (isset($_GET['page'])) {
 }
 // スタートのページを計算
 if ($page > 1) {
-  $start = ($page * 15) - 15;
+  $start = ($page * 16) - 16;
 } else {
   $start = 0;
 }
@@ -23,14 +23,14 @@ $pdo = new ArticleModel();
 $pages = $pdo->page_count_public_index();
 $page_num = $pages->fetchColumn();
 // ページネーションの数を取得
-$pagination = ceil($page_num / 15);
+$pagination = ceil($page_num / 16);
 
 // Articleクラスを呼び出し
 $pdo = new ArticleModel();
 // indexメソッドを呼び出し
-$articles = $pdo->public_index($start);
+$top_articles = $pdo->public_index($start);
 // モデルからreturnしてきた情報をarticlesに格納
-$articles = $articles->fetchAll(PDO::FETCH_ASSOC);
+$top_articles = $top_articles->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -51,7 +51,7 @@ $articles = $articles->fetchAll(PDO::FETCH_ASSOC);
     <div class="col-sm-8 ms-3">
       <div class="row-cols-1 row-cols-md-1 g-3">
         <!-- 公開状態の記事のみ表示 -->
-        <?php foreach ($articles as $article_top) {
+        <?php foreach ($top_articles as $article_top) {
           $target = $article_top["article_image"]; ?>
           <div class="card mb-2" style="max-width: auto;">
             <a href="../view_public/article_show.php?article_id=<?= $article_top["id"] ?>" class="text-dark" style="text-decoration:none">

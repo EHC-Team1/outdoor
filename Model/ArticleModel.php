@@ -185,15 +185,15 @@ class ArticleModel
       // DBに接続
       $pdo = $this->db_connect();
       //SQL文 投稿日時の降順で取得
-      $articles = $pdo->prepare(
-        "SELECT * FROM articles WHERE is_status = 1 ORDER BY updated_at DESC LIMIT {$start}, 15"
+      $top_articles = $pdo->prepare(
+        "SELECT * FROM articles WHERE is_status = 1 ORDER BY updated_at DESC LIMIT {$start}, 16"
       );
-      $articles->execute();
+      $top_articles->execute();
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
     }
     // $articlesを返す
-    return $articles;
+    return $top_articles;
   }
 
   // public_indexページング用データ数取得
@@ -227,22 +227,22 @@ class ArticleModel
     return $articles;
   }
 
-    // 記事の一覧表示(管理者側)
-    public function admin_index_limit($start)
-    {
-      $start = $start;
-      try {
-        $pdo = $this->db_connect();
-        // 更新日時の降順で取得
-        $articles = $pdo->prepare(
-          "SELECT * FROM articles ORDER BY updated_at DESC LIMIT {$start}, 15"
-        );
-        $articles->execute();
-      } catch (PDOException $Exception) {
-        exit("接続エラー：" . $Exception->getMessage());
-      }
-      return $articles;
+  // 記事の一覧表示(管理者側)
+  public function admin_index_limit($start)
+  {
+    $start = $start;
+    try {
+      $pdo = $this->db_connect();
+      // 更新日時の降順で取得
+      $articles = $pdo->prepare(
+        "SELECT * FROM articles ORDER BY updated_at DESC LIMIT {$start}, 15"
+      );
+      $articles->execute();
+    } catch (PDOException $Exception) {
+      exit("接続エラー：" . $Exception->getMessage());
     }
+    return $articles;
+  }
 
 
   // 関連記事の呼び出し
