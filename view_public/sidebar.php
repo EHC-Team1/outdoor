@@ -56,7 +56,7 @@ $genres = $genres->fetchAll(PDO::FETCH_ASSOC);
     <thead class="table-secondary">
       <tr>
         <th>
-          <h5 class="text-center">コラム一覧</h5>
+          <h5 class="text-center">新着コラム</h5>
         </th>
       </tr>
     </thead>
