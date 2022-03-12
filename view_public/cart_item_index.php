@@ -129,6 +129,7 @@ if (isset($_POST['cart_item_id'])) {
         <button type="submit" class="btn btn-outline-primary" onclick="location.href='public_order_input.php'">ご注文手続きへ</button>
       </div>
     </div>
+    <!-- カートに商品がない場合 -->
   <?php } else { ?>
     <div class="row d-flex justify-content-center">
       <h1 class="text-center my-5">カートに商品がありません。</h1>
