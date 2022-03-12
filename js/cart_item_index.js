@@ -9,6 +9,7 @@ $('select').change(function() {
         cart_item_id : cart_item_id,
         quantity : quantity
       }
+      
     }).fail(function(){
       alert('数量が変更できません。')
     }).done(function(){
