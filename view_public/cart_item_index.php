@@ -32,6 +32,7 @@ if (isset($_POST['cart_item_id'])) {
   // updateメソッドを呼び出し
   $cart_item = $pdo->update();
 
+
   // 削除ボタンが押下された時
 } elseif (isset($_POST['delete'])) {
   // CartItemクラスを呼び出し
@@ -45,9 +46,7 @@ if (isset($_POST['cart_item_id'])) {
   $pdo = new CartItemModel();
   // all_deleteメソッドを呼び出し
   $cart_item = $pdo->all_delete();
-} else {
 }
-// header('Location: cart_item_index.php');
 ?>
 
 <?php require_once('../view_common/header.php') ?>
@@ -129,6 +128,7 @@ if (isset($_POST['cart_item_id'])) {
         <button type="submit" class="btn btn-outline-primary" onclick="location.href='public_order_input.php'">ご注文手続きへ</button>
       </div>
     </div>
+    <!-- カートに商品がない場合 -->
   <?php } else { ?>
     <div class="row d-flex justify-content-center">
       <h1 class="text-center my-5">カートに商品がありません。</h1>
