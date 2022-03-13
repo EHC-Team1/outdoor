@@ -134,7 +134,6 @@ class CartItemModel
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
-    header('Location: cart_item_index.php');
   }
 
   // カート内商品の削除
