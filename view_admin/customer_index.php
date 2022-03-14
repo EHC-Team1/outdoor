@@ -78,7 +78,7 @@ if (isset($_GET['secession_member_id'])) {
 <?php require_once '../view_common/header.php'; ?>
 
 <div class="container">
-  <div class="row d-flex justify-content-center bg-white sticky-sm-top">
+  <div class="row d-flex justify-content-center bg-white sticky-top">
     <div class="row d-flex justify-content-center mt-5">
       <div class="col-sm-12 d-flex flex-row-reverse">
         <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg">戻る</button>
@@ -115,8 +115,8 @@ if (isset($_GET['secession_member_id'])) {
                 <th class="col-sm-7 text-center">住所</th>
               </tr>
               <tr>
-                <th class="col-sm-4 text-center">入会日</th>
-                <th class="col-sm-7 text-center">電話番号</th>
+                <th class="col-sm-4 text-center" id="space">入会日</th>
+                <th class="col-sm-7 text-center" id="space">電話番号</th>
               </tr>
             </thead>
           </table>
@@ -149,7 +149,7 @@ if (isset($_GET['secession_member_id'])) {
             </tr>
             <tr>
               <td class="col-sm-7 text-center">
-                <?= '〒' . substr_replace($customer['postal_code'], '-', 3, 0) . $customer['address'] . $customer['house_num'] ?>
+                <?= '〒' . substr_replace($customer['postal_code'], '-', 3, 0) . '　' . $customer['address'] . $customer['house_num'] ?>
               </td>
             </tr>
             <tr>

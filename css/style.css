@@ -71,3 +71,7 @@ footer {
   background-size: cover;
   background-position: bottom;
 }
+
+#space {
+  padding-bottom: 10px;
+}
