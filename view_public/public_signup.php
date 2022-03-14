@@ -63,14 +63,14 @@ $message = htmlspecialchars($message);
             </div>
           </div>
           <div class="row mb-3">
-            <strong><label class="mb-1">市区町村</label></strong>
             <div class="col">
+              <strong><label class="mb-1">市区町村</label></strong>
               <input type="text" name="address" class="form-control" placeholder="例) 東京都豊島区池袋" value="<?= $_SESSION['signup']['address'] ?>">
             </div>
           </div>
           <div class="row mb-3">
-            <strong><label class="mb-1">番地・建物名</label></strong>
             <div class="col">
+              <strong><label class="mb-1">番地・建物名</label></strong>
               <input type="text" name="house_num" class="form-control" placeholder="例) 〇丁目△番地 □□マンション 101号室" value="<?= $_SESSION['signup']['house_num'] ?>">
             </div>
           </div>
