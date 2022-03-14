@@ -18,9 +18,9 @@ $article_show = $pdo->show($article_id);
 $article_show = $article_show->fetch(PDO::FETCH_ASSOC);
 
 // article_itemメソッドを呼び出し
-$item = $pdo->article_item($article_id);
+$items = $pdo->article_item($article_id);
 // 取得データを配列に格納
-$item = $item->fetch(PDO::FETCH_ASSOC);
+$items = $items->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -50,30 +50,32 @@ $item = $item->fetch(PDO::FETCH_ASSOC);
           <?= nl2br($article_show["body"]) ?>
         </p>
       </div>
-      <!-- 関連商品あり、販売可能状態の場合に表示 -->
-      <?php if ((!empty($item['item_article_id'])) && ($item['item_is_status'] == 1)) {
-        $target = $item["item_image"]; ?>
+      <!-- 購入可能状態の関連商品がある場合に表示 -->
+      <?php if (!empty($items)) { ?>
+        <h3>関連商品</h3>
         <div class="row-cols-1 row-cols-md-1 g-3">
-          <h3>関連商品</h3>
-          <div class="card" style="max-width: auto;">
-            <a href="../view_public/item_show.php?item_id=<?= $item["item_id"] ?>" class="text-dark" style="text-decoration:none">
-              <div class="row g-0">
-                <div class="col-lg-5 d-flex align-items-center">
-                  <div class="card-body">
-                    <?php if ($item["item_extension"] == "jpeg" || $item["item_extension"] == "png" || $item["item_extension"] == "gif") { ?>
-                      <img src="../view_common/item_image.php?target=<?= $target ?>" alt="item_image" class="img-fluid">
-                    <?php } ?>
+          <?php foreach ($items as $item) {
+            $target = $item["item_image"]; ?>
+            <div class="card mb-2" style="max-width: auto;">
+              <a href="../view_public/item_show.php?item_id=<?= $item["item_id"] ?>" class="text-dark" style="text-decoration:none">
+                <div class="row g-0">
+                  <div class="col-lg-5 d-flex align-items-center">
+                    <div class="card-body">
+                      <?php if ($item["item_extension"] == "jpeg" || $item["item_extension"] == "png" || $item["item_extension"] == "gif") { ?>
+                        <img src="../view_common/item_image.php?target=<?= $target ?>" alt="item_image" class="img-fluid">
+                      <?php } ?>
+                    </div>
+                  </div>
+                  <div class="col-lg-7 d-flex align-items-center">
+                    <div class="card-body">
+                      <h3 class="card-title"><?= $item['name'] ?> / <?= $item['genre_name'] ?></h3>
+                      <h4 class="card-text">￥<?= $item['price'] ?></h4>
+                    </div>
                   </div>
                 </div>
-                <div class="col-lg-7 d-flex align-items-center">
-                  <div class="card-body">
-                    <h3 class="card-title"><?= $item['name'] ?> / <?= $item['genre_name'] ?></h3>
-                    <h4 class="card-text">￥<?= $item['price'] ?></h4>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
+              </a>
+            </div>
+          <?php } ?>
         </div>
       <?php } ?>
     </div>

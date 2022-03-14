@@ -134,14 +134,14 @@ class ArticleModel
     try {
       // db_connectメソッドを呼び出す
       $pdo = $this->db_connect();
-      $item = $pdo->prepare(
-        "SELECT genres.name AS genre_name, items.id AS item_id, items.article_id AS item_article_id, items.name AS name, items.price AS price, items.item_image AS item_image, items.extension AS item_extension, items.is_status AS item_is_status FROM genres,items WHERE items.article_id = $article_id"
+      $items = $pdo->prepare(
+        "SELECT genres.name AS genre_name, items.id AS item_id, items.article_id AS item_article_id, items.name AS name, items.price AS price, items.item_image AS item_image, items.extension AS item_extension, items.is_status AS item_is_status FROM genres,items WHERE items.genre_id = genres.id AND items.is_status = 1 AND items.article_id = $article_id"
       );
-      $item->execute();
+      $items->execute();
     } catch (PDOException $Exception) {
       exit("接続エラー：" . $Exception->getMessage());
     }
-    return $item;
+    return $items;
   }
 
   // サイドバー内コラム一覧表示
