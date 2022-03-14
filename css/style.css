@@ -8,6 +8,11 @@ a {
   text-decoration: none;
 }
 
+html {
+  display: flex;
+  flex-direction: column;
+}
+
 body {
   display: flex;
   flex-flow: column;
@@ -15,7 +20,7 @@ body {
 }
 
 main {
-  flex: 1;
+  flex: 1 1 auto;
 }
 
 footer {
