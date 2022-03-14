@@ -3,7 +3,8 @@ $('#article_update_btn').click(function () {
   // 必須項目の入力チェック
   var title = document.getElementById("article_update_title").value;
   var body = document.getElementById("article_update_body").value;
-  if (title == "" || body == "") {
+
+  if (Number(title) == "" || Number(body) == ""){
     alert("画像以外は必須項目です");
     return false;
   }

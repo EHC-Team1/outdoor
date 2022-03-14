@@ -35,6 +35,22 @@ $top_articles = $top_articles->fetchAll(PDO::FETCH_ASSOC);
 
 <?php require_once '../view_common/header.php'; ?>
 
+<?php
+// IEからのアクセス判定 初めてブラウザを開いた時
+if (empty($_SESSION['ie_access'])) {
+  require_once('../view_common/ie_block.php');
+  // IEからアクセスされた場合、アラート表示
+  if ($browser == 'ie_access') {
+?>
+    <script>
+      alert('お使いのブラウザは閲覧推奨環境ではありません。\nウェブサイトが正しく表示されない、動作しない等の現象が\n起こる場合がありますので、予めご了承ください。\nchromeまたはEdgeブラウザのご利用をおすすめいたします。');
+    </script>
+<?php
+    // セッション中は、アラートが再表示されないように処理
+    $_SESSION['ie_access'] = [$browser];
+  }
+} ?>
+
 <div class="main-visual">
   <div class="slide1"></div>
   <div class="slide2"></div>

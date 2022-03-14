@@ -22,6 +22,7 @@ if (isset($_POST['signup'])) {
 
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <link rel="stylesheet" href="../css/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- jQuery読み込み -->
@@ -53,6 +54,22 @@ if (isset($_POST['signup'])) {
       </div>
     </nav>
   </header>
+
+  <?php
+  // IEからのアクセス判定 初めてブラウザを開いた時
+  if (empty($_SESSION['ie_access'])) {
+    require_once('../view_common/ie_block.php');
+    // IEからアクセスされた場合、アラート表示
+    if ($browser == 'ie_access') {
+  ?>
+      <script>
+        alert('お使いのブラウザは閲覧推奨環境ではありません。\nウェブサイトが正しく表示されない、動作しない等の現象が\n起こる場合がありますので、予めご了承ください。\nchromeまたはEdgeブラウザのご利用をおすすめいたします。');
+      </script>
+  <?php
+      // セッション中は、アラートが再表示されないように処理
+      $_SESSION['ie_access'] = [$browser];
+    }
+  } ?>
 
   <div class="container">
     <h1 class="my-5 text-center">管理者アカウント作成</h1>
