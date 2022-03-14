@@ -73,34 +73,27 @@ if (isset($_GET['secession_member_id'])) {
   // admin_switch_statusメソッドを呼び出し
   $switch_status = $pdo->admin_switch_status($id, $secession_member_id);
 }
-
-
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
 
 <div class="container">
-  <form method="post">
-    <div class="row d-flex align-items-center justify-content-center mt-5">
+  <div class="row d-flex justify-content-center bg-white sticky-sm-top">
+    <div class="row d-flex justify-content-center mt-5">
+      <div class="col-sm-12 d-flex flex-row-reverse">
+        <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg">戻る</button>
+      </div>
     </div>
-  </form>
-  <div class="row d-flex justify-content-center">
-    <div class="col-sm-10 d-flex flex-row-reverse">
-      <button onclick="location.href='admin_item_index.php'" class="btn btn-outline-secondary btn-lg mt-3">戻る</button>
-    </div>
-  </div>
-  <h1 class="text-center my-5">ユーザー一覧</h1>
-  <div class="row d-flex align-items-center justify-content-center">
-    <div class="col-sm-10">
+    <div class="row d-flex justify-content-center">
+      <div class="col-sm-12 p-0">
+        <h1 class="text-center">ユーザー一覧</h1>
+        <p class="text-center">氏名をクリックすると、「退会」処理を実行します</p>
 
-      <!-- 退会済みタブ選択時 部分テンプレート使用 -->
-      <?php if (isset($_GET['secession_members'])) { ?>
-        <?php require_once 'customer_index_secession.php'; ?>
-
-        <!-- 会員タブ選択時 -->
-      <?php } else { ?>
-        <div class="sticky-top bg-white">
-          <p>氏名をクリックすると、「退会」処理を実行します</p>
+        <!-- 退会済みタブ選択時 部分テンプレート使用 -->
+        <?php if (isset($_GET['secession_members'])) { ?>
+          <?php require_once 'customer_index_secession.php'; ?>
+          <!-- 会員タブ選択時 -->
+        <?php } else { ?>
           <ul class="nav nav-tabs">
             <li class="nav-item">
               <a class="nav-link bg-secondary text-white h5" href="#">会員</a>
@@ -109,67 +102,73 @@ if (isset($_GET['secession_member_id'])) {
               <a class="nav-link h5" href="customer_index.php?secession_members" style="color:black">退会済み</a>
             </li>
           </ul>
-          <table class="table table-borderless m-0">
-            <thead>
-              <tr class="row h5 py-3 mx-0 mb-0 bg-secondary text-white">
-                <th class="col-sm-2">&emsp;氏名
-                  <small class="h6"> (入会日)</small>
+          <table class="table table-borderless mb-1">
+            <thead class="bg-secondary text-white">
+              <tr>
+                <th rowspan="3" class="align-middle col-sm-1 text-center"></th>
+                <th rowspan="2" class="align-middle col-sm-4 text-center">
+                  <h5>氏名</h5>
                 </th>
-                <th class="col-sm-3">&emsp;メールアドレス</th>
-                <th class="col-sm-5">&emsp;住所</th>
-                <th class="col-sm-2">&emsp;電話番号</th>
+                <th class="col-sm-7 text-center">メールアドレス</th>
+              </tr>
+              <tr>
+                <th class="col-sm-7 text-center">住所</th>
+              </tr>
+              <tr>
+                <th class="col-sm-4 text-center">入会日</th>
+                <th class="col-sm-7 text-center">電話番号</th>
               </tr>
             </thead>
           </table>
-        </div>
-
-        <table class="table table-borderless">
-          <?php $i = 0;
-          foreach ($customers as $customer) {
-            $i++ ?>
-            <tbody>
-              <tr scope="col">
-                <td rowspan="2" class="border-bottom align-middle ps-0 pe-1">
-                  <h5 class="text-muted">
-                    <?= $i ?>
-                  </h5>
-                </td>
-              </tr>
-              <tr class="row d-flex align-items-center py-3 m-0 border-bottom table table-hover">
-                <td class="col-md-2">
-                  <div class="row h5 mb-1">
-                    <a href="customer_index.php?id=<?= $customer["id"] ?>" name="secession" class="secession_btn p-0" style="text-decoration:none">
-                      <div class="text-dark ps-3">
-                        <?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?>
-                      </div>
-                  </div>
-                  <div class="row text-end me-3">
-                    <small class="text-muted">
-                      <?= date('Y-m-d', strtotime($customer['created_at'])) ?>
-                    </small>
-                    </a>
-                  </div>
-                </td>
-                <td class="col-md-3 ps-3 ~~~" style="word-wrap:break-word;">
-                  <?= $customer['email'] ?>
-                </td>
-                <td class="col-md-5 ps-3 ~~~" style="word-wrap:break-word;">
-                  <div class="mb-1">
-                    <?= '〒' . substr_replace($customer['postal_code'], '-', 3, 0) . '<br>' ?>
-                  </div>
-                  <?= $customer['address'] . '<br>' . $customer['house_num'] ?>
-                </td>
-                <td class="col-md-2 ps-3">
-                  <?= $customer['telephone_num'] ?>
-                </td>
-              </tr>
-            </tbody>
-          <?php } ?>
-        </table>
-        <?php require_once '../view_common/paging.php'; ?>
-      <?php } ?>
+      </div>
     </div>
   </div>
+  <div class="row d-flex justify-content-center mx-1">
+    <div class="col-sm-12 p-0">
+      <table class="table table-borderless m-0">
+        <?php $i = 0;
+          foreach ($customers as $customer) {
+            $i++ ?>
+          <tbody class="bg-secondary text-white border-bottom">
+            <tr>
+              <td rowspan="3" class="align-middle col-sm-1 text-center">
+                <h5 class="text-white">
+                  <?= $i ?>
+                </h5>
+              </td>
+              <td rowspan="2" class="align-middle col-sm-4 text-center">
+                <a href="customer_index.php?id=<?= $customer["id"] ?>" name="secession" class="secession_btn p-0" style="text-decoration:none">
+                  <h5 class="text-white">
+                    <?= $customer['name_last'] . '&nbsp;' . $customer['name_first'] ?>
+                  </h5>
+                </a>
+              </td>
+              <td class="col-sm-7 text-center">
+                <?= $customer['email'] ?>
+              </td>
+            </tr>
+            <tr>
+              <td class="col-sm-7 text-center">
+                <?= '〒' . substr_replace($customer['postal_code'], '-', 3, 0) . $customer['address'] . $customer['house_num'] ?>
+              </td>
+            </tr>
+            <tr>
+              <td class="col-sm-4 text-center">
+                <?= date('Y-m-d', strtotime($customer['created_at'])) ?>
+              </td>
+              <td class="col-sm-7 text-center">
+                <?= $customer['telephone_num'] ?>
+              </td>
+            </tr>
+          </tbody>
+        <?php } ?>
+      </table>
+    </div>
+  </div>
+  <?php require_once '../view_common/paging.php'; ?>
+<?php } ?>
+
+
 </div>
 
 <!-- 退会・再入会処理用jsファイル -->
