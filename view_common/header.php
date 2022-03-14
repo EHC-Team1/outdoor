@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
   <link rel="stylesheet" href="../css/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- jQuery読み込み -->
@@ -16,17 +17,6 @@
   <title>Outdoor</title>
 </head>
 
-<?php
-// 「ログアウト」ボタンが押された時
-if (isset($_POST['customer_logout'])) {
-  // CustomerModelファイルを呼び出し
-  require_once('../Model/CustomerModel.php');
-  // Customerクラスを呼び出し
-  $pdo = new CustomerModel();
-  // logoutメソッドを呼び出し
-  $pdo = $pdo->logout();
-}
-?>
 
 <body>
   <header>

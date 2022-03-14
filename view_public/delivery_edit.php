@@ -42,7 +42,7 @@ if (isset($_POST['update_delivery'])) {
             <div class="row mb-3">
               <div class="col-sm-6">
                 <strong><label class="mb-1">郵便番号</label></strong>
-                <input type="number" name="postal_code" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" class="form-control" id="delivery_postal_code" placeholder="例) 1700014" value="<?= $delivery['postal_code'] ?>">
+                <input type="number" min="0" name="postal_code" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');" class="form-control" id="delivery_postal_code" placeholder="例) 1700014" value="<?= $delivery['postal_code'] ?>">
               </div>
               <div class="col mt-auto">
                 郵便番号入力後、市区町村が自動的に表示されます。<br>
