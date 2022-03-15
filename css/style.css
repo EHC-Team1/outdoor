@@ -157,10 +157,33 @@ footer {
 
 #fadein3 {
   margin-top: 100px;
-  margin-right: auto;
+  margin-left: 50px;
 }
 
 .fadein-before3 {
+  height: 600px;
+  opacity: 0;
+  transform: translateZ(-100px);
+  transition: opacity 1s, transform 1s;
+}
+
+.fadein-after3 {
+  opacity: 1;
+  transform: translate(0);
+}
+
+.title4 {
+  margin-top: 450px;
+  margin-bottom: 200px;
+  margin-left: 50px;
+}
+
+#fadein4 {
+  margin-top: 100px;
+  margin-right: auto;
+}
+
+.fadein-before4 {
   height: 600px;
   background-image: url(../image/about2.jpg);
   background-size: cover;
@@ -170,7 +193,7 @@ footer {
   transition: opacity 1s, transform 1s;
 }
 
-.fadein-after3 {
+.fadein-after4 {
   opacity: 1;
   transform: translate(0);
 }
