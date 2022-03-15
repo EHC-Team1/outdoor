@@ -54,9 +54,6 @@ class DeliveryModel
       } catch (PDOException $Exception) {
         die('接続エラー：' . $Exception->getMessage());
       }
-      // 下記2行コメントアウトしないとマイページへ遷移しない
-      // $message = "新規配送先が登録されました。";
-      // return $message;
 
       // 格納に成功すればマイページに遷移
       header('Location: mypage.php');
@@ -154,8 +151,6 @@ class DeliveryModel
     } catch (PDOException $Exception) {
       die('接続エラー：' . $Exception->getMessage());
     }
-    // $message = "配送先が削除されました。";
-    // return $message;
 
     header('Location: mypage.php');
   }
