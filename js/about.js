@@ -57,3 +57,14 @@ window.addEventListener('scroll', () => {
     FADEIN_ELEM3.classList.remove('fadein-after3');
   }
 });
+
+const FADEIN_ELEM4 = document.getElementById('fadein4');
+window.addEventListener('scroll', () => {
+  const FADEIN_ELEM_TOP4 = FADEIN_ELEM4.getBoundingClientRect().top;
+  const WINDOW_HEIGHT4 = window.innerHeight;
+  if(WINDOW_HEIGHT4 > (FADEIN_ELEM_TOP4 + 200)){
+    FADEIN_ELEM4.classList.add('fadein-after4');
+  }else{
+    FADEIN_ELEM4.classList.remove('fadein-after4');
+  }
+});

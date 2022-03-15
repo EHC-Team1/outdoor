@@ -89,12 +89,73 @@
       </div>
       <div class="title3">
         <h2 class="ms-5">会社概要</h2>
-        <div id="fadein3" class="fadein-before3 mt-5"></div>
+        <div id="fadein3" class="fadein-before3 mt-5">
+          <table class="table table-borderless">
+            <tbody>
+              <tr>
+                <th>
+                  <h3>商号</h3>
+                </th>
+                <td>
+                  <p class="fs-3">〇✕〇✕〇✕</p>
+                </td>
+              </tr>
+              <tr>
+                <th rowspan="2">
+                  <h3>住所</h3>
+                </th>
+                <td>
+                  <p class="fs-3">〒171-0014</br>東京都豊島区池袋2-43-1 池袋青柳ビル4F</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d43575.11986999955!2d139.66637969138836!3d35.732608381131946!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188d5d4043e0dd%3A0x213775d25d2b034d!2z5rGg6KKL6aeF!5e0!3m2!1sja!2sjp!4v1642567937495!5m2!1sja!2sjp" width="500" height="350" frameborder="0" class="mx-auto mt-2" allowfullscreen></iframe>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <h3>資本金</h3>
+                </th>
+                <td>
+                  <p class="fs-3">3000万円</p>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <h3>事業内容</h3>
+                </th>
+                <td>
+                  <p class="fs-3">コンテンツの発信・アウトドア用品の販売</p>
+                </td>
+              </tr>
+              <tr>
+                <th rowspan="3">
+                  <h3>役員</h3>
+                </th>
+                <td>
+                  <p class="fs-3">代表取締役社長 / 〇✕〇✕〇✕</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="fs-3">取締役 / 〇✕〇✕〇✕</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="fs-3">取締役 / 〇✕〇✕〇✕</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="title4">
+        <div id="fadein4" class="fadein-before4 mt-5"></div>
       </div>
     </main>
   </div>
-
-
 
   <footer>
     <a href="../view_public/top.php" style="text-decoration:none">
