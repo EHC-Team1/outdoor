@@ -2,9 +2,6 @@
 // セッションを宣言
 session_start();
 
-require_once('../Model/OrderModel.php');
-$pdo = new OrderModel();
-
 ?>
 
 <?php require_once '../view_common/header.php'; ?>

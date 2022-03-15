@@ -10,9 +10,6 @@ $pdo = new DeliveryModel();
 $delivery = $pdo->edit();
 $delivery = $delivery->fetch(PDO::FETCH_ASSOC);
 
-// var_dump($delivery);
-// die;
-
 // 「更新」ボタンが押された場合
 if (isset($_POST['update_delivery'])) {
   // Deliveryクラスを呼び出し
@@ -21,6 +18,7 @@ if (isset($_POST['update_delivery'])) {
   $delivery = $pdo->update($delivery);
   header('Location: mypage.php');
 }
+
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -75,6 +73,5 @@ if (isset($_POST['update_delivery'])) {
 <!-- 住所自動入力用jsファイル -->
 <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
 <script src="../js/delivery_edit.js"></script>
-
 
 <?php require_once '../view_common/footer.php'; ?>

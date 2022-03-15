@@ -2,11 +2,6 @@
 // セッションを宣言
 session_start();
 
-// OrderModelファイルを読み込み
-require_once('../Model/OrderModel.php');
-// Orderクラスを呼び出し
-$pdo = new OrderModel();
-
 // CustomerModelファイルを読み込み
 require_once('../Model/CustomerModel.php');
 // Customerクラス呼び出し

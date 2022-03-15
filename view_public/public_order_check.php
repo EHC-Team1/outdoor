@@ -2,11 +2,6 @@
 // セッションを宣言
 session_start();
 
-// OrderModelファイルを読み込み
-require_once('../Model/OrderModel.php');
-// Orderクラスを呼び出し
-$pdo = new OrderModel();
-
 // CartItemModelファイル読み込み
 require_once('../Model/CartItemModel.php');
 // CartItemクラス呼び出し
@@ -16,6 +11,8 @@ $cart_items = $pdo->index();
 
 // 注文を確定するボタンが押された場合
 if (isset($_POST['fixed_order'])) {
+  // OrderModelファイルを読み込み
+  require_once('../Model/OrderModel.php');
   // Orderクラスを呼び出し
   $pdo = new OrderModel();
   // inputメソッドを呼び出してordersテーブルへ格納

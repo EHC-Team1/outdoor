@@ -57,16 +57,6 @@ class OrderModel
     return $order_id;
   }
 
-  // 注文情報確認画面の表示
-  public function check()
-  {
-  }
-
-  // 注文完了画面の表示
-  public function complete()
-  {
-  }
-
   // public側
   // 注文履歴一覧画面の表示
   public function index($start)

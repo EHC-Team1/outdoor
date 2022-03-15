@@ -15,6 +15,7 @@ if (isset($_POST['input_delivery'])) {
   $delivery = $pdo->input();
   header('Location: mypage.php');
 }
+
 ?>
 
 <?php require_once '../view_common/header.php'; ?>
@@ -64,8 +65,10 @@ if (isset($_POST['input_delivery'])) {
     </div>
   </div>
 </div>
+
 <!-- バリデーション用jsファイル -->
 <script src="../js/delivery_input.js"></script>
 <!-- 住所自動入力用jsファイル -->
 <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+
 <?php require_once '../view_common/footer.php'; ?>
