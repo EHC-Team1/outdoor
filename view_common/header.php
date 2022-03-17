@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <link rel="stylesheet" href="../css/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- jQuery読み込み -->
@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="../css/slick-theme.css" type="text/css">
   <link rel="stylesheet" href="../css/slick.css" type="text/css">
   <script src="../js/slick.js" type="text/javascript"></script>
+  <!--ツールチップ出現用-->
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/tippy.js@5.0.3/animations/shift-toward-subtle.css">
   <title>Outdoor</title>
 </head>
 

@@ -21,6 +21,13 @@ if (isset($_POST['delete'])) {
   // サクセスメッセージを$messageに格納
   $message = $item;
 
+  // 商品状態更新ボタンが押された場合
+} elseif (isset($_POST['item_id'])) {
+  // Itemクラスを呼び出し
+  $pdo = new ItemModel();
+  // switchメソッドを呼び出し
+  $switch_status = $pdo->switch();
+
   // 押されていない状態
 } else {
   $message = "";
@@ -86,9 +93,9 @@ $message = htmlspecialchars($message);
               <td rowspan="2" class="align-middle col-sm-1">
                 <form class="d-flex align-items-center justify-content-center mb-4">
                   <?php if ($item['is_status'] == 1) { ?>
-                    <button type='button' class='btn btn-success' disabled>販売中</button>
+                    <button type='button' class='btn btn-success switch_unable' data-tippy-content="<p>販売停止にする</p>" value="<?= $item['id'] ?>">販売中</button>
                   <?php } else { ?>
-                    <button type='button' class='btn btn-danger' disabled>販売停止</button>
+                    <button type='button' class='btn btn-danger switch_able' data-tippy-content="<p>販売可能にする</p>" value="<?= $item['id'] ?>">販売停止</button>
                   <?php } ?>
                 </form>
                 <form method="post" class="d-flex align-items-center justify-content-center">
@@ -125,6 +132,10 @@ $message = htmlspecialchars($message);
   <?php require_once '../view_common/paging.php'; ?>
 </div>
 
-<!-- バリデーション・アラート用jsファイル -->
+<!--ツールチップ用jsファイル-->
+<script src="https://unpkg.com/popper.js@1"></script>
+<script src="https://unpkg.com/tippy.js@5"></script>
+<!-- jsファイル -->
 <script src="../js/admin_item_index.js"></script>
+
 <?php require_once '../view_common/footer.php'; ?>
