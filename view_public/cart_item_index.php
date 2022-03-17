@@ -25,13 +25,12 @@ $pdo = new CartItemModel();
 $cart_items = $pdo->index();
 $cart_items = $cart_items->fetchAll(PDO::FETCH_ASSOC);
 
-// 更新ボタンが押下された時
+// 数量が変更された時
 if (isset($_POST['cart_item_id'])) {
   // CartItemクラスを呼び出し
   $pdo = new CartItemModel();
   // updateメソッドを呼び出し
   $cart_item = $pdo->update();
-
 
   // 削除ボタンが押下された時
 } elseif (isset($_POST['delete'])) {

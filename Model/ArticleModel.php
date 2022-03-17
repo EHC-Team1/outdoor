@@ -426,7 +426,6 @@ class ArticleModel
     header("location:../view_admin/article_index.php");
   }
 
-
   // 記事の削除
   public function delete()
   {
@@ -446,4 +445,5 @@ class ArticleModel
     $message = "記事を削除しました。";
     return $message;
   }
+
 }

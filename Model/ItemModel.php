@@ -432,4 +432,29 @@
       }
       return $search_items;
     }
+
+    public function switch()
+    {
+      $item_id = $_POST['id'];
+      $item_status = $_POST['item_status'];
+      if ($item_status == 1) {
+        try {
+          $pdo = $this->db_connect();
+          $switch_status = $pdo->prepare(
+            "UPDATE items SET is_status = :is_status WHERE id = $item_id"
+          );
+          $switch_status->bindParam(':is_status', 0, PDO::PARAM_INT);
+          $switch_status->execute();
+        } catch (PDOException $Exception) {
+          exit("接続エラー：" . $Exception->getMessage());
+        }
+      } else {
+        $pdo = $this->db_connect();
+        $switch_status = $pdo->prepare(
+          "UPDATE items SET is_status = :is_status WHERE id = $item_id"
+        );
+        $switch_status->bindParam(':is_status', 1, PDO::PARAM_INT);
+        $switch_status->execute();
+      }
+    }
   }
