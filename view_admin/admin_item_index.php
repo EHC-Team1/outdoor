@@ -70,6 +70,7 @@ $message = htmlspecialchars($message);
     <div class="col-sm-10 d-flex flex-row-reverse">
       <button onclick="location.href='admin_order_index.php'" class="btn btn-outline-secondary btn-lg ms-5">注文履歴一覧</button>
       <button onclick="location.href='customer_index.php'" class="btn btn-outline-secondary btn-lg">ユーザー一覧</button>
+      <button onclick="location.href='data_analyze.php'" class="btn btn-outline-secondary btn-lg">データ分析一覧</button>
     </div>
   </div>
   <h1 style="text-align:center" class="mt-3 mb-5">管理者トップ</h1>
